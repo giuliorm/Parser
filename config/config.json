@@ -1,9 +1,0 @@
-{
-  "entityName": "fontanka",
-  "entityUrl": "http://m.fontanka.ru/",
-  "newsListPath": "li.article.switcher-all-news",
-  "articleNamePath": "h2.itemTitle",
-  "articleDatePath": "span.itemDateCreated",
-  "articleTextPath": "div.itemFullText",
-  "refreshTimeout": "600000"
-}
