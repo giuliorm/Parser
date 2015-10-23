@@ -42,6 +42,35 @@ public class WebEntity implements IEntity {
 }
 */
 
+<<<<<<< HEAD
+=======
+    private String entityName = "site";
+    public String entityUrl = "http://m.fontanka.ru/";
+    private String newsListPath = "li.article.switcher-all-news";
+    private String articleNamePath = "h2.itemTitle";
+    private String articleDatePath = "span.itemDateCreated";
+    private String articleTextPath = "div.itemFullText";
+
+/*
+/*{
+  "entityName": "fontanka",
+  "entityUrl": "http://m.fontanka.ru/",
+  "newsListPath": "li.article.switcher-all-news",
+  "articleNamePath": "h2.itemTitle",
+  "articleDatePath": "span.itemDateCreated",
+  "articleTextPath": "div.itemFullText",
+  "refreshTimeout": "600000"
+}
+*/
+/*
+    private String entityName = "site";
+    public String entityUrl = "http://www.gazeta.spb.ru/allnews/";
+    private String newsListPath = "div.materials.nonLine";
+    private String articleNamePath = "h1";
+    private String articleDatePath = "i";
+    private String articleTextPath = "div#ntext";
+*/
+>>>>>>> 41ade43173dd673efd8058fdb23bca67064fffda
 
     private long refreshTimeout;
 
@@ -121,8 +150,12 @@ public class WebEntity implements IEntity {
         InfoAboutLink.add(Header_Text);
         //main header on main page
         Elements blockTitle1 = doc1.select(articleTextPath); // MainText gaz = div#ntext  Font = div.itemFullText
+<<<<<<< HEAD
         String s = (blockTitle1).toString();
         //String s = (blockTitle1.get(0).text()).toString(); //main text
+=======
+        String s = (blockTitle1.get(0).text()).toString(); //main text
+>>>>>>> 41ade43173dd673efd8058fdb23bca67064fffda
         //add text correct between transger into string
         InfoAboutLink.add(s);
         //time on main page
