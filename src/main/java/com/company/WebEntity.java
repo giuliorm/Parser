@@ -12,39 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WebEntity implements IEntity, Runnable {
-/*
-    private String entityName = "site";
-    public String entityUrl = "http://m.fontanka.ru/";
-    private String newsListPath = "li.article.switcher-all-news";
-    private String articleNamePath = "h2.itemTitle";
-    private String articleDatePath = "span.itemDateCreated";
-    private String articleTextPath = "div.itemFullText";
-    */
     private String entityName;
     public String entityUrl;
     private String newsListPath;
     private String articleNamePath;
     private String articleDatePath;
     private String articleTextPath;
-    private long refTimeout;
-
-    /*private String entityName = "site";
-    public String entityUrl = "http://www.gazeta.spb.ru/allnews/";
-    private String newsListPath = "div.materials.nonLine";
-    private String articleNamePath = "h1";
-    private String articleDatePath = "i";
-    private String articleTextPath = "div#ntext";
-    private long refTimeout = 600000;*/
-/*{
-  "entityName": "fontanka",
-  "entityUrl": "http://m.fontanka.ru/",
-  "newsListPath": "li.article.switcher-all-news",
-  "articleNamePath": "h2.itemTitle",
-  "articleDatePath": "span.itemDateCreated",
-  "articleTextPath": "div.itemFullText",
-  "refreshTimeout": "600000"
-}
-*/
+    private long refreshTimeout;
 
 
     public String getArticleTextPath() {
@@ -71,14 +45,12 @@ public class WebEntity implements IEntity, Runnable {
         return articleDatePath;
     }
 
-    public long getRefTimeout() {
-        return refTimeout;
+    public long getRefreshTimeout() {
+        return refreshTimeout;
     }
 
 
     //Single-configuration file
-
-
     public WebEntity entityFromCfg(String cfgPath) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();

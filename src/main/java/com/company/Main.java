@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public  class Main {
 
 
@@ -38,11 +40,24 @@ public  class Main {
 
        // we.entityListFromCfg("config/multiConfig.json");
         WebEntity we = new WebEntity();
-        WebEntity we = new WebEntity();
-        we.entityListFromCfg("config/multiConfig.json");
+        //for (WebEntity entityInstance : we.entityListFromCfg("src/main/resources/config/multiConfig.json")) {
+        //};
+        ArrayList<WebEntity> webEntityList = we.entityListFromCfg("src/main/resources/config/multiConfig.json");
+
+        Thread[] threads = new Thread[2];
+        for (int i = 0; i < webEntityList.size(); i++) {
+            threads[i] = new Thread(webEntityList.get(i));
+            threads[i].start();
+        }
+
+        for (int i=0; i< webEntityList.size(); i++)
+        {
+            threads[i].join();
+        }
         //we = we.entityFromCfg("config/config.json");
         //System.out.println(we.toString());
         //we.parse();
+
     }
 
 
