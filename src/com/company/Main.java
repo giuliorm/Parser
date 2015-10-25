@@ -1,6 +1,6 @@
 package com.company;
 
-public class Main {
+public  class Main {
 
 
     //http://www.gazeta.spb.ru/allnews/
@@ -16,7 +16,7 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
-        WebEntity[] we = new WebEntity[2];
+       /* WebEntity[] we = new WebEntity[2];
         we[0] = new WebEntity("site", "http://www.gazeta.spb.ru/allnews/", "div.materials.nonLine",
                 "h1", "i", "div#ntext", 600000);
         we[1] = new WebEntity("site", "http://m.fontanka.ru/", "li.article.switcher-all-news", "h2.itemTitle",
@@ -33,7 +33,13 @@ public class Main {
             threads[i].join();
         }
 
+*/
+     //   ArrayList<WebEntity> we = new ArrayList<WebEntity>();
 
+       // we.entityListFromCfg("config/multiConfig.json");
+        WebEntity we = new WebEntity();
+        WebEntity we = new WebEntity();
+        we.entityListFromCfg("config/multiConfig.json");
         //we = we.entityFromCfg("config/config.json");
         //System.out.println(we.toString());
         //we.parse();

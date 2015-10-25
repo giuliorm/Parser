@@ -20,15 +20,21 @@ public class WebEntity implements IEntity, Runnable {
     private String articleDatePath = "span.itemDateCreated";
     private String articleTextPath = "div.itemFullText";
     */
+    private String entityName;
+    public String entityUrl;
+    private String newsListPath;
+    private String articleNamePath;
+    private String articleDatePath;
+    private String articleTextPath;
+    private long refTimeout;
 
-
-    private String entityName = "site";
+    /*private String entityName = "site";
     public String entityUrl = "http://www.gazeta.spb.ru/allnews/";
     private String newsListPath = "div.materials.nonLine";
     private String articleNamePath = "h1";
     private String articleDatePath = "i";
     private String articleTextPath = "div#ntext";
-    private long refTimeout = 600000;
+    private long refTimeout = 600000;*/
 /*{
   "entityName": "fontanka",
   "entityUrl": "http://m.fontanka.ru/",
@@ -65,23 +71,13 @@ public class WebEntity implements IEntity, Runnable {
         return articleDatePath;
     }
 
-    public long getRefreshTimeout() {
+    public long getRefTimeout() {
         return refTimeout;
     }
 
 
     //Single-configuration file
 
-   public WebEntity(String entityName, String entityUrl, String newsListPath, String articleNamePath,
-              String articleDatePath, String articleTextPath, long refTimeout) {
-        this.entityName = entityName;
-        this.entityUrl = entityUrl;
-        this.newsListPath = newsListPath;
-        this.articleNamePath = articleNamePath;
-        this.articleDatePath = articleDatePath;
-        this.articleTextPath = articleTextPath;
-        this.refTimeout = refTimeout;
-    }
 
     public WebEntity entityFromCfg(String cfgPath) throws IOException {
 
