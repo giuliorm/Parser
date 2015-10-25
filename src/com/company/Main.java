@@ -1,29 +1,42 @@
 package com.company;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.sql.*;
-import java.util.ArrayList;
-
-
 public class Main {
 
 
     //http://www.gazeta.spb.ru/allnews/
     //http://www.fontanka.ru/
+/*
+    private String entityName = "site";
+    public String entityUrl = "http://m.fontanka.ru/";
+    private String newsListPath = "li.article.switcher-all-news";
+    private String articleNamePath = "h2.itemTitle";
+    private String articleDatePath = "span.itemDateCreated";
+    private String articleTextPath = "div.itemFullText";
+    */
 
-    // ArrayList<String> PackOfSettingsGazeta = new ArrayList<String>("http://www.gazeta.spb.ru/allnews/", 9,
-    // "div.materials.nonLine", "h1",  "div#ntext", "i" );
-    // ArrayList<String> PacjOfSettingsFontan = new ArrayList<String>("http://m.fontanka.ru/", 1,
-    // "li.article.switcher-all-news", "h2.itemTitle", "div.itemFullText", "span.itemDateCreated");
 
-    public void main(String[] args) throws Exception {
-        WebEntity we = new WebEntity();
-        we = we.entityFromCfg("config/config.json");
+    public static void main(String[] args) throws Exception {
+        WebEntity[] we = new WebEntity[2];
+        we[0] = new WebEntity("site", "http://www.gazeta.spb.ru/allnews/", "div.materials.nonLine",
+                "h1", "i", "div#ntext", 600000);
+        we[1] = new WebEntity("site", "http://m.fontanka.ru/", "li.article.switcher-all-news", "h2.itemTitle",
+                "span.itemDateCreated", "div.itemFullText", 600000);
+
+        Thread[] threads = new Thread[2];
+        for (int i = 0; i < we.length; i++) {
+            threads[i] = new Thread(we[i]);
+            threads[i].start();
+        }
+
+        for (int i=0; i< we.length; i++)
+        {
+            threads[i].join();
+        }
+
+
+        //we = we.entityFromCfg("config/config.json");
         //System.out.println(we.toString());
-        we.parse();
+        //we.parse();
     }
 
 
