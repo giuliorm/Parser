@@ -5,10 +5,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import javax.xml.soap.Node;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,6 +72,7 @@ public class WebEntity implements IEntity {
     }
 
 
+    //Single-configuration file
     public WebEntity entityFromCfg(String cfgPath) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -81,6 +80,16 @@ public class WebEntity implements IEntity {
 
         return wEntity;
 
+    }
+
+    //Able to load multi-configuration files.
+    public ArrayList<WebEntity> entityListFromCfg(String cfgPath) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        ArrayList<WebEntity> webEntityList = mapper.readValue(new File(cfgPath),
+                mapper.getTypeFactory().constructCollectionType(ArrayList.class, WebEntity.class));
+
+        return webEntityList;
     }
 
     public String entityToCfg(IEntity entity) throws IOException {
@@ -158,15 +167,16 @@ public class WebEntity implements IEntity {
     public static void main(String[] args) throws IOException {
 
         WebEntity we = new WebEntity();
-        we = we.entityFromCfg("config/config.json");
+        //we = we.entityFromCfg("config/config.json");
         //System.out.println(we.toString());
+        we.entityListFromCfg("config/multiConfig.json");
     }
 
     public String regExp(String entityUrl) throws Exception {
         String LinkAfterRegExp = null;
         Pattern urlPattern = Pattern.compile("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})\\/");
         Matcher urlMatcher = urlPattern.matcher(entityUrl);
-        while(urlMatcher.find()) {
+        while (urlMatcher.find()) {
             LinkAfterRegExp = (entityUrl.substring(urlMatcher.start(), urlMatcher.end()) + "");
         }
         return LinkAfterRegExp;
