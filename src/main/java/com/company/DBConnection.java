@@ -7,18 +7,13 @@ import java.util.ArrayList;
  * Created by gp on 21.10.15.
  */
 public class DBConnection {
-    private static final String url = "jdbc:mysql://localhost:3306/MyBase1";
-    private static final String user = "root";
-    private static final String password = "123";
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/MyBase1";
+    private static final String USER = "root";
+    private static final String PASSWORD = "123";
 
-    public static void PutIntoDB(ArrayList<String> InfoIntoDB) throws SQLException {
-        PreparedStatement stmt = null;
-        con = DriverManager.getConnection(url, user, password);
-        ;
-        stmt = con.prepareStatement("INSERT INTO MyTable1 (MyNumber, MyTitle, MyMainText, MyDate, MyLink, MyMainLink) VALUES (?, ?, ?, ?, ?, ?)");
+    public void PutIntoDB(ArrayList<String> InfoIntoDB) throws SQLException {
+        Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO MyTable1 (MyNumber, MyTitle, MyMainText, MyDate, MyLink, MyMainLink) VALUES (?, ?, ?, ?, ?, ?)");
         stmt.setString(1, InfoIntoDB.get(0));
         stmt.setString(2, InfoIntoDB.get(1));
         stmt.setString(3, InfoIntoDB.get(2));
@@ -28,13 +23,13 @@ public class DBConnection {
         stmt.executeUpdate();
     }
 
-    public static ArrayList<String> TakeFromDB() throws SQLException {
+    public static ArrayList<String> takeFromDB() throws SQLException {
 
         ArrayList<String> ArrayListInformFromDB = new ArrayList<String>();
         String query1 = "select * from MyTable1";
-        con = DriverManager.getConnection(url, user, password);
-        stmt = con.createStatement();
-        rs = stmt.executeQuery(query1);
+        Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query1);
 
         while (rs.next()) {
             ArrayListInformFromDB.add(rs.getString(1));
@@ -44,9 +39,6 @@ public class DBConnection {
             ArrayListInformFromDB.add(rs.getString(5));
             ArrayListInformFromDB.add(rs.getString(6));
         }
-        System.out.println(query1);
-        con = DriverManager.getConnection(url, user, password);
-        stmt = con.createStatement();
         return ArrayListInformFromDB;
     }
 
@@ -54,37 +46,40 @@ public class DBConnection {
         int count = 0;
         String query = "select count(*) from MyTable1";
 
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
         try {
-            con = DriverManager.getConnection(url, user, password);
-            stmt = con.createStatement();
-            rs = stmt.executeQuery(query);
+            connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
 
-            while (rs.next()) {
-                count = rs.getInt(1);
+            while (resultSet.next()) {
+                count = resultSet.getInt(1);
             }
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
         } finally {
             try {
-                con.close();
+                connection.close();
             } catch (SQLException se) { /*can't do anything */ }
             try {
-                stmt.close();
+                statement.close();
             } catch (SQLException se) { /*can't do anything */ }
             try {
-                rs.close();
+                resultSet.close();
             } catch (SQLException se) { /*can't do anything */ }
         }
         return count;
     }
 
-    public static String TakeLastNewsLinkFromDB() throws SQLException {
+    public static String takeLastNewsLinkFromDB() throws SQLException {
         String LinkOfLastNewsInDB = null;
         String query1 = "select * FROM MyTable1 WHERE MyNumber = 0";
 
-        con = DriverManager.getConnection(url, user, password);
-        stmt = con.createStatement();
-        rs = stmt.executeQuery(query1);
+        Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query1);
 
         while (rs.next()) {
             LinkOfLastNewsInDB = ((rs.getString(5)));

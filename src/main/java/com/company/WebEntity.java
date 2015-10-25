@@ -51,7 +51,7 @@ public class WebEntity implements IEntity, Runnable {
 
 
     //Single-configuration file
-    public WebEntity entityFromCfg(String cfgPath) throws IOException {
+    public WebEntity getEntityFromConfig(String cfgPath) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
         WebEntity wEntity = mapper.readValue(new File(cfgPath), WebEntity.class);
@@ -61,7 +61,7 @@ public class WebEntity implements IEntity, Runnable {
     }
 
     //Able to load multi-configuration files.
-    public ArrayList<WebEntity> entityListFromCfg(String cfgPath) throws IOException {
+    public ArrayList<WebEntity> getEntityListFromConfig(String cfgPath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
         ArrayList<WebEntity> webEntityList = mapper.readValue(new File(cfgPath),
@@ -70,7 +70,7 @@ public class WebEntity implements IEntity, Runnable {
         return webEntityList;
     }
 
-    public String entityToCfg(IEntity entity) throws IOException {
+    public String saveToConfig(IEntity entity) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
         File conf = new File("config/myObj.json");
@@ -86,7 +86,7 @@ public class WebEntity implements IEntity, Runnable {
                 + "\n" + this.newsListPath);
     }
 
-    public ArrayList<String> GetLinksFromTheMainSite(String MainLink) throws Exception {
+    public ArrayList<String> getLinksFromTheMainSite(String MainLink) throws Exception {
         Document doc = Jsoup.connect(entityUrl).get();
         Elements blockTitle = doc.select(newsListPath);///<<<!!!!!!!!!!
         Elements OnlyLinks = blockTitle.select("a[href]");         ///<<<!!!!!!!!!!
@@ -99,7 +99,7 @@ public class WebEntity implements IEntity, Runnable {
         return ArrayOfLinks;
     }
 
-    public ArrayList<String> ParsePage(String MainLink) throws Exception {
+    public ArrayList<String> parsePage(String MainLink) throws Exception {
         Document doc1 = Jsoup.connect(MainLink).get();
         ArrayList<String> InfoAboutLink = new ArrayList<String>();
 
@@ -123,7 +123,7 @@ public class WebEntity implements IEntity, Runnable {
 
         ArrayList<String> LinksFromMainSite = new ArrayList<String>();
         ArrayList<String> ArrayLinksFromTheMainSite = new ArrayList<String>();
-        ArrayLinksFromTheMainSite = GetLinksFromTheMainSite(entityUrl);
+        ArrayLinksFromTheMainSite = getLinksFromTheMainSite(entityUrl);
         DBConnection mySqlConection = new DBConnection();
         entityUrl = (regExp(entityUrl));
         for (int i = 0; i < ArrayLinksFromTheMainSite.size(); i++) {
@@ -131,7 +131,7 @@ public class WebEntity implements IEntity, Runnable {
             {
                 ArrayList<String> ArrayInfoIntoDB = new ArrayList<String>();
                 LinksFromMainSite.add(entityUrl.substring(0, entityUrl.length() - 1) + ArrayLinksFromTheMainSite.get(i));//Here 9 1
-                ArrayInfoIntoDB = ParsePage(LinksFromMainSite.get(i));
+                ArrayInfoIntoDB = parsePage(LinksFromMainSite.get(i));
                 ArrayInfoIntoDB.add(0, Integer.toString(i));
                 ArrayInfoIntoDB.add(LinksFromMainSite.get(i));
                 ArrayInfoIntoDB.add(entityUrl);
@@ -142,23 +142,24 @@ public class WebEntity implements IEntity, Runnable {
         System.out.println("Total number of news in the table : " + mySqlConection.ShowNumOfNewsInDB());
     }
 
-         public void run() {
-             try {
-                 parse();
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
-             //WebEntity we = new WebEntity();
-        //we = we.entityFromCfg("config/config.json");
+    public void run() {
+        try {
+            parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //WebEntity we = new WebEntity();
+        //we = we.getEntityFromConfig("config/config.json");
         //System.out.println(we.toString());
-        //we.entityListFromCfg("config/multiConfig.json");
+        //we.getEntityListFromConfig("config/multiConfig.json");
     }
-    public void main (String[] args) throws Exception{
+
+    public void main(String[] args) throws Exception {
 
         //WebEntity we = new WebEntity();
-        //we = we.entityFromCfg("config/config.json");
+        //we = we.getEntityFromConfig("config/config.json");
         //System.out.println(we.toString());
-        //we.entityListFromCfg("config/multiConfig.json");
+        //we.getEntityListFromConfig("config/multiConfig.json");
         this.run();
     }
 

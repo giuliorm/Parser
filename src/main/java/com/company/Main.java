@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.ArrayList;
 
-public  class Main {
+public class Main {
 
 
     //http://www.gazeta.spb.ru/allnews/
@@ -36,13 +36,13 @@ public  class Main {
         }
 
 */
-     //   ArrayList<WebEntity> we = new ArrayList<WebEntity>();
+        //   ArrayList<WebEntity> we = new ArrayList<WebEntity>();
 
-       // we.entityListFromCfg("config/multiConfig.json");
+        // we.getEntityListFromConfig("config/multiConfig.json");
         WebEntity we = new WebEntity();
-        //for (WebEntity entityInstance : we.entityListFromCfg("src/main/resources/config/multiConfig.json")) {
+        //for (WebEntity entityInstance : we.getEntityListFromConfig("src/main/resources/config/multiConfig.json")) {
         //};
-        ArrayList<WebEntity> webEntityList = we.entityListFromCfg("src/main/resources/config/multiConfig.json");
+        ArrayList<WebEntity> webEntityList = we.getEntityListFromConfig("src/main/resources/config/multiConfig.json");
 
         Thread[] threads = new Thread[2];
         for (int i = 0; i < webEntityList.size(); i++) {
@@ -50,11 +50,10 @@ public  class Main {
             threads[i].start();
         }
 
-        for (int i=0; i< webEntityList.size(); i++)
-        {
+        for (int i = 0; i < webEntityList.size(); i++) {
             threads[i].join();
         }
-        //we = we.entityFromCfg("config/config.json");
+        //we = we.getEntityFromConfig("config/config.json");
         //System.out.println(we.toString());
         //we.parse();
 

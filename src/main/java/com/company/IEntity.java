@@ -7,13 +7,13 @@ import java.util.ArrayList;
  * Created by Easton on 19.10.2015.
  */
 public interface IEntity {
-    public IEntity entityFromCfg(String cfgPath) throws IOException;
+    public IEntity getEntityFromConfig(String cfgPath) throws IOException;
 
-    public String entityToCfg(IEntity entity) throws IOException;
+    public String saveToConfig(IEntity entity) throws IOException;
 
-    public ArrayList<String> ParsePage(String MainLink) throws Exception;
+    public ArrayList<String> parsePage(String MainLink) throws Exception;
 
-    public ArrayList<String> GetLinksFromTheMainSite(String MainLink) throws Exception;
+    public ArrayList<String> getLinksFromTheMainSite(String MainLink) throws Exception;
 
-    public ArrayList<WebEntity> entityListFromCfg(String cfgPath) throws IOException;
+    public ArrayList<WebEntity> getEntityListFromConfig(String cfgPath) throws IOException;
 }
