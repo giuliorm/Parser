@@ -1,0 +1,9 @@
+{
+  "entityName": "site",
+  "entityUrl": "http://www.gazeta.spb.ru/allnews/",
+  "newsListPath": "div.materials.nonLine",
+  "articleNamePath": "h1",
+  "articleDatePath": "i",
+  "articleTextPath": "div#ntext",
+  "refreshTimeout": "600000"
+}

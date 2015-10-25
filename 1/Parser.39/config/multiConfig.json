@@ -1,0 +1,20 @@
+[
+  {
+    "entityName": "site",
+    "entityUrl": "http://www.gazeta.spb.ru/allnews/",
+    "newsListPath": "div.materials.nonLine",
+    "articleNamePath": "h1",
+    "articleDatePath": "i",
+    "articleTextPath": "div#ntext",
+    "refreshTimeout": "600000"
+  },
+  {
+    "entityName": "site1",
+    "entityUrl": "http://www.gazeta.spb.ru/allnews/1111",
+    "newsListPath": "div.materials.nonLine1111",
+    "articleNamePath": "h123",
+    "articleDatePath": "i123",
+    "articleTextPath": "div#ntext222",
+    "refreshTimeout": "6000001"
+  }
+]
