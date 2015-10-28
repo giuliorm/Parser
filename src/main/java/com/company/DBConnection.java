@@ -11,9 +11,11 @@ public class DBConnection {
     private static final String USER = "root";
     private static final String PASSWORD = "123";
 
-    public void PutIntoDB(ArrayList<String> InfoIntoDB) throws SQLException {
+    //TODO:change input data type
+    public void putIntoDB(ArrayList<String> InfoIntoDB) throws SQLException {
         Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO MyTable1 (MyNumber, MyTitle, MyMainText, MyDate, MyLink, MyMainLink) VALUES (?, ?, ?, ?, ?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO MyTable1 (MyNumber, MyTitle, " +
+                "MyMainText, MyDate, MyLink, MyMainLink) VALUES (?, ?, ?, ?, ?, ?)");
         stmt.setString(1, InfoIntoDB.get(0));
         stmt.setString(2, InfoIntoDB.get(1));
         stmt.setString(3, InfoIntoDB.get(2));
@@ -42,7 +44,7 @@ public class DBConnection {
         return ArrayListInformFromDB;
     }
 
-    public static int ShowNumOfNewsInDB() {
+    public static int showNumOfNewsInDB() {
         int count = 0;
         String query = "select count(*) from MyTable1";
 
