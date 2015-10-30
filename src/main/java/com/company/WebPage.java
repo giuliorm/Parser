@@ -46,9 +46,9 @@ public class WebPage implements Runnable {
         String articleName = header.get(0).textNodes().toString();
         pageContents.add(1, articleName);
         //main header on main page
+
         Elements body = htmlPage.select(articleTextPath);
         String articleText = (body).toString();
-        //add text correct between transger into string
         pageContents.add(2, articleText);
         //time on main page
         Elements time = htmlPage.select(articleDatePath);

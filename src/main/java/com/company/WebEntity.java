@@ -106,7 +106,15 @@ public class WebEntity implements Runnable {
 
     public void run() {
         try {
-            getLinksFromTheMainSite(entityUrl);
+            ArrayList<WebPage> arrayOfWebPage =  getLinksFromTheMainSite(entityUrl);
+            /*Thread[] threads = new Thread[arrayOfWebPage.size()];
+            for (int i = 0; i < arrayOfWebPage.size(); i++) {
+                threads[i] = new Thread(arrayOfWebPage.get(i));
+                threads[i].start();
+            }*/
+            for (int i = 0; i < arrayOfWebPage.size(); i++) {
+                arrayOfWebPage.get(i).run();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
