@@ -91,12 +91,11 @@ public class WebEntity implements Runnable {
         Elements blockTitle = doc.select(newsListPath);
         Elements OnlyLinks = blockTitle.select("a[href]");
         ArrayList<WebPage> arrayOfWebPages = new ArrayList<WebPage>();
-
         String newsUrl = regExp(entityUrl);
+
         for (int i = 0; i < OnlyLinks.size() - 1; i++) {
             if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
-                String pageUrl = newsUrl.substring(0, entityUrl.length() - 1)
-                        + OnlyLinks.get(i).attr("href").toString();
+                String pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();
                 WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
                 arrayOfWebPages.add(newPage);
             }
@@ -107,7 +106,7 @@ public class WebEntity implements Runnable {
 
     public void run() {
         try {
-            //parse();
+            getLinksFromTheMainSite(entityUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }
