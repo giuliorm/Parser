@@ -17,12 +17,12 @@ public class WebPage implements Runnable {
     private String articleDatePath;
     private String articleTextPath;
 
-    public WebPage(String entityUrl, String pageUrl, String articleTextPath, String articleDatePath, String articleNamePath){
+    public WebPage(String entityUrl, String pageUrl, String articleTextPath, String articleDatePath, String articleNamePath) {
         this.entityUrl = entityUrl;
         this.pageUrl = pageUrl;
         this.articleDatePath = articleDatePath;
-        this.articleNamePath = articleDatePath;
-        this.articleTextPath = articleNamePath;
+        this.articleNamePath = articleNamePath;
+        this.articleTextPath = articleTextPath;
     }
 
     public void run() {
@@ -41,12 +41,9 @@ public class WebPage implements Runnable {
         ArrayList<String> pageContents = new ArrayList<String>();
 
         pageContents.add(0, Long.toString(System.nanoTime()));
-
         Elements header = htmlPage.select(articleNamePath);
         String articleName = header.get(0).textNodes().toString();
         pageContents.add(1, articleName);
-        //main header on main page
-
         Elements body = htmlPage.select(articleTextPath);
         String articleText = (body).toString();
         pageContents.add(2, articleText);
@@ -54,10 +51,8 @@ public class WebPage implements Runnable {
         Elements time = htmlPage.select(articleDatePath);
         String articleDate = time.get(0).textNodes().toString().replace("&nbsp;", " ");
         pageContents.add(3, articleDate);
-
         pageContents.add(4, pageUrl);
         pageContents.add(5, entityUrl);
-
         mySqlConnection.putIntoDB(pageContents);
 
         System.out.println("Total number of news in the table : " + mySqlConnection.showNumOfNewsInDB());
