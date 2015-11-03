@@ -1,6 +1,6 @@
 [
   {
-    "entityName": "site",
+    "entityName": "gazeta.spb.ru",
     "entityUrl": "http://www.gazeta.spb.ru/allnews/",
     "newsListPath": "div.materials.nonLine",
     "articleNamePath": "h1",
@@ -9,7 +9,7 @@
     "refreshTimeout": "600000"
   },
   {
-    "entityName": "fontanka",
+    "entityName": "fontanka.ru",
     "entityUrl": "http://m.fontanka.ru/",
     "newsListPath": "li.article.switcher-all-news",
     "articleNamePath": "h2.itemTitle",

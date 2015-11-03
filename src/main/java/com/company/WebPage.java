@@ -1,5 +1,7 @@
 package com.company;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -10,12 +12,12 @@ import java.util.ArrayList;
  * Created by gp on 28.10.15.
  */
 public class WebPage implements Runnable {
-
     private String entityUrl;
     private String pageUrl;
     private String articleNamePath;
     private String articleDatePath;
     private String articleTextPath;
+    static Log LogWebPage = LogFactory.getLog("MainClassLogger");
 
     public WebPage(String entityUrl, String pageUrl, String articleTextPath, String articleDatePath, String articleNamePath) {
         this.entityUrl = entityUrl;
@@ -30,11 +32,12 @@ public class WebPage implements Runnable {
             parse();
         } catch (Exception e) {
             e.printStackTrace();
+            LogWebPage.info("Web page is not starting" + this.pageUrl);
         }
-
     }
 
-    public void parse() throws Exception {
+    public void parse() throws Exception
+    {
         DBConnection mySqlConnection = new DBConnection();
 
         Document htmlPage = Jsoup.connect(pageUrl).get();
@@ -54,8 +57,6 @@ public class WebPage implements Runnable {
         pageContents.add(4, pageUrl);
         pageContents.add(5, entityUrl);
         mySqlConnection.putIntoDB(pageContents);
-
-        System.out.println("Total number of news in the table : " + mySqlConnection.showNumOfNewsInDB());
     }
 
 }

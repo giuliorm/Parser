@@ -1,5 +1,5 @@
 {
-  "entityName": "site",
+  "entityName": "gazeta.spb.ru",
   "entityUrl": "http://www.gazeta.spb.ru/allnews/",
   "newsListPath": "div.materials.nonLine",
   "articleNamePath": "h1",

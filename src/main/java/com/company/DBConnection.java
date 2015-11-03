@@ -23,25 +23,22 @@ public class DBConnection {
         stmt.setString(5, InfoIntoDB.get(4));
         stmt.setString(6, InfoIntoDB.get(5));
         stmt.executeUpdate();
+    System.out.println(stmt);
     }
 
-    public static ArrayList<String> takeFromDB() throws SQLException {
+    public static ArrayList<String> takeFromDB(String nameOfNewsPortal) throws SQLException {
 
         ArrayList<String> ArrayListInformFromDB = new ArrayList<String>();
-        String query1 = "select * from MyTable1";
+        String query = "select MyLink from MyTable1 WHERE MyMainLink LIKE \"%" + nameOfNewsPortal + "%\"";
+        System.out.println(query);
         Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
         Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery(query1);
+        ResultSet rs = statement.executeQuery(query);
 
         while (rs.next()) {
             ArrayListInformFromDB.add(rs.getString(1));
-            ArrayListInformFromDB.add(rs.getString(2));
-            ArrayListInformFromDB.add(rs.getString(3));
-            ArrayListInformFromDB.add(rs.getString(4));
-            ArrayListInformFromDB.add(rs.getString(5));
-            ArrayListInformFromDB.add(rs.getString(6));
         }
-        return ArrayListInformFromDB;
+               return ArrayListInformFromDB;
     }
 
     public static int showNumOfNewsInDB() {
@@ -74,7 +71,7 @@ public class DBConnection {
         }
         return count;
     }
-
+/*
     public static String takeLastNewsLinkFromDB() throws SQLException {
         String LinkOfLastNewsInDB = null;
         String query1 = "select * FROM MyTable1 WHERE MyNumber = 0";
@@ -88,5 +85,5 @@ public class DBConnection {
         }
         return LinkOfLastNewsInDB;
     }
-
+*/
 }
