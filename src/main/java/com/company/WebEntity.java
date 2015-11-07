@@ -1,16 +1,14 @@
 package com.company;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,48 +98,47 @@ public class WebEntity implements Runnable {
         ArrayListNewsLinksInDB = mySqlConnection.takeFromDB(entityName);
         System.out.println(ArrayListNewsLinksInDB.size());
 
-        for (int i = 0; i < OnlyLinks.size() - 1; i++)
-        {
+        for (int i = 0; i < OnlyLinks.size() - 1; i++) {
             if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
                 String pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();
-                    if (ArrayListNewsLinksInDB.size()==0) {
-                            WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
-                            arrayOfWebPages.add(newPage);
-                    }
-                    else{
-                        for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
-                            if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
-                                break;
-                            }
-                            else {
-                                if ((j == ArrayListNewsLinksInDB.size()-1)) {
-                                    WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
-                                    arrayOfWebPages.add(newPage);
-                                }
+                if (ArrayListNewsLinksInDB.size() == 0) {
+                    WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
+                    arrayOfWebPages.add(newPage);
+                } else {
+                    for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
+                        if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
+                            break;
+                        } else {
+                            if ((j == ArrayListNewsLinksInDB.size() - 1)) {
+                                WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
+                                arrayOfWebPages.add(newPage);
                             }
                         }
                     }
+                }
             }
         }
         return arrayOfWebPages;
     }
 
     public void run() {
+        WebPageParser pageParser = null;
         try {
-            ArrayList<WebPage> arrayOfWebPage =  getLinksFromTheMainSite(entityUrl);
+            pageParser = new WebPageParser(getLinksFromTheMainSite(entityUrl));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pageParser.parse();
+        //ArrayList<WebPage> arrayOfWebPage =  getLinksFromTheMainSite(entityUrl);
             /*Thread[] threads = new Thread[arrayOfWebPage.size()];
             for (int i = 0; i < arrayOfWebPage.size(); i++) {
                 threads[i] = new Thread(arrayOfWebPage.get(i));
                 threads[i].start();
             }*/
-            for (int i = 0; i < arrayOfWebPage.size(); i++) {
-                arrayOfWebPage.get(i).run();
-            }
-        }
+            /*for (int i = 0; i < arrayOfWebPage.size(); i++) {
+                arrayOfWebPage.get(i).parse();
+            }*/
 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void main(String[] args) throws Exception {
