@@ -23,9 +23,8 @@ public class Main {
         Thread.sleep(600000);
 
         for (int i = 0; i < webEntityList.size(); i++) {
-            mLog.info("Thread for " + webEntityList.get(i).getEntityName() + " succesfully ended");
             threads[i].join();
-
+            mLog.info("Thread for " + webEntityList.get(i).getEntityName() + " succesfully ended");
         }
 
     }

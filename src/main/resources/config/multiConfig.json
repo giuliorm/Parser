@@ -1,5 +1,42 @@
 [
   {
+    "entityName": "gazeta",
+    "entityUrl": "http://www.gazeta.ru/",
+    "newsListPath": "div#news_lenta.left.bgwhite.col300.txtclear.adddecor div#news_lenta_intro div.sk_news_main.skin div.pu10",
+    "articleNamePath": "h1.txtclear.txt_2b.mt5.mb5",
+    "articleDatePath": "span.date_time",
+    "articleTextPath": "div.txt_1 div.txt_1",
+    "refreshTimeout": "600000"
+  },
+  {
+    "entityName": "ntv",
+    "entityUrl": "http://www.ntv.ru/novosti/",
+    "newsListPath": "div#news_day_container ul.arc_lst li.wthout_pct a.type2",
+    "articleNamePath": "body div.content div.c_left.news div#itemcontent h2#newsLead.lead.wrapType2",
+    "articleDatePath": "li.ndate",
+    "articleTextPath": "div.smcntr",
+    "refreshTimeout": "600000"
+  },
+  {
+    "entityName": "kommersant",
+    "entityUrl": "http://www.kommersant.ru/",
+    "newsListPath": "section.b-newsline.resize article.b-newsline__item a",
+    "articleNamePath": "h2.article_name",
+    "articleDatePath": "time.title__cake",
+    "articleTextPath": "p.b-article__text",
+    "refreshTimeout": "600000"
+  },
+
+  {
+    "entityName": "interfax",
+    "entityUrl": "http://www.interfax.ru/news/",
+    "newsListPath": "div.an",
+    "articleNamePath": "h1.textMTitle",
+    "articleDatePath": "a.time",
+    "articleTextPath": "div.at",
+    "refreshTimeout": "600000"
+  },
+  {
     "entityName": "gazeta.spb.ru",
     "entityUrl": "http://www.gazeta.spb.ru/allnews/",
     "newsListPath": "div.materials.nonLine",
