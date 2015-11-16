@@ -53,7 +53,8 @@ public class WebPageParser {
         pageContents.add(1, articleName);
         Elements body = htmlPage.select(webPage.getArticleTextPath());
         String articleText = (body).toString();
-        pageContents.add(2, articleText);
+        //added text preprocessing. may be a bottleneck.
+        pageContents.add(2, articleTextProcessing(articleText, webPage));
         //time on main page
         Elements time = htmlPage.select(webPage.getArticleDatePath());
         String articleDate = time.get(0).textNodes().toString().replace("&nbsp;", " ");
@@ -63,33 +64,65 @@ public class WebPageParser {
         mySqlConnection.putIntoDB(pageContents);
     }
 
-    public static String articleTextProcessing(String text) {
+    private String articleTextProcessing(String text, WebPage page) {
+        String entityUrl = page.getEntityUrl();
+
         String eraseRegex = "<[a-zA-Z\\/][^>]*>";
-        String hrefRegex = "<a.+?\\s*href\\s*=\\s*[\"\\']?([^\"\\'\\s>]+)[\"\\']?";
+        String hrefRegex = "(<a.+?\\s*href\\s*=)\\s*[\"\\']?([^\"\\'\\s>]+)[\"\\']?";
 
         Pattern hrefPattern = Pattern.compile(hrefRegex);
         Matcher hrefMatcher = hrefPattern.matcher(text);
 
+        ArrayList<String> linksFromText = new ArrayList<String>();
+
         while (hrefMatcher.find()) {
-            System.out.println(hrefMatcher.group());
-            String foundLink = hrefMatcher.group();
-            //foundLink.
+            String foundHref = hrefMatcher.group(2);
+            if (!isUrl(foundHref)) {
+                foundHref = makeUrl(foundHref, entityUrl);
+            } else foundHref = correctUrl(foundHref, entityUrl);
+            linksFromText.add(foundHref);
         }
 
         String resultText = text.replaceAll(eraseRegex, "");
-
-        //System.out.println(resultText);
 
         return resultText;
 
     }
 
-    public static void main(String[] args) {
-        String testString = "<p>\n" +
-                "\tВ 2014 году тремя организациями было доставлено на спецплощадки 174 960 автомобилей. Что должно было обойтись автовладельцам в 472 392 000 рублей, а с учетом платы за хранение (в среднем более пяти часов на автомобиль) &ndash; в полмиллиарда с лишним.</p>\n" +
-                "<p>\n" +
-                "\t<a href=\"http://http://www.fontanka.ru/2015/06/19/133/\">В июне 2015 года были объявлены новые правила эвакуации</a>, казалось бы, ужесточившие требования к ДПС и эвакуаторщикам. По словам представителей уполномоченных организаций, количество доставляемых на спецплощадки авто упало в разы и угрожало разорением. Однако <a href=\"http://www.fontanka.ru/2015/08/19/103/\">промежуточные итоги года поразительны</a>.</p>\n";
-        WebPageParser.articleTextProcessing(testString);
+    private boolean isUrl(String checkedString) {
+        String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
+                "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
+                "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
+        Pattern urlPattern = Pattern.compile(urlRegex);
+        Matcher urlMatcher = urlPattern.matcher(checkedString);
+        if (urlMatcher.find()) {
+            return true;
+        } else return false;
+    }
 
+    private String makeUrl(String interLink, String entityUrl) {
+        String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
+                "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
+                "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
+        Pattern urlPattern = Pattern.compile(urlRegex);
+        Matcher urlMatcher = urlPattern.matcher(entityUrl);
+        String targetUrl = entityUrl;
+        if (urlMatcher.find()) {
+            targetUrl = urlMatcher.group(2);
+        }
+        return targetUrl.concat(interLink);
+    }
+
+    private String correctUrl(String url, String entityUrl) { //Simple correction for fontanka. Not good, I know.
+        String correctedUrl = url;
+        System.out.println(url);
+        String checkRegex = "(https?:\\/\\/)(www.)(\\w*)\\.(\\w*)((\\W\\w*)*)";
+        Pattern checkPattern = Pattern.compile(checkRegex);
+        Matcher matcher = checkPattern.matcher(url);
+        if (matcher.find() && entityUrl == "http://m.fontanka.ru/") {
+            correctedUrl = makeUrl(matcher.group(5), entityUrl);
+        }
+
+        return correctedUrl;
     }
 }

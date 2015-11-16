@@ -2,6 +2,7 @@ package com.company;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WebEntity implements Runnable {
     private String entityName;
     private String entityUrl;
@@ -102,7 +104,7 @@ public class WebEntity implements Runnable {
             if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
                 String pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();
                 if (ArrayListNewsLinksInDB.size() == 0) {
-                    WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
+                    WebPage newPage = new WebPage(this, pageUrl);
                     arrayOfWebPages.add(newPage);
                 } else {
                     for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
@@ -110,7 +112,7 @@ public class WebEntity implements Runnable {
                             break;
                         } else {
                             if ((j == ArrayListNewsLinksInDB.size() - 1)) {
-                                WebPage newPage = new WebPage(entityUrl, pageUrl, articleTextPath, articleDatePath, articleNamePath);
+                                WebPage newPage = new WebPage(this, pageUrl);
                                 arrayOfWebPages.add(newPage);
                             }
                         }

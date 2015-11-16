@@ -4,6 +4,7 @@ package com.company;
  * Created by gp on 28.10.15.
  */
 public class WebPage {
+    private WebEntity entity;
     private String entityUrl;
     private String pageUrl;
     private String articleNamePath;
@@ -30,12 +31,14 @@ public class WebPage {
         return articleTextPath;
     }
 
-    public WebPage(String entityUrl, String pageUrl, String articleTextPath, String articleDatePath, String articleNamePath) {
-        this.entityUrl = entityUrl;
+    public WebPage(WebEntity entity, String pageUrl) {
+        this.entity = entity;
+        this.entityUrl = entity.getEntityUrl();
         this.pageUrl = pageUrl;
-        this.articleDatePath = articleDatePath;
-        this.articleNamePath = articleNamePath;
-        this.articleTextPath = articleTextPath;
+        this.articleDatePath = entity.getArticleDatePath();
+        this.articleNamePath = entity.getArticleNamePath();
+        this.articleTextPath = entity.getArticleTextPath();
+
     }
 
 
