@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Created by gp on 21.10.15.
  */
 public class DBConnection {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/MyBase1";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/MyBase1?characterEncoding=utf8";
     private static final String USER = "root";
     private static final String PASSWORD = "123";
 
@@ -23,7 +23,8 @@ public class DBConnection {
         stmt.setString(5, InfoIntoDB.get(4));
         stmt.setString(6, InfoIntoDB.get(5));
         stmt.executeUpdate();
-    System.out.println(stmt);
+        System.out.println(stmt);
+        //connection.close();
     }
 
     public static ArrayList<String> takeFromDB(String nameOfNewsPortal) throws SQLException {
@@ -38,7 +39,7 @@ public class DBConnection {
         while (rs.next()) {
             ArrayListInformFromDB.add(rs.getString(1));
         }
-               return ArrayListInformFromDB;
+        return ArrayListInformFromDB;
     }
 
     public static int showNumOfNewsInDB() {

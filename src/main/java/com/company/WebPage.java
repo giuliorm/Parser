@@ -4,12 +4,17 @@ package com.company;
  * Created by gp on 28.10.15.
  */
 public class WebPage {
+
     private WebEntity entity;
     private String entityUrl;
     private String pageUrl;
     private String articleNamePath;
     private String articleDatePath;
     private String articleTextPath;
+
+    public WebEntity getEntity() {
+        return entity;
+    }
 
     public String getEntityUrl() {
         return entityUrl;

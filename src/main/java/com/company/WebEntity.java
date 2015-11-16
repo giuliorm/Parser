@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +26,20 @@ public class WebEntity implements Runnable {
     private long refreshTimeout;
     static Log mLog = LogFactory.getLog("MainClassLogger");
 
+    private Crawler myCrawler;
+
+    private ArrayList<WebPage> webPages;
+
+    public ArrayList<WebPage> getWebPages() {
+        ArrayList<WebPage> result = webPages;
+        webPages.clear();
+        return result;
+    }
+
+    public void setMyCrawler(Crawler myCrawler) {
+        this.myCrawler = myCrawler;
+        webPages = new ArrayList<WebPage>();
+    }
 
     public String getArticleTextPath() {
         return articleTextPath;
@@ -155,5 +170,27 @@ public class WebEntity implements Runnable {
             LinkAfterRegExp = (entityUrl.substring(urlMatcher.start(), urlMatcher.end()) + "");
         }
         return LinkAfterRegExp;
+    }
+
+    private void addWebPageByLink(String link) {
+        WebPage newPage = new WebPage(this, link);
+        this.webPages.add(newPage);
+    }
+
+    public void addWebPage(String link) {
+        String linkUrl = Crawler.getUrlStd(link);
+        String entityUrl = Crawler.getUrlStd(getEntityUrl());
+
+        if (linkUrl.equals(entityUrl)) {
+            addWebPageByLink(link);
+            System.out.println("Added page " + link + "\n for WebEntity " + entityUrl);
+        } else {
+            Map<String, WebEntity> webEntityMap = myCrawler.getWebEntityMap();
+            if (webEntityMap.containsKey(linkUrl)) {
+                WebEntity entityForLink = webEntityMap.get(linkUrl);
+                entityForLink.addWebPage(link);
+                System.out.println("Transmitted page " + link + "\n to WebEntity " + entityForLink.getEntityUrl());
+            }
+        }
     }
 }

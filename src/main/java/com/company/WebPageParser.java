@@ -31,13 +31,27 @@ public class WebPageParser {
     }
 
     public void parse() {
-        for (int i = 0; i < arrayOfWebPage.size(); i++) {
+        /*for (int i = 0; i < arrayOfWebPage.size(); i++) {
             try {
                 parsePage(arrayOfWebPage.get(i));
             } catch (Exception e) {
                 e.printStackTrace();
                 LogWebPage.info("Web page is not starting" + arrayOfWebPage.get(i).getPageUrl());
             }
+        }*/
+
+        while (arrayOfWebPage.size() != 0) {
+            try {
+                parsePage(arrayOfWebPage.get(0));
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogWebPage.info("Web page is not starting " + arrayOfWebPage.get(0).getPageUrl());
+            }
+            /*ArrayList<WebPage> pageList = takeWebPagesFromEntity(arrayOfWebPage.get(0));
+            if (pageList.size() > 0) {
+                arrayOfWebPage.addAll(pageList);
+            }*/
+            arrayOfWebPage.remove(0);
         }
     }
 
@@ -83,6 +97,8 @@ public class WebPageParser {
             linksFromText.add(foundHref);
         }
 
+        //transmitLinksToEntity(linksFromText, page);
+
         String resultText = text.replaceAll(eraseRegex, "");
 
         return resultText;
@@ -124,5 +140,15 @@ public class WebPageParser {
         }
 
         return correctedUrl;
+    }
+
+    private ArrayList<WebPage> takeWebPagesFromEntity(WebPage page) throws NullPointerException {
+        return page.getEntity().getWebPages();
+    }
+
+    private void transmitLinksToEntity(ArrayList<String> links, WebPage page) {
+        for (int i = 0; i < links.size(); i++) {
+            page.getEntity().addWebPage(links.get(i));
+        }
     }
 }
