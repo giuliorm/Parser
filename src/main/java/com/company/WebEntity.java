@@ -103,7 +103,7 @@ public class WebEntity implements Runnable {
                 + "\n" + this.newsListPath);
     }
 
-    public ArrayList<WebPage> getLinksFromTheMainSite(String MainLink) throws Exception {
+    private ArrayList<WebPage> getLinksFromTheMainSite(String MainLink) throws Exception {
         Document doc = Jsoup.connect(entityUrl).get();
         Elements blockTitle = doc.select(newsListPath);
         Elements OnlyLinks = blockTitle.select("a[href]");
@@ -153,7 +153,7 @@ public class WebEntity implements Runnable {
         this.run();
     }
 
-    public static String regExp(String entityUrl) throws Exception {
+    private String regExp(String entityUrl) throws Exception {
         String LinkAfterRegExp = null;
         Pattern urlPattern = Pattern.compile("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})\\/");
         Matcher urlMatcher = urlPattern.matcher(entityUrl);

@@ -19,7 +19,7 @@ public class Crawler {
     private Map<String, WebEntity> webEntityMap;
     private ArrayList<String> linksToWebPages = new ArrayList<String>();
 
-    public Map<String, WebEntity> getWebEntityMap() {
+    private Map<String, WebEntity> getWebEntityMap() {
         return webEntityMap;
     }
 
@@ -59,7 +59,7 @@ public class Crawler {
         }
     }
 
-    public static String getUrlStd(String url) {
+    private String getUrlStd(String url) {
         String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
                 "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
                 "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
