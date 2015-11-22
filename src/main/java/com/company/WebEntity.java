@@ -11,7 +11,6 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +26,7 @@ public class WebEntity implements Runnable {
     static Log mLog = LogFactory.getLog("MainClassLogger");
 
     private Crawler myCrawler;
+    private WebPageParser myParser;
 
     private ArrayList<WebPage> webPages;
 
@@ -142,20 +142,11 @@ public class WebEntity implements Runnable {
         WebPageParser pageParser = null;
         try {
             pageParser = new WebPageParser(getLinksFromTheMainSite(entityUrl));
+            myParser = pageParser;
+            pageParser.parse();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        pageParser.parse();
-        //ArrayList<WebPage> arrayOfWebPage =  getLinksFromTheMainSite(entityUrl);
-            /*Thread[] threads = new Thread[arrayOfWebPage.size()];
-            for (int i = 0; i < arrayOfWebPage.size(); i++) {
-                threads[i] = new Thread(arrayOfWebPage.get(i));
-                threads[i].start();
-            }*/
-            /*for (int i = 0; i < arrayOfWebPage.size(); i++) {
-                arrayOfWebPage.get(i).parse();
-            }*/
-
     }
 
     public void main(String[] args) throws Exception {
@@ -172,25 +163,12 @@ public class WebEntity implements Runnable {
         return LinkAfterRegExp;
     }
 
-    private void addWebPageByLink(String link) {
-        WebPage newPage = new WebPage(this, link);
-        this.webPages.add(newPage);
+    public void transmitToCrawler(ArrayList<String> links) {
+        myCrawler.addLinks(links);
     }
 
-    public void addWebPage(String link) {
-        String linkUrl = Crawler.getUrlStd(link);
-        String entityUrl = Crawler.getUrlStd(getEntityUrl());
-
-        if (linkUrl.equals(entityUrl)) {
-            addWebPageByLink(link);
-            System.out.println("Added page " + link + "\n for WebEntity " + entityUrl);
-        } else {
-            Map<String, WebEntity> webEntityMap = myCrawler.getWebEntityMap();
-            if (webEntityMap.containsKey(linkUrl)) {
-                WebEntity entityForLink = webEntityMap.get(linkUrl);
-                entityForLink.addWebPage(link);
-                System.out.println("Transmitted page " + link + "\n to WebEntity " + entityForLink.getEntityUrl());
-            }
-        }
+    public void transmitToParser(String link) {
+        WebPage page = new WebPage(this, link);
+        myParser.addPage(page);
     }
 }

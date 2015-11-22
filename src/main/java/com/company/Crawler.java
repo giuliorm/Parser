@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 public class Crawler {
     static Log mLog = LogFactory.getLog("MainClassLogger");
     private Map<String, WebEntity> webEntityMap;
+    private ArrayList<String> linksToWebPages = new ArrayList<String>();
 
     public Map<String, WebEntity> getWebEntityMap() {
         return webEntityMap;
@@ -67,5 +68,26 @@ public class Crawler {
         if (urlMatcher.find()) {
             return urlMatcher.group(2);
         } else return "";
+    }
+
+    private void processLinks() {
+        for (int i = 0; i < linksToWebPages.size(); i++) {
+            routeLink(linksToWebPages.get(i));
+        }
+        linksToWebPages.clear();
+    }
+
+    private void routeLink(String link) {
+        String linkUrl = getUrlStd(link);
+        if (webEntityMap.containsKey(linkUrl)) {
+            WebEntity entityForLink = webEntityMap.get(linkUrl);
+            entityForLink.transmitToParser(link);
+        }
+
+    }
+
+    public void addLinks(ArrayList<String> links) {
+        linksToWebPages.addAll(links);
+        processLinks();
     }
 }
