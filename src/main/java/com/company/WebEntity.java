@@ -22,23 +22,15 @@ public class WebEntity implements Runnable {
     private String articleNamePath;
     private String articleDatePath;
     private String articleTextPath;
+    private String parserMode; //May be JSoup or Selenium. Field for future investigations.
     private long refreshTimeout;
     static Log mLog = LogFactory.getLog("MainClassLogger");
 
-    private Crawler myCrawler;
-    private WebPageParser myParser;
+    private Crawler crawlerForCurrentEntity;
+    private WebPageParser parserForCurrentEntity;
 
-    private ArrayList<WebPage> webPages;
-
-    public ArrayList<WebPage> getWebPages() {
-        ArrayList<WebPage> result = webPages;
-        webPages.clear();
-        return result;
-    }
-
-    public void setMyCrawler(Crawler myCrawler) {
-        this.myCrawler = myCrawler;
-        webPages = new ArrayList<WebPage>();
+    public void setCrawlerForCurrentEntity(Crawler crawlerForCurrentEntity) {
+        this.crawlerForCurrentEntity = crawlerForCurrentEntity;
     }
 
     public String getArticleTextPath() {
@@ -63,6 +55,10 @@ public class WebEntity implements Runnable {
 
     public String getArticleDatePath() {
         return articleDatePath;
+    }
+
+    public String getParserMode() {
+        return parserMode;
     }
 
     public long getRefreshTimeout() {
@@ -142,7 +138,7 @@ public class WebEntity implements Runnable {
         WebPageParser pageParser = null;
         try {
             pageParser = new WebPageParser(getLinksFromTheMainSite(entityUrl));
-            myParser = pageParser;
+            parserForCurrentEntity = pageParser;
             pageParser.parse();
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,11 +160,11 @@ public class WebEntity implements Runnable {
     }
 
     public void transmitToCrawler(ArrayList<String> links) {
-        myCrawler.addLinks(links);
+        crawlerForCurrentEntity.addLinks(links);
     }
 
     public void transmitToParser(String link) {
         WebPage page = new WebPage(this, link);
-        myParser.addPage(page);
+        parserForCurrentEntity.addPage(page);
     }
 }

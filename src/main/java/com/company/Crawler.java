@@ -55,10 +55,11 @@ public class Crawler {
 
             webEntityMap.put(entityUrl, webEntityList.get(i));
 
-            webEntityList.get(i).setMyCrawler(this);
+            webEntityList.get(i).setCrawlerForCurrentEntity(this);
         }
     }
 
+    //url should look like "https://docs.google.com" or "http://vk.com"
     private String getUrlStd(String url) {
         String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
                 "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
