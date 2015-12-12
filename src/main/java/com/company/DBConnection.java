@@ -72,6 +72,19 @@ public class DBConnection {
         }
         return count;
     }
+
+    public void putSentimentToDB(String score, String myNumber, String myDate) throws SQLException {
+        Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+        /*PreparedStatement stmt = connection.prepareStatement("INSERT INTO MyTable1 sentiment values ?" +
+                "WHERE MyNumber=? AND MyDate=?");*/
+        PreparedStatement stmt = connection.prepareStatement("UPDATE MyTable1 SET sentiment = ? " +
+                "WHERE MyNumber=?");
+        stmt.setString(1, score);
+        stmt.setString(2, myNumber);
+        //stmt.setString(3, myDate);
+        System.out.println(stmt);
+        stmt.executeUpdate();
+    }
 /*
     public static String takeLastNewsLinkFromDB() throws SQLException {
         String LinkOfLastNewsInDB = null;

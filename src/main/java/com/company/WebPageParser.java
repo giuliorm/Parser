@@ -71,12 +71,17 @@ public class WebPageParser {
         pageContents.add(4, webPage.getPageUrl());
         pageContents.add(5, webPage.getEntityUrl());
         mySqlConnection.putIntoDB(pageContents);
+
+        String sentimentValue = SentimentalAnalysis.checkViaAlchemy(pageContents.get(2));
+        mySqlConnection.putSentimentToDB(sentimentValue,
+                pageContents.get(0),
+                pageContents.get(3));
     }
 
     private String articleTextProcessing(String text, WebPage page) {
         String entityUrl = page.getEntityUrl();
 
-        String eraseRegex = "<[a-zA-Z\\/][^>]*>";
+        String eraseRegex = "<[a-zA-Z\\/][^>]*>|&nbsp;|\\n";
         String hrefRegex = "(<a.+?\\s*href\\s*=)\\s*[\"\\']?([^\"\\'\\s>]+)[\"\\']?";
 
         Pattern hrefPattern = Pattern.compile(hrefRegex);
