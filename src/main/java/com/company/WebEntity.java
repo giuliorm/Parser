@@ -108,8 +108,8 @@ public class WebEntity implements Runnable {
 
         DBConnection mySqlConnection = new DBConnection();
         ArrayList<String> ArrayListNewsLinksInDB = new ArrayList<String>();
-        ArrayListNewsLinksInDB = mySqlConnection.takeFromDB(entityName);
-        System.out.println(ArrayListNewsLinksInDB.size());
+//        ArrayListNewsLinksInDB = mySqlConnection.takeFromDB(entityName);
+//        System.out.println(ArrayListNewsLinksInDB.size());
 
         for (int i = 0; i < OnlyLinks.size() - 1; i++) {
             if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
