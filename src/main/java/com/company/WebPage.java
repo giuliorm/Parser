@@ -11,6 +11,7 @@ public class WebPage {
     private String articleNamePath;
     private String articleDatePath;
     private String articleTextPath;
+    private String parserMode;
 
     public WebEntity getEntity() {
         return entity;
@@ -36,6 +37,13 @@ public class WebPage {
         return articleTextPath;
     }
 
+    public String getParserMode() {
+        return parserMode;
+    }
+
+
+
+
     public WebPage(WebEntity entity, String pageUrl) {
         this.entity = entity;
         this.entityUrl = entity.getEntityUrl();
@@ -43,7 +51,7 @@ public class WebPage {
         this.articleDatePath = entity.getArticleDatePath();
         this.articleNamePath = entity.getArticleNamePath();
         this.articleTextPath = entity.getArticleTextPath();
-
+        this.parserMode = entity.getParserMode();
     }
 
 

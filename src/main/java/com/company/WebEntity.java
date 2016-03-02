@@ -7,12 +7,19 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WebEntity implements Runnable {
@@ -25,45 +32,10 @@ public class WebEntity implements Runnable {
     private String parserMode; //May be JSoup or Selenium. Field for future investigations.
     private long refreshTimeout;
     static Log mLog = LogFactory.getLog("MainClassLogger");
+    static WebDriver driver = new HtmlUnitDriver();
 
     private Crawler crawlerForCurrentEntity;
     private WebPageParser parserForCurrentEntity;
-
-    public void setCrawlerForCurrentEntity(Crawler crawlerForCurrentEntity) {
-        this.crawlerForCurrentEntity = crawlerForCurrentEntity;
-    }
-
-    public String getArticleTextPath() {
-        return articleTextPath;
-    }
-
-    public String getEntityName() {
-        return entityName;
-    }
-
-    public String getEntityUrl() {
-        return entityUrl;
-    }
-
-    public String getNewsListPath() {
-        return newsListPath;
-    }
-
-    public String getArticleNamePath() {
-        return articleNamePath;
-    }
-
-    public String getArticleDatePath() {
-        return articleDatePath;
-    }
-
-    public String getParserMode() {
-        return parserMode;
-    }
-
-    public long getRefreshTimeout() {
-        return refreshTimeout;
-    }
 
     //Single-configuration file
     public static WebEntity getEntityFromConfig(String cfgPath) throws IOException {
@@ -99,39 +71,52 @@ public class WebEntity implements Runnable {
                 + "\n" + this.newsListPath);
     }
 
+
+    /*child method*/
     private ArrayList<WebPage> getLinksFromTheMainSite(String MainLink) throws Exception {
-        Document doc = Jsoup.connect(entityUrl).get();
-        Elements blockTitle = doc.select(newsListPath);
-        Elements OnlyLinks = blockTitle.select("a[href]");
         ArrayList<WebPage> arrayOfWebPages = new ArrayList<WebPage>();
-        String newsUrl = regExp(entityUrl);
-
-        DBConnection mySqlConnection = new DBConnection();
-        ArrayList<String> ArrayListNewsLinksInDB = new ArrayList<String>();
-//        ArrayListNewsLinksInDB = mySqlConnection.takeFromDB(entityName);
+        if (parserMode.equals("jsoup")) {
+            Document doc = Jsoup.connect(entityUrl).get();
+            Elements blockTitle = doc.select(newsListPath);
+            Elements OnlyLinks = blockTitle.select("a[href]");
+            String newsUrl = regExp(entityUrl);
+//        DBConnection dbConnection = new DBConnection();
+//        ArrayListNewsLinksInDB = dbConnection.takeFromDB(entityName);
 //        System.out.println(ArrayListNewsLinksInDB.size());
-
-        for (int i = 0; i < OnlyLinks.size() - 1; i++) {
-            if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
-                String pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();
-                if (ArrayListNewsLinksInDB.size() == 0) {
-                    WebPage newPage = new WebPage(this, pageUrl);
-                    arrayOfWebPages.add(newPage);
-                } else {
-                    for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
-                        if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
-                            break;
-                        } else {
-                            if ((j == ArrayListNewsLinksInDB.size() - 1)) {
-                                WebPage newPage = new WebPage(this, pageUrl);
-                                arrayOfWebPages.add(newPage);
+            ArrayList<String> ArrayListNewsLinksInDB = new ArrayList<String>();
+            for (int i = 0; i < OnlyLinks.size(); i++) {
+                if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
+                    String pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();
+                    if (ArrayListNewsLinksInDB.size() == 0) {
+                        WebPage newPage = new WebPage(this, pageUrl);
+                        arrayOfWebPages.add(newPage);
+                    } else {
+                        for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
+                            if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
+                                break;
+                            } else {
+                                if ((j == ArrayListNewsLinksInDB.size() - 1)) {
+                                    WebPage newPage = new WebPage(this, pageUrl);
+                                    arrayOfWebPages.add(newPage);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        return arrayOfWebPages;
+    else {
+        driver.get(entityUrl);
+
+        List<WebElement> OnlyLinks = driver.findElements(By.xpath(newsListPath));
+
+        for (WebElement link : OnlyLinks){
+                //System.out.println(link.getAttribute("href"));
+                WebPage newPage = new WebPage(this, link.getAttribute("href"));
+                arrayOfWebPages.add(newPage);
+        }
+    }
+    return arrayOfWebPages;
     }
 
     public void run() {
@@ -166,5 +151,42 @@ public class WebEntity implements Runnable {
     public void transmitToParser(String link) {
         WebPage page = new WebPage(this, link);
         parserForCurrentEntity.addPage(page);
+    }
+
+
+    public void setCrawlerForCurrentEntity(Crawler crawlerForCurrentEntity) {
+        this.crawlerForCurrentEntity = crawlerForCurrentEntity;
+    }
+
+    public String getArticleTextPath() {
+        return articleTextPath;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public String getEntityUrl() {
+        return entityUrl;
+    }
+
+    public String getNewsListPath() {
+        return newsListPath;
+    }
+
+    public String getArticleNamePath() {
+        return articleNamePath;
+    }
+
+    public String getArticleDatePath() {
+        return articleDatePath;
+    }
+
+    public String getParserMode() {
+        return parserMode;
+    }
+
+    public long getRefreshTimeout() {
+        return refreshTimeout;
     }
 }

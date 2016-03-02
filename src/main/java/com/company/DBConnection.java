@@ -10,16 +10,16 @@ import java.util.ArrayList;
 /**
  * Created by gp on 21.10.15.
  */
-//TODO for using mongo db see here:
+// for using mongo db see here:
 //https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 
 public class DBConnection {
     MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
     String[] titles = {"Number", "Title", "MainText", "Date", "Link", "MainLink"};
+    DB db = mongoClient.getDB( "mongo_database" );
 
     public void putIntoDB(ArrayList<String> InfoIntoDB) {
         try{
-            DB db = mongoClient.getDB( "mongo_database" );
             System.out.println("Connect to database successfully");
             DBCollection coll = db.getCollection("mycol");
             BasicDBObject doc = new BasicDBObject();

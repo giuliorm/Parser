@@ -1,5 +1,6 @@
 [
   {
+    "parserMode": "jsoup",
     "entityName": "gazeta",
     "entityUrl": "http://www.gazeta.ru/",
     "newsListPath": "div#news_lenta.left.bgwhite.col300.txtclear.adddecor div#news_lenta_intro div.sk_news_main.skin div.pu10",
@@ -9,6 +10,7 @@
     "refreshTimeout": "600000"
   },
   {
+    "parserMode": "jsoup",
     "entityName": "ntv",
     "entityUrl": "http://www.ntv.ru/novosti/",
     "newsListPath": "div#news_day_container ul.arc_lst li.wthout_pct a.type2",
@@ -18,6 +20,7 @@
     "refreshTimeout": "600000"
   },
   {
+    "parserMode": "jsoup",
     "entityName": "kommersant",
     "entityUrl": "http://www.kommersant.ru/",
     "newsListPath": "section.b-newsline.resize article.b-newsline__item a",
@@ -28,6 +31,7 @@
   },
 
   {
+    "parserMode": "jsoup",
     "entityName": "interfax",
     "entityUrl": "http://www.interfax.ru/news/",
     "newsListPath": "div.an",
@@ -37,6 +41,7 @@
     "refreshTimeout": "600000"
   },
   {
+    "parserMode": "jsoup",
     "entityName": "gazeta.spb.ru",
     "entityUrl": "http://www.gazeta.spb.ru/allnews/",
     "newsListPath": "div.materials.nonLine",
@@ -46,6 +51,7 @@
     "refreshTimeout": "600000"
   },
   {
+    "parserMode": "jsoup",
     "entityName": "fontanka.ru",
     "entityUrl": "http://m.fontanka.ru/",
     "newsListPath": "li.article.switcher-all-news",
@@ -53,5 +59,15 @@
     "articleDatePath": "span.itemDateCreated",
     "articleTextPath": "div.itemFullText",
     "refreshTimeout": "600000"
-  }
+  },
+  {
+     "parserMode": "js",
+     "entityName": "https://saint-petersburg.ru/",
+     "entityUrl": "https://saint-petersburg.ru/",
+     "newsListPath": "/html/body/div[3]/div[2]/div/ul/li/a",
+     "articleNamePath": "/html/body/div[3]/div[1]/div[1]/h1/a",
+     "articleDatePath": "/html/body/div[3]/div[1]/div[1]/time",
+     "articleTextPath": "/html/body/div[3]/div[1]/div[1]/div",
+     "refreshTimeout": "600000"
+   }
 ]

@@ -5,8 +5,13 @@ import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,31 +56,45 @@ public class WebPageParser {
     }
 
     private void parsePage(WebPage webPage) throws Exception {
-        DBConnection mySqlConnection = new DBConnection();
-
-        Document htmlPage = Jsoup.connect(webPage.getPageUrl()).get();
+        DBConnection dbConnection = new DBConnection();
+        WebDriver driver = new HtmlUnitDriver();
         ArrayList<String> pageContents = new ArrayList<String>();
-
         pageContents.add(0, Long.toString(System.nanoTime()));
-        Elements header = htmlPage.select(webPage.getArticleNamePath());
-        String articleName = header.get(0).textNodes().toString();
-        pageContents.add(1, articleName);
-        Elements body = htmlPage.select(webPage.getArticleTextPath());
-        String articleText = (body).toString();
-        //added text preprocessing. may be a bottleneck.
-        pageContents.add(2, articleTextProcessing(articleText, webPage));
-        //time on main page
-        Elements time = htmlPage.select(webPage.getArticleDatePath());
-        String articleDate = time.get(0).textNodes().toString().replace("&nbsp;", " ");
-        pageContents.add(3, articleDate);
-        pageContents.add(4, webPage.getPageUrl());
-        pageContents.add(5, webPage.getEntityUrl());
-        mySqlConnection.putIntoDB(pageContents);
 
-     /*   String sentimentValue = SentimentalAnalysis.checkViaAlchemy(pageContents.get(2));
-        mySqlConnection.putSentimentToDB(sentimentValue,
-                pageContents.get(0),
-     *//*           pageContents.get(3));*/
+        if (webPage.getParserMode().equals("jsoup")) {
+            Document htmlPage = Jsoup.connect(webPage.getPageUrl()).get();
+            Elements header = htmlPage.select(webPage.getArticleNamePath());
+            String articleName = header.get(0).textNodes().toString();
+            pageContents.add(1, articleName);
+            Elements body = htmlPage.select(webPage.getArticleTextPath());
+            String articleText = (body).toString();
+            //added text preprocessing. may be a bottleneck.
+            pageContents.add(2, articleTextProcessing(articleText, webPage));
+            //time on main page
+            Elements time = htmlPage.select(webPage.getArticleDatePath());
+            String articleDate = time.get(0).textNodes().toString().replace("&nbsp;", " ");
+            pageContents.add(3, articleDate);
+            pageContents.add(4, webPage.getPageUrl());
+            pageContents.add(5, webPage.getEntityUrl());
+        }
+
+        else {
+            driver.get(webPage.getPageUrl());
+            String Header = driver.findElement(By.xpath(webPage.getArticleNamePath())).getText();
+            List<WebElement> BodyElement = driver.findElements(By.xpath(webPage.getArticleTextPath()));
+            String Body = "";
+            for (WebElement element : BodyElement){
+                Body += element.getText();
+            }
+
+            String articleDate = driver.findElement(By.xpath(webPage.getArticleDatePath())).getText();
+            pageContents.add(1, Header);
+            pageContents.add(2, Body);
+            pageContents.add(3, articleDate);
+            pageContents.add(4, webPage.getPageUrl());
+            pageContents.add(5, webPage.getEntityUrl());
+        }
+            dbConnection.putIntoDB(pageContents);
     }
 
     private String articleTextProcessing(String text, WebPage page) {

@@ -11,9 +11,5 @@ public interface IEntity {
 
     public String saveToConfig(IEntity entity) throws IOException;
 
-    //public ArrayList<String> parsePage(String MainLink) throws Exception;
-
-    //public ArrayList<String> getLinksFromTheMainSite(String MainLink) throws Exception;
-
     public ArrayList<WebEntity> getEntityListFromConfig(String cfgPath) throws IOException;
 }
