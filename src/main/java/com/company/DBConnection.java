@@ -1,9 +1,6 @@
 package com.company;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 
 import java.util.ArrayList;
 
@@ -38,5 +35,8 @@ public class DBConnection {
         }catch(Exception e){
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
+    }
+    public boolean findInDB(String pageUrl ){
+        return (db.getCollection("mycol").find((new BasicDBObject("pageUrl", pageUrl))).size()==1) ?  true : false;
     }
 }
