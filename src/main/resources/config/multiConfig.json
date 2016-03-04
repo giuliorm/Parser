@@ -1,5 +1,15 @@
 [
   {
+    "parserMode": "js",
+    "entityName": "http://www.metronews.ru/news/peterbourg/",
+    "entityUrl": "http://www.metronews.ru/news/peterbourg/",
+    "newsListPath": "//*[contains(@class, \"column-item\")]//*[contains(@class, \"push-component\")]/a",
+    "articleNamePath": "/html/body/div[1]/div[3]/div[7]/div[2]/div[1]/div[1]/h1/span",
+    "articleDatePath": "/html/body/div[1]/div[3]/div[7]/div[2]/div[1]/div[1]/div[1]",
+    "articleTextPath": "//*[contains(@class, \"body-area\")]//*[contains(@class, \"article-body\")]/p",
+    "refreshTimeout": "600000"
+  },
+  {
     "parserMode": "jsoup",
     "entityName": "gazeta",
     "entityUrl": "http://www.gazeta.ru/",
@@ -61,13 +71,13 @@
     "refreshTimeout": "600000"
   },
   {
-     "parserMode": "js",
-     "entityName": "https://saint-petersburg.ru/",
-     "entityUrl": "https://saint-petersburg.ru/",
-     "newsListPath": "/html/body/div[3]/div[2]/div/ul/li/a",
-     "articleNamePath": "/html/body/div[3]/div[1]/div[1]/h1/a",
-     "articleDatePath": "/html/body/div[3]/div[1]/div[1]/time",
-     "articleTextPath": "/html/body/div[3]/div[1]/div[1]/div",
-     "refreshTimeout": "600000"
-   }
-]
+    "parserMode": "js",
+    "entityName": "https://saint-petersburg.ru/",
+    "entityUrl": "https://saint-petersburg.ru/",
+    "newsListPath": "/html/body/div[3]/div[2]/div/ul/li/a",
+    "articleNamePath": "/html/body/div[3]/div[1]/div[1]/h1/a",
+    "articleDatePath": "/html/body/div[3]/div[1]/div[1]/time",
+    "articleTextPath": "/html/body/div[3]/div[1]/div[1]/div",
+    "refreshTimeout": "600000"
+  }
+  ]

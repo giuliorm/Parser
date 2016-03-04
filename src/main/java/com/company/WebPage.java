@@ -6,15 +6,41 @@ package com.company;
 public class WebPage {
 
     private WebEntity entity;
+    private Long parseTime;
     private String entityUrl;
     private String pageUrl;
-    private String articleNamePath;
-    private String articleDatePath;
-    private String articleTextPath;
+    private String articleName;
+    private String articleDate;
+    private String articleText;
     private String parserMode;
 
     public WebEntity getEntity() {
         return entity;
+    }
+
+
+    public Long parseTime() {
+        return parseTime;
+    }
+
+    public void setEntity(WebEntity entity) {
+        this.entity = entity;
+    }
+
+    public void setParseTime(Long parseTime) {
+        this.parseTime = parseTime;
+    }
+
+    public void setArticleName(String articleName) {
+        this.articleName = articleName;
+    }
+
+    public void setArticleDate(String articleDate) {
+        this.articleDate = articleDate;
+    }
+
+    public void setArticleText(String articleText) {
+        this.articleText = articleText;
     }
 
     public String getEntityUrl() {
@@ -25,34 +51,30 @@ public class WebPage {
         return pageUrl;
     }
 
-    public String getArticleNamePath() {
-        return articleNamePath;
+    public String getArticleName() {
+        return articleName;
     }
 
-    public String getArticleDatePath() {
-        return articleDatePath;
+    public String getArticleDate() {
+        return articleDate;
     }
 
-    public String getArticleTextPath() {
-        return articleTextPath;
+    public String getArticleText() {
+        return articleText;
     }
 
     public String getParserMode() {
         return parserMode;
     }
 
-
-
-
     public WebPage(WebEntity entity, String pageUrl) {
         this.entity = entity;
         this.entityUrl = entity.getEntityUrl();
         this.pageUrl = pageUrl;
-        this.articleDatePath = entity.getArticleDatePath();
-        this.articleNamePath = entity.getArticleNamePath();
-        this.articleTextPath = entity.getArticleTextPath();
+        this.articleDate = entity.getArticleDatePath();
+        this.articleName = entity.getArticleNamePath();
+        this.articleText = entity.getArticleTextPath();
         this.parserMode = entity.getParserMode();
     }
-
 
 }

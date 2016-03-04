@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WebEntity implements Runnable {
+
     private String entityName;
     private String entityUrl;
     private String newsListPath;
@@ -32,11 +33,9 @@ public class WebEntity implements Runnable {
     private String parserMode; //May be JSoup or Selenium. Field for future investigations.
     private long refreshTimeout;
     static Log mLog = LogFactory.getLog("MainClassLogger");
-    static WebDriver driver = new HtmlUnitDriver();
-
     private Crawler crawlerForCurrentEntity;
-    private WebPageParser parserForCurrentEntity;
 
+    private WebPageParser parserForCurrentEntity;
     //Single-configuration file
     public static WebEntity getEntityFromConfig(String cfgPath) throws IOException {
 
@@ -71,7 +70,6 @@ public class WebEntity implements Runnable {
                 + "\n" + this.newsListPath);
     }
 
-
     /*child method*/
     private ArrayList<WebPage> getLinksFromTheMainSite(String MainLink) throws Exception {
         ArrayList<WebPage> arrayOfWebPages = new ArrayList<WebPage>();
@@ -80,9 +78,6 @@ public class WebEntity implements Runnable {
             Elements blockTitle = doc.select(newsListPath);
             Elements OnlyLinks = blockTitle.select("a[href]");
             String newsUrl = regExp(entityUrl);
-//        DBConnection dbConnection = new DBConnection();
-//        ArrayListNewsLinksInDB = dbConnection.takeFromDB(entityName);
-//        System.out.println(ArrayListNewsLinksInDB.size());
             ArrayList<String> ArrayListNewsLinksInDB = new ArrayList<String>();
             for (int i = 0; i < OnlyLinks.size(); i++) {
                 if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
@@ -106,18 +101,20 @@ public class WebEntity implements Runnable {
             }
         }
     else {
-        driver.get(entityUrl);
+            WebDriver driver = new HtmlUnitDriver();
+            driver.get(entityUrl);
 
         List<WebElement> OnlyLinks = driver.findElements(By.xpath(newsListPath));
 
         for (WebElement link : OnlyLinks){
-                //System.out.println(link.getAttribute("href"));
-                WebPage newPage = new WebPage(this, link.getAttribute("href"));
-                arrayOfWebPages.add(newPage);
+            WebPage newPage = new WebPage(this, link.getAttribute("href"));
+            arrayOfWebPages.add(newPage);
         }
     }
     return arrayOfWebPages;
     }
+
+
 
     public void run() {
         WebPageParser pageParser = null;

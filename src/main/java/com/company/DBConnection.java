@@ -1,42 +1,29 @@
 package com.company;
 
-import com.mongodb.*;
-
-import java.util.ArrayList;
-
-/**
- * Created by gp on 21.10.15.
- */
-// for using mongo db see here:
-//https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 
 public class DBConnection {
     MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-    String[] titles = {"Number", "Title", "MainText", "Date", "Link", "MainLink"};
     DB db = mongoClient.getDB( "mongo_database" );
+    DBCollection coll = db.getCollection("mycol");
 
-    public void putIntoDB(ArrayList<String> InfoIntoDB) {
+    public void putIntoDB(WebPage page) {
         try{
             System.out.println("Connect to database successfully");
-            DBCollection coll = db.getCollection("mycol");
             BasicDBObject doc = new BasicDBObject();
-            for (int i =0; i<InfoIntoDB.size(); i++)
-            {
-                if (i<= titles.length-1) {
-                    doc.append(titles[i], InfoIntoDB.get(i));
-                }
-                else{
-                    doc.append("AdditionalTitle", InfoIntoDB.get(i));
-                }
-            }
+            doc.append("Number",page.parseTime()).append("Title", page.getArticleName()).append("MainText", page.getArticleText());
+            doc.append("Date", page.getArticleDate()).append("Link", page.getPageUrl()).append("MainLink",page.getEntityUrl());
             coll.insert(doc);
-
             System.out.println("Document inserted successfully");
         }catch(Exception e){
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
     }
-    public boolean findInDB(String pageUrl ){
-        return (db.getCollection("mycol").find((new BasicDBObject("pageUrl", pageUrl))).size()==1) ?  true : false;
+
+    public boolean IsExist(String pageUrl ){
+        return (coll.find(new BasicDBObject("Link", pageUrl)).count())>0 ? true:false;
     }
 }

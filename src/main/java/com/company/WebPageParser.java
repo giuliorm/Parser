@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 public class WebPageParser {
     static Log LogWebPage = LogFactory.getLog("MainClassLogger");
     DBConnection dbConnection = new DBConnection();
+    static WebDriver driver = new HtmlUnitDriver();
 
     private ArrayList<WebPage> arrayOfWebPage;
 
@@ -57,45 +58,30 @@ public class WebPageParser {
     }
 
     private void parsePage(WebPage webPage) throws Exception {
-        WebDriver driver = new HtmlUnitDriver();
-        ArrayList<String> pageContents = new ArrayList<String>();
-        pageContents.add(0, Long.toString(System.nanoTime()));
-
-        if(dbConnection.findInDB(webPage.getPageUrl())) {
-
+           if(!dbConnection.IsExist(webPage.getPageUrl())) {
+            webPage.setParseTime(System.nanoTime());
             if (webPage.getParserMode().equals("jsoup")) {
                 Document htmlPage = Jsoup.connect(webPage.getPageUrl()).get();
-                Elements header = htmlPage.select(webPage.getArticleNamePath());
-                String articleName = header.get(0).textNodes().toString();
-                pageContents.add(1, articleName);
-                Elements body = htmlPage.select(webPage.getArticleTextPath());
-                String articleText = (body).toString();
-                //added text preprocessing. may be a bottleneck.
-                pageContents.add(2, articleTextProcessing(articleText, webPage));
-                //time on main page
-                Elements time = htmlPage.select(webPage.getArticleDatePath());
-                String articleDate = time.get(0).textNodes().toString().replace("&nbsp;", " ");
-                pageContents.add(3, articleDate);
-                pageContents.add(4, webPage.getPageUrl());
-                pageContents.add(5, webPage.getEntityUrl());
+                webPage.setArticleName(htmlPage.select(webPage.getArticleName()).get(0).textNodes().toString());
+                webPage.setArticleText(articleTextProcessing((htmlPage.select(webPage.getArticleText())).toString(), webPage));
+                webPage.setArticleDate(htmlPage.select(webPage.getArticleDate()).get(0).textNodes().toString().replace("&nbsp;", " "));
+                //TODO bug here. Sometimes articleDate is empty.  http://www.kommersant.ru/Doc/2748082
             } else {
                 driver.get(webPage.getPageUrl());
-                String Header = driver.findElement(By.xpath(webPage.getArticleNamePath())).getText();
-                List<WebElement> BodyElement = driver.findElements(By.xpath(webPage.getArticleTextPath()));
+                String Header = driver.findElement(By.xpath(webPage.getArticleName())).getText();
+                List<WebElement> BodyElement = driver.findElements(By.xpath(webPage.getArticleText()));
                 String Body = "";
                 for (WebElement element : BodyElement) {
                     Body += element.getText();
                 }
 
-                String articleDate = driver.findElement(By.xpath(webPage.getArticleDatePath())).getText();
-                pageContents.add(1, Header);
-                pageContents.add(2, Body);
-                pageContents.add(3, articleDate);
-                pageContents.add(4, webPage.getPageUrl());
-                pageContents.add(5, webPage.getEntityUrl());
-            }
-          //  System.out.println("Новость " + webPage.getPageUrl() + " была создана" );
-            dbConnection.putIntoDB(pageContents);
+                String articleDate = driver.findElement(By.xpath(webPage.getArticleDate())).getText();
+                webPage.setArticleName(Header);
+                webPage.setArticleText(Body);
+                webPage.setArticleDate(articleDate);
+                }
+            System.out.println("Новость " + webPage.getPageUrl() + " была создана" );
+            dbConnection.putIntoDB(webPage);
         }
     }
 
