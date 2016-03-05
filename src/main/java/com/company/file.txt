@@ -140,3 +140,4 @@
     "refreshTimeout": "600000"
   }
 ]
+//47news dp.ru

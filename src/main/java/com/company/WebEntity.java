@@ -80,20 +80,23 @@ public class WebEntity implements Runnable {
             String newsUrl = regExp(entityUrl);
             ArrayList<String> ArrayListNewsLinksInDB = new ArrayList<String>();
             for (int i = 0; i < OnlyLinks.size(); i++) {
+                String pageUrl=null;
                 if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
-                    String pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();
-                    if (ArrayListNewsLinksInDB.size() == 0) {
-                        WebPage newPage = new WebPage(this, pageUrl);
-                        arrayOfWebPages.add(newPage);
-                    } else {
-                        for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
-                            if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
-                                break;
-                            } else {
-                                if ((j == ArrayListNewsLinksInDB.size() - 1)) {
-                                    WebPage newPage = new WebPage(this, pageUrl);
-                                    arrayOfWebPages.add(newPage);
-                                }
+                    pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();}
+                else  {
+                    pageUrl=OnlyLinks.get(i).attr("href").toString();
+                }
+                if (ArrayListNewsLinksInDB.size() == 0) {
+                    WebPage newPage = new WebPage(this, pageUrl);
+                    arrayOfWebPages.add(newPage);
+                } else {
+                    for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
+                        if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
+                            break;
+                        } else {
+                            if ((j == ArrayListNewsLinksInDB.size() - 1)) {
+                                WebPage newPage = new WebPage(this, pageUrl);
+                                arrayOfWebPages.add(newPage);
                             }
                         }
                     }

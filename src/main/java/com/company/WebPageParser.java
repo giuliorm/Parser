@@ -78,7 +78,7 @@ public class WebPageParser {
                 webPage.setArticleName(Header);
                 webPage.setArticleText(Body);
                 webPage.setArticleDate(articleDate);
-                }
+            }
             System.out.println(webPage.getArticleText());
             System.out.println(webPage.getArticleName());
             System.out.println(webPage.getArticleDate());
