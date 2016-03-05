@@ -4,8 +4,8 @@
     "entityName": "http://www.metronews.ru/news/peterbourg/",
     "entityUrl": "http://www.metronews.ru/news/peterbourg/",
     "newsListPath": "//*[contains(@class, \"column-item\")]//*[contains(@class, \"push-component\")]/a",
-    "articleNamePath": "/html/body/div[1]/div[3]/div[7]/div[2]/div[1]/div[1]/h1/span",
-    "articleDatePath": "/html/body/div[1]/div[3]/div[7]/div[2]/div[1]/div[1]/div[1]",
+    "articleNamePath": "//*[contains(@class, \"article-wrapper\")]//*[contains(@class, \"title\")]/span",
+    "articleDatePath": "//*[contains(@class, \"article-main-wrapper\")]//*[contains(@id, \"date\")]",
     "articleTextPath": "//*[contains(@class, \"body-area\")]//*[contains(@class, \"article-body\")]/p",
     "refreshTimeout": "600000"
   },
@@ -29,17 +29,6 @@
     "articleTextPath": "div.smcntr",
     "refreshTimeout": "600000"
   },
-  {
-    "parserMode": "jsoup",
-    "entityName": "kommersant",
-    "entityUrl": "http://www.kommersant.ru/",
-    "newsListPath": "section.b-newsline.resize article.b-newsline__item a",
-    "articleNamePath": "h2.article_name",
-    "articleDatePath": "time.title__cake",
-    "articleTextPath": "p.b-article__text",
-    "refreshTimeout": "600000"
-  },
-
   {
     "parserMode": "jsoup",
     "entityName": "interfax",
@@ -71,6 +60,16 @@
     "refreshTimeout": "600000"
   },
   {
+    "parserMode": "jsoup",
+    "entityName": "fontanka.ru",
+    "entityUrl": "http://m.fontanka.ru/",
+    "newsListPath": "li.article.switcher-all-news",
+    "articleNamePath": "h2.itemTitle",
+    "articleDatePath": "span.itemDateCreated",
+    "articleTextPath": "div.itemFullText p",
+    "refreshTimeout": "600000"
+  },
+  {
     "parserMode": "js",
     "entityName": "https://saint-petersburg.ru/",
     "entityUrl": "https://saint-petersburg.ru/",
@@ -80,4 +79,4 @@
     "articleTextPath": "/html/body/div[3]/div[1]/div[1]/div",
     "refreshTimeout": "600000"
   }
-  ]
+]

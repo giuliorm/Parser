@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -80,12 +79,16 @@ public class WebPageParser {
                 webPage.setArticleText(Body);
                 webPage.setArticleDate(articleDate);
                 }
-            System.out.println("Новость " + webPage.getPageUrl() + " была создана" );
+            System.out.println(webPage.getArticleText());
+            System.out.println(webPage.getArticleName());
+            System.out.println(webPage.getArticleDate());
+               System.out.println("Новость " + webPage.getPageUrl() + " была создана" );
             dbConnection.putIntoDB(webPage);
         }
     }
 
     private String articleTextProcessing(String text, WebPage page) {
+
         String entityUrl = page.getEntityUrl();
 
         String eraseRegex = "<[a-zA-Z\\/][^>]*>|&nbsp;|\\n";
@@ -108,7 +111,7 @@ public class WebPageParser {
             transmitLinksToCrawler(linksFromText, page);
         }
 
-        String resultText = text.replaceAll(eraseRegex, "");
+        String resultText = text.replaceAll(eraseRegex, "").replaceAll("(?s)<!--.*?-->", "").replaceAll("&#x200b","");;
 
         return resultText;
 
