@@ -1,28 +1,37 @@
 package com.company;
 
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by vyakovlev on 11/7/2015.
- */
+
 public class WebPageParser {
-    static Log LogWebPage = LogFactory.getLog("MainClassLogger");
+    WebDriver driver = new HtmlUnitDriver();
+
+    private static Logger WPPlogger = LogManager.getLogger(WebPageParser.class.getName());
+
     DBConnection dbConnection = new DBConnection();
-    static WebDriver driver = new HtmlUnitDriver();
 
     private ArrayList<WebPage> arrayOfWebPage;
+    static {
+        LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
+        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
+        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+        java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
+    }
 
     public WebPageParser(ArrayList<WebPage> arrayOfWebPage) {
         this.arrayOfWebPage = arrayOfWebPage;
@@ -46,46 +55,125 @@ public class WebPageParser {
                 parsePage(arrayOfWebPage.get(0));
             } catch (Exception e) {
                 e.printStackTrace();
-                LogWebPage.info("Web page is not starting " + arrayOfWebPage.get(0).getPageUrl());
+                WPPlogger.error("Web page is not starting " + arrayOfWebPage.get(0).getPageUrl());
+                System.out.println("Web page is not starting " + arrayOfWebPage.get(0).getPageUrl());
             }
-            /*ArrayList<WebPage> pageList = takeWebPagesFromEntity(arrayOfWebPage.get(0));
-            if (pageList.size() > 0) {
-                arrayOfWebPage.addAll(pageList);
-            }*/
             arrayOfWebPage.remove(0);
         }
     }
 
     private void parsePage(WebPage webPage) throws Exception {
-           if(!dbConnection.IsExist(webPage.getPageUrl())) {
+        if (!dbConnection.IsExist(webPage.getPageUrl())) {
             webPage.setParseTime(System.nanoTime());
-            if (webPage.getParserMode().equals("jsoup")) {
-                Document htmlPage = Jsoup.connect(webPage.getPageUrl()).get();
-                webPage.setArticleName(htmlPage.select(webPage.getArticleName()).get(0).textNodes().toString());
-                webPage.setArticleText(articleTextProcessing((htmlPage.select(webPage.getArticleText())).toString(), webPage));
-                webPage.setArticleDate(htmlPage.select(webPage.getArticleDate()).get(0).textNodes().toString().replace("&nbsp;", " "));
-                //TODO bug here. Sometimes articleDate is empty.  http://www.kommersant.ru/Doc/2748082
-            } else {
-                driver.get(webPage.getPageUrl());
-                String Header = driver.findElement(By.xpath(webPage.getArticleName())).getText();
-                List<WebElement> BodyElement = driver.findElements(By.xpath(webPage.getArticleText()));
-                String Body = "";
-                for (WebElement element : BodyElement) {
-                    Body += element.getText();
-                }
 
-                String articleDate = driver.findElement(By.xpath(webPage.getArticleDate())).getText();
-                webPage.setArticleName(Header);
-                webPage.setArticleText(Body);
-                webPage.setArticleDate(articleDate);
+            driver.get(webPage.getPageUrl());
+            String Header = driver.findElement(By.xpath(webPage.getArticleName())).getText();
+            List<WebElement> BodyElement = driver.findElements(By.xpath(webPage.getArticleText()));
+            String Body = "";
+            for (WebElement element : BodyElement) {
+                Body += element.getText();
             }
-            System.out.println(webPage.getArticleText());
+
+            String Tags = null;
+            if (!webPage.getTags().isEmpty()) {
+                List<WebElement> TagsElement = driver.findElements(By.xpath(webPage.getTags()));
+                List<String> tagsList = new LinkedList<String>();
+                for (WebElement element : TagsElement) {
+                    tagsList.add(element.getText());
+                }
+                Tags = tagsList.toString();
+            }
+
+            List<String> links = new LinkedList<String>();
+            if (!webPage.getSameNews().isEmpty()) {
+                List<WebElement> OnlyLinks = driver.findElements(By.xpath(webPage.getSameNews()));
+                for (WebElement link : OnlyLinks) {
+                    links.add(link.getAttribute("href"));
+                }
+            }
+
+            String date = driver.findElement(By.xpath(webPage.getArticleDate())).getText();
+            String articleDate = doRegExp(webPage, checkWords(date, webPage.getDateFormat()));
+            webPage.setArticleName(Header);
+            webPage.setArticleText(Body);
+            webPage.setArticleDate(articleDate);
+            webPage.setSameNews(links.toString());
+            webPage.setTags(Tags);
+
+            System.out.println(webPage.getPageUrl());
             System.out.println(webPage.getArticleName());
             System.out.println(webPage.getArticleDate());
-               System.out.println("Новость " + webPage.getPageUrl() + " была создана" );
+            System.out.println(webPage.getArticleText());
+            System.out.println(webPage.getTags());
+            System.out.println(webPage.getSameNews());
+
+
             dbConnection.putIntoDB(webPage);
         }
     }
+    private String checkWords(String date, String datePattern) throws ParseException {
+        String hour, minute, day, month, year;
+        LocalDateTime now = LocalDateTime.now();
+        date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ");
+
+
+        if (date.contains("сегодня")) {
+            year = String.valueOf(now.getYear());
+            day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
+            month = String.valueOf(String.format("%02d", now.getMonthValue()));
+            String a = day + "." + month + "." + year;
+            date = date.replaceAll("сегодня", a);
+        }
+
+        if (date.contains("вчера")) {
+            year = String.valueOf(now.getYear());
+            day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
+            month = String.valueOf(String.format("%02d", now.getMonthValue()));
+            String a = day + "." + month + "." + year;
+            date = date.replaceAll("вчера", a);
+        }
+
+        Locale rusLocale = new Locale.Builder().setLanguage("ru").setScript("Cyrl").build();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, rusLocale);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("МСК"));
+            Date dateFinal = dateFormat.parse(date);
+
+            if (datePattern.contains("yyyy")){
+                year = String.valueOf(dateFinal.getYear()+1900);
+                //System.out.println(dateFinal);
+            }
+            else {
+                year = String.valueOf(now.getYear());
+            }
+
+            day = String.valueOf(String.format("%02d", dateFinal.getDate()));
+            month = String.valueOf(String.format("%02d", dateFinal.getMonth() + 1));
+            hour = String.valueOf(String.format("%02d", dateFinal.getHours()-3));
+            minute = String.valueOf(String.format("%02d", dateFinal.getMinutes()));
+            date = day + "." + month + "." + year + " " + hour + ":" + minute;
+        } catch (ParseException e) {
+        }
+        return date;
+    }
+
+    private void dateProc(String date, int monthNumber) {
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        String result = month + "." + year;
+    }
+
+    private String doRegExp(WebPage webPage, String date) {
+        List<String> allMatches = new ArrayList<String>();
+        Matcher m = Pattern.compile(webPage.getRegExpForDate()).matcher(date);
+        while (m.find()) {
+            allMatches.add(m.group());
+        }
+
+        return allMatches.size()>0? allMatches.get(0) : date;
+    }
+
 
     private String articleTextProcessing(String text, WebPage page) {
 
@@ -111,8 +199,8 @@ public class WebPageParser {
             transmitLinksToCrawler(linksFromText, page);
         }
 
-        String resultText = text.replaceAll(eraseRegex, "").replaceAll("(?s)<!--.*?-->", "").replaceAll("&#x200b","");;
-
+        //TODO regExp add for &#x97
+        String resultText = text.replaceAll(eraseRegex, "").replaceAll("(?s)<!--.*?-->", "").replaceAll("&#x200b", " ").replaceAll("&#x97", "").replaceAll("&nbsp;", " ");
         return resultText;
 
     }

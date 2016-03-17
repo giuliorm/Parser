@@ -1,14 +1,18 @@
 package com.company;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class DBConnection {
-    MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-    DB db = mongoClient.getDB( "mongo_database" );
-    DBCollection coll = db.getCollection("mycol");
+    static ArrayList dbConfig;
+    static MongoClient mongoClient;
+    static DB db ;
+    static DBCollection coll ;
+
 
     public void putIntoDB(WebPage page) {
         try{
@@ -25,5 +29,15 @@ public class DBConnection {
 
     public boolean IsExist(String pageUrl ){
         return (coll.find(new BasicDBObject("Link", pageUrl)).count())>0 ? true:false;
+    }
+
+    public static void getDbConfigs() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+         dbConfig = mapper.readValue(new File("src/main/resources/config/bdConfig.json"),
+                mapper.getTypeFactory().constructCollectionType(ArrayList.class, String.class));
+         mongoClient = new MongoClient((String) dbConfig.get(6), (Integer.parseInt((String) dbConfig.get(4))));
+        db = mongoClient.getDB((String) dbConfig.get(2));
+        coll = db.getCollection((String) dbConfig.get(8));
+
     }
 }

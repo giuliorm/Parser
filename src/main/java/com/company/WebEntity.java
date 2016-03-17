@@ -1,12 +1,9 @@
 package com.company;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,35 +13,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WebEntity implements Runnable {
 
-    private String entityName;
-    private String entityUrl;
-    private String newsListPath;
-    private String articleNamePath;
-    private String articleDatePath;
-    private String articleTextPath;
-    private String parserMode; //May be JSoup or Selenium. Field for future investigations.
+    private static Logger WElogger = LogManager.getLogger(WebPageParser.class.getName());
+    private String entityName, entityUrl, newsListPath, articleNamePath, articleDatePath, articleTextPath, tags, sameNews, regExpForDate, dateFormat;
     private long refreshTimeout;
-    static Log mLog = LogFactory.getLog("MainClassLogger");
+
     private Crawler crawlerForCurrentEntity;
-
     private WebPageParser parserForCurrentEntity;
-    //Single-configuration file
-    public static WebEntity getEntityFromConfig(String cfgPath) throws IOException {
-
-        ObjectMapper mapper = new ObjectMapper();
-        WebEntity wEntity = mapper.readValue(new File(cfgPath), WebEntity.class);
-        return wEntity;
+    static {
+        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
     }
 
-    //Able to load multi-configuration files.
     public static ArrayList<WebEntity> getEntityListFromConfig(String cfgPath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
@@ -54,15 +37,6 @@ public class WebEntity implements Runnable {
         return webEntityList;
     }
 
-    public String saveToConfig(IEntity entity) throws IOException {
-
-        ObjectMapper mapper = new ObjectMapper();
-        File conf = new File("config/myObj.json");
-        mapper.writeValue(conf, entity);
-
-        return conf.getAbsolutePath();
-    }
-
     @Override
     public String toString() {
         return (this.entityName
@@ -70,54 +44,30 @@ public class WebEntity implements Runnable {
                 + "\n" + this.newsListPath);
     }
 
-    /*child method*/
     private ArrayList<WebPage> getLinksFromTheMainSite(String MainLink) throws Exception {
         ArrayList<WebPage> arrayOfWebPages = new ArrayList<WebPage>();
-        if (parserMode.equals("jsoup")) {
-            Document doc = Jsoup.connect(entityUrl).get();
-            Elements blockTitle = doc.select(newsListPath);
-            Elements OnlyLinks = blockTitle.select("a[href]");
-            String newsUrl = regExp(entityUrl);
-            ArrayList<String> ArrayListNewsLinksInDB = new ArrayList<String>();
-            for (int i = 0; i < OnlyLinks.size(); i++) {
-                String pageUrl=null;
-                if (((OnlyLinks.get(i)).attr("href").toString()).indexOf("http") == -1) {
-                    pageUrl = newsUrl.substring(0, newsUrl.length() - 1) + OnlyLinks.get(i).attr("href").toString();}
-                else  {
-                    pageUrl=OnlyLinks.get(i).attr("href").toString();
-                }
-                if (ArrayListNewsLinksInDB.size() == 0) {
-                    WebPage newPage = new WebPage(this, pageUrl);
-                    arrayOfWebPages.add(newPage);
-                } else {
-                    for (int j = 0; j < ArrayListNewsLinksInDB.size(); j++) {
-                        if ((ArrayListNewsLinksInDB.get(j)).equals(pageUrl)) {
-                            break;
-                        } else {
-                            if ((j == ArrayListNewsLinksInDB.size() - 1)) {
-                                WebPage newPage = new WebPage(this, pageUrl);
-                                arrayOfWebPages.add(newPage);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    else {
-            WebDriver driver = new HtmlUnitDriver();
-            driver.get(entityUrl);
+
+        WebDriver driver = new HtmlUnitDriver();
+
+        driver.get(entityUrl);
 
         List<WebElement> OnlyLinks = driver.findElements(By.xpath(newsListPath));
 
-        for (WebElement link : OnlyLinks){
+        for (WebElement link : OnlyLinks) {
             WebPage newPage = new WebPage(this, link.getAttribute("href"));
             arrayOfWebPages.add(newPage);
         }
-    }
-    return arrayOfWebPages;
-    }
 
+        for (WebPage wp : arrayOfWebPages) {
+            wp.setTags(tags);
+            wp.setSameNews(sameNews);
+            wp.setRegExpForDate(regExpForDate);
+            wp.setDateFormat(dateFormat);
+        }
 
+        WElogger.info("");
+        return arrayOfWebPages;
+    }
 
     public void run() {
         WebPageParser pageParser = null;
@@ -132,16 +82,6 @@ public class WebEntity implements Runnable {
 
     public void main(String[] args) throws Exception {
         this.run();
-    }
-
-    private String regExp(String entityUrl) throws Exception {
-        String LinkAfterRegExp = null;
-        Pattern urlPattern = Pattern.compile("^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})\\/");
-        Matcher urlMatcher = urlPattern.matcher(entityUrl);
-        while (urlMatcher.find()) {
-            LinkAfterRegExp = (entityUrl.substring(urlMatcher.start(), urlMatcher.end()) + "");
-        }
-        return LinkAfterRegExp;
     }
 
     public void transmitToCrawler(ArrayList<String> links) {
@@ -182,11 +122,32 @@ public class WebEntity implements Runnable {
         return articleDatePath;
     }
 
-    public String getParserMode() {
-        return parserMode;
+    public String getTags() {
+        return tags;
+    }
+
+    public String getSameNews() {
+        return sameNews;
     }
 
     public long getRefreshTimeout() {
         return refreshTimeout;
     }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public String getRegExpForDate() {
+        return regExpForDate;
+    }
+
+    public void setRegExpForDate(String regExpForDate) {
+        this.regExpForDate = regExpForDate;
+    }
+
 }

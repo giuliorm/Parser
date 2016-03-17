@@ -2,6 +2,8 @@ package com.company;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,18 +12,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Easton
- * on 14.11.2015.
- */
 public class Crawler {
-    static Log mLog = LogFactory.getLog("MainClassLogger");
+    Logger CrawlerLog =  LogManager.getLogger(Main.class.getName());;
     private Map<String, WebEntity> webEntityMap;
     private ArrayList<String> linksToWebPages = new ArrayList<String>();
-
-    private Map<String, WebEntity> getWebEntityMap() {
-        return webEntityMap;
-    }
 
 
     public void startDuty() throws IOException, InterruptedException {
@@ -29,21 +23,19 @@ public class Crawler {
         fillMap(webEntityList);
         Thread[] threads = new Thread[webEntityList.size()];
 
-
         while (true) {
             for (int i = 0; i < webEntityList.size(); i++) {
                 threads[i] = new Thread(webEntityList.get(i));
                 threads[i].start();
-                mLog.info("Thread for " + webEntityList.get(i).getEntityName() + " was created");
+                CrawlerLog.info("Thread for " + webEntityList.get(i).getEntityName() + " was created");
             }
 
             Thread.sleep(600000);
 
             for (int i = 0; i < webEntityList.size(); i++) {
                 threads[i].join();
-                mLog.info("Thread for " + webEntityList.get(i).getEntityName() + " succesfully ended");
+                CrawlerLog.info("Thread for " + webEntityList.get(i).getEntityName() + " succesfully ended");
             }
-
         }
     }
 
@@ -59,7 +51,6 @@ public class Crawler {
         }
     }
 
-    //url should look like "https://docs.google.com" or "http://vk.com"
     private String getUrlStd(String url) {
         String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
                 "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
