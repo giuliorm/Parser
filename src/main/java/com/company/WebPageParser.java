@@ -6,7 +6,11 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,10 +19,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.openqa.selenium.*;
 
 
 public class WebPageParser {
-    WebDriver driver = new HtmlUnitDriver();
+    HtmlUnitDriver driver;
 
     private static Logger WPPlogger = LogManager.getLogger(WebPageParser.class.getName());
 
@@ -34,7 +39,12 @@ public class WebPageParser {
     }
 
     public WebPageParser(ArrayList<WebPage> arrayOfWebPage) {
+
         this.arrayOfWebPage = arrayOfWebPage;
+        driver = new HtmlUnitDriver();
+        Proxy proxy = new Proxy();
+        proxy.setHttpProxy("proxy.ifmo.ru:3128");
+        driver.setProxySettings(proxy);
     }
 
     public void addPage(WebPage page) {

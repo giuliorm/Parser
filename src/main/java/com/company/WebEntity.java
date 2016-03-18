@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -47,7 +47,17 @@ public class WebEntity implements Runnable {
     private ArrayList<WebPage> getLinksFromTheMainSite(String MainLink) throws Exception {
         ArrayList<WebPage> arrayOfWebPages = new ArrayList<WebPage>();
 
-        WebDriver driver = new HtmlUnitDriver();
+//        org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();
+//        proxy.setProxyType(Proxy.ProxyType.MANUAL).setHttpProxy("proxy.ifmo.ru:3128").setSslProxy("proxy.ifmo.ru:3128");
+
+//        DesiredCapabilities cap = new DesiredCapabilities();
+//        cap.setCapability(CapabilityType.PROXY, proxy);
+//        WebDriver driver = new FirefoxDriver();
+        HtmlUnitDriver driver = new HtmlUnitDriver();
+        Proxy proxy = new Proxy();
+        proxy.setHttpProxy("proxy.ifmo.ru:3128");
+        driver.setProxySettings(proxy);
+
 
         driver.get(entityUrl);
 
