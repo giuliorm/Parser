@@ -1,4 +1,4 @@
-package com.company;
+package ifmo.escience.newscrawler;
 
 import java.io.*;
 

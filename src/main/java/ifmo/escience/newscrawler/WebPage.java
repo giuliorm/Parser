@@ -1,8 +1,8 @@
-package com.company;
+package ifmo.escience.newscrawler;
+
+import ifmo.escience.newscrawler.entities.WebEntity;
 
 public class WebPage {
-
-    private WebEntity entity;
     private Long parseTime;
     private String entityUrl;
     private String pageUrl;
@@ -10,26 +10,8 @@ public class WebPage {
     private String articleDate;
     private String articleText;
     private String tags;
-    private String sameNews;
-    private String regExpForDate;
-    private String dateFormat;
+    private String similarNews;
 
-
-    public String getRegExpForDate() {
-        return regExpForDate;
-    }
-
-    public void setRegExpForDate(String regExpForDate) {
-        this.regExpForDate = regExpForDate;
-    }
-
-    public String getDateFormat() {
-        return dateFormat;
-    }
-
-    public void setDateFormat(String dateFormat) {
-        this.dateFormat = dateFormat;
-    }
     public String getTags() {
         return tags;
     }
@@ -38,23 +20,18 @@ public class WebPage {
         this.tags = tags;
     }
 
-    public String getSameNews() {
-        return sameNews;
+    public String getSimilarNews() {
+        return similarNews;
     }
 
-    public void setSameNews(String sameNews) {
-        this.sameNews = sameNews;
+    public void setSimilarNews(String sameNews) {
+        this.similarNews = sameNews;
     }
 
-    public WebEntity getEntity() {
-        return entity;
-    }
     public Long parseTime() {
         return parseTime;
     }
-    public void setEntity(WebEntity entity) {
-        this.entity = entity;
-    }
+    
     public void setParseTime(Long parseTime) {
         this.parseTime = parseTime;
     }
@@ -83,12 +60,7 @@ public class WebPage {
     public String getArticleText() {
         return articleText;
     }
-    public WebPage(WebEntity entity, String pageUrl) {
-        this.entity = entity;
-        this.entityUrl = entity.getEntityUrl();
+    public WebPage(String pageUrl) {
         this.pageUrl = pageUrl;
-        this.articleDate = entity.getArticleDatePath();
-        this.articleName = entity.getArticleNamePath();
-        this.articleText = entity.getArticleTextPath();
     }
 }

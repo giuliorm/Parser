@@ -1,5 +1,6 @@
-package com.company;
+package ifmo.escience.newscrawler;
 
+import ifmo.escience.newscrawler.entities.WebEntity;
 import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,13 +24,15 @@ import org.openqa.selenium.*;
 
 
 public class WebPageParser {
-    HtmlUnitDriver driver;
+    FirefoxDriver driver;
 
-    private static Logger WPPlogger = LogManager.getLogger(WebPageParser.class.getName());
+    private static Logger logger = LogManager.getLogger(WebPageParser.class.getName());
 
     DBConnection dbConnection = new DBConnection();
 
-    private ArrayList<WebPage> arrayOfWebPage;
+    private List<String> webLinks;
+    private WebEntity entity;
+    
     static {
         LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
@@ -38,87 +41,72 @@ public class WebPageParser {
         java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
     }
 
-    public WebPageParser(ArrayList<WebPage> arrayOfWebPage) {
+    public WebPageParser(List<String> arrayOfWebPage, WebEntity entity) {
 
-        this.arrayOfWebPage = arrayOfWebPage;
-        driver = new HtmlUnitDriver();
-        Proxy proxy = new Proxy();
-        proxy.setHttpProxy("proxy.ifmo.ru:3128");
-        driver.setProxySettings(proxy);
+        this.webLinks = arrayOfWebPage;
+        this.entity = entity;
+        driver = new FirefoxDriver();
+        //Proxy proxy = new Proxy();
+        //proxy.setHttpProxy("proxy.ifmo.ru:3128");
+        //driver.setProxySettings(proxy);
     }
 
-    public void addPage(WebPage page) {
-        arrayOfWebPage.add(page);
-    }
-
-    public void run() {
-        try {
-            parse();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void addPage(String page) {
+        webLinks.add(page);
     }
 
     public void parse() {
-        while (arrayOfWebPage.size() != 0) {
+        while (webLinks.size() != 0) {
             try {
-                parsePage(arrayOfWebPage.get(0));
+                parsePage(webLinks.get(0));
             } catch (Exception e) {
                 e.printStackTrace();
-                WPPlogger.error("Web page is not starting " + arrayOfWebPage.get(0).getPageUrl());
-                System.out.println("Web page is not starting " + arrayOfWebPage.get(0).getPageUrl());
+                logger.error("Web page is not starting " + webLinks.get(0));
+                System.out.println("Web page is not starting " + webLinks.get(0));
             }
-            arrayOfWebPage.remove(0);
+            webLinks.remove(0);
         }
     }
 
-    private void parsePage(WebPage webPage) throws Exception {
-        if (!dbConnection.IsExist(webPage.getPageUrl())) {
-            webPage.setParseTime(System.nanoTime());
+    private void parsePage(String link) throws Exception {
+        if (!dbConnection.exists(link)) {
+            WebPage newPage = new WebPage(link);
+            newPage.setParseTime(System.nanoTime());
 
-            driver.get(webPage.getPageUrl());
-            String Header = driver.findElement(By.xpath(webPage.getArticleName())).getText();
-            List<WebElement> BodyElement = driver.findElements(By.xpath(webPage.getArticleText()));
+            driver.get(newPage.getPageUrl());
+            String Header = driver.findElement(By.xpath(entity.getArticleNamePath())).getText();
+            List<WebElement> BodyElement = driver.findElements(By.xpath(entity.getArticleTextPath()));
             String Body = "";
             for (WebElement element : BodyElement) {
                 Body += element.getText();
             }
 
             String Tags = null;
-            if (!webPage.getTags().isEmpty()) {
-                List<WebElement> TagsElement = driver.findElements(By.xpath(webPage.getTags()));
+            if (!entity.getTagsPath().isEmpty()) {
+                List<WebElement> TagsElement = driver.findElements(By.xpath(entity.getTagsPath()));
                 List<String> tagsList = new LinkedList<String>();
                 for (WebElement element : TagsElement) {
                     tagsList.add(element.getText());
                 }
                 Tags = tagsList.toString();
             }
+            newPage.setTags(Tags);
 
-            List<String> links = new LinkedList<String>();
-            if (!webPage.getSameNews().isEmpty()) {
-                List<WebElement> OnlyLinks = driver.findElements(By.xpath(webPage.getSameNews()));
-                for (WebElement link : OnlyLinks) {
-                    links.add(link.getAttribute("href"));
+            List<String> similarLinks = new LinkedList<String>();
+            if (!entity.getSimilarNewsPath().isEmpty()) {
+                List<WebElement> OnlyLinks = driver.findElements(By.xpath(entity.getSimilarNewsPath()));
+                for (WebElement similarLink : OnlyLinks) {
+                    similarLinks.add(similarLink.getAttribute("href"));
                 }
             }
 
-            String date = driver.findElement(By.xpath(webPage.getArticleDate())).getText();
-            String articleDate = doRegExp(webPage, checkWords(date, webPage.getDateFormat()));
-            webPage.setArticleName(Header);
-            webPage.setArticleText(Body);
-            webPage.setArticleDate(articleDate);
-            webPage.setSameNews(links.toString());
-            webPage.setTags(Tags);
-
-            System.out.println(webPage.getPageUrl());
-            System.out.println(webPage.getArticleName());
-            System.out.println(webPage.getArticleDate());
-            System.out.println(webPage.getArticleText());
-            System.out.println(webPage.getTags());
-            System.out.println(webPage.getSameNews());
-
-
-            dbConnection.putIntoDB(webPage);
+            String date = driver.findElement(By.xpath(entity.getArticleDatePath())).getText();
+            String articleDate = doRegExp(checkWords(date, entity.getDateFormat()));
+            newPage.setArticleName(Header);
+            newPage.setArticleText(Body);
+            newPage.setArticleDate(articleDate);
+            newPage.setSimilarNews(similarLinks.toString());
+            dbConnection.insert(newPage);
         }
     }
     private String checkWords(String date, String datePattern) throws ParseException {
@@ -127,12 +115,12 @@ public class WebPageParser {
         date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ");
 
 
-        if (date.contains("сегодня")) {
+        if (date.contains("�?егодн�?")) {
             year = String.valueOf(now.getYear());
             day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
             month = String.valueOf(String.format("%02d", now.getMonthValue()));
             String a = day + "." + month + "." + year;
-            date = date.replaceAll("сегодня", a);
+            date = date.replaceAll("�?егодн�?", a);
         }
 
         if (date.contains("вчера")) {
@@ -174,9 +162,9 @@ public class WebPageParser {
         String result = month + "." + year;
     }
 
-    private String doRegExp(WebPage webPage, String date) {
+    private String doRegExp(String date) {
         List<String> allMatches = new ArrayList<String>();
-        Matcher m = Pattern.compile(webPage.getRegExpForDate()).matcher(date);
+        Matcher m = Pattern.compile(entity.getRegExpForDate()).matcher(date);
         while (m.find()) {
             allMatches.add(m.group());
         }
@@ -253,6 +241,7 @@ public class WebPageParser {
     }
 
     private void transmitLinksToCrawler(ArrayList<String> links, WebPage page) {
-        page.getEntity().transmitToCrawler(links);
+        entity.transmitToCrawler(links);
+        
     }
 }

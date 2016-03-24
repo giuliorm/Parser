@@ -1,4 +1,4 @@
-package com.company;
+package ifmo.escience.newscrawler;
 
 import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
@@ -21,12 +21,16 @@ public class Main {
     }
 
     private static Logger logger = LogManager.getLogger(Main.class.getName());
-    public static void main(String[] args) throws Exception {
-
-        DBConnection.getDbConfigs();
-        Crawler crawler = new Crawler();
-        logger.trace("Crawler working");
-        crawler.startDuty();
+    public static void main(String[] args) {
+        try{
+            DBConnection.getDbConfigs();
+            Crawler crawler = new Crawler();
+            logger.trace("Crawler has started working");
+            crawler.start();
+        }
+        catch(Exception ex){
+            logger.trace("Error on starting crawling", ex);
+        }
     }
 }
 

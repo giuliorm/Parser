@@ -1,5 +1,6 @@
-package com.company;
+package ifmo.escience.newscrawler;
 
+import ifmo.escience.newscrawler.entities.WebEntity;
 import java.io.IOException;
 import java.util.ArrayList;
 

@@ -1,8 +1,0 @@
-[
-  {
-    "dbName": "mongo_test",
-    "dbPort": "27017",
-    "localisation":"localhost",
-    "collectionName": "mycol"
-  }
-]

@@ -1,0 +1,14 @@
+[
+  {
+    "parserMode": "js",
+    "entityName": "https://news.yandex.ru/yandsearch?geonews=10174&rpt=nnews2",
+    "entityUrl": "https://news.yandex.ru/yandsearch?geonews=10174&rpt=nnews2",
+    "newsListPath": "//*[contains(@class,'search-item')]/div/h2/div/a"
+  },
+  {
+    "parserMode": "js",
+    "entityName": "https://news.yandex.ru/yandsearch?geonews=2&rpt=nnews2",
+    "entityUrl": "https://news.yandex.ru/yandsearch?geonews=2&rpt=nnews2",
+    "newsListPath": "//*[contains(@class,'search-item')]/div/h2/div/a"
+  }
+]
