@@ -5,13 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,11 +15,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.openqa.selenium.*;
 
 
 public class WebPageParser {
-    FirefoxDriver driver;
+    HtmlUnitDriver driver;
 
     private static Logger logger = LogManager.getLogger(WebPageParser.class.getName());
 
@@ -45,10 +39,10 @@ public class WebPageParser {
 
         this.webLinks = arrayOfWebPage;
         this.entity = entity;
-        driver = new FirefoxDriver();
-        //Proxy proxy = new Proxy();
-        //proxy.setHttpProxy("proxy.ifmo.ru:3128");
-        //driver.setProxySettings(proxy);
+        driver = new HtmlUnitDriver();
+//        Proxy proxy = new Proxy();
+//        proxy.setHttpProxy("proxy.ifmo.ru:3128");
+//        driver.setProxySettings(proxy);
     }
 
     public void addPage(String page) {
@@ -62,7 +56,6 @@ public class WebPageParser {
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("Web page is not starting " + webLinks.get(0));
-                System.out.println("Web page is not starting " + webLinks.get(0));
             }
             webLinks.remove(0);
         }
@@ -74,6 +67,7 @@ public class WebPageParser {
             newPage.setParseTime(System.nanoTime());
 
             driver.get(newPage.getPageUrl());
+
             String Header = driver.findElement(By.xpath(entity.getArticleNamePath())).getText();
             List<WebElement> BodyElement = driver.findElements(By.xpath(entity.getArticleTextPath()));
             String Body = "";
@@ -115,12 +109,12 @@ public class WebPageParser {
         date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ");
 
 
-        if (date.contains("�?егодн�?")) {
+        if (date.contains("�?егодн�?")) {
             year = String.valueOf(now.getYear());
             day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
             month = String.valueOf(String.format("%02d", now.getMonthValue()));
             String a = day + "." + month + "." + year;
-            date = date.replaceAll("�?егодн�?", a);
+            date = date.replaceAll("�?егодн�?", a);
         }
 
         if (date.contains("вчера")) {
@@ -166,6 +160,7 @@ public class WebPageParser {
         List<String> allMatches = new ArrayList<String>();
         Matcher m = Pattern.compile(entity.getRegExpForDate()).matcher(date);
         while (m.find()) {
+
             allMatches.add(m.group());
         }
 
@@ -196,6 +191,7 @@ public class WebPageParser {
         if (linksFromText.size() > 0) {
             transmitLinksToCrawler(linksFromText, page);
         }
+
 
         //TODO regExp add for &#x97
         String resultText = text.replaceAll(eraseRegex, "").replaceAll("(?s)<!--.*?-->", "").replaceAll("&#x200b", " ").replaceAll("&#x97", "").replaceAll("&nbsp;", " ");

@@ -12,8 +12,8 @@ public class KeyWords {
 
         String cmd = "python3 " + System.getProperty("user.dir") + "/src/main/python/KeyWords.py";
         Process p = Runtime.getRuntime().exec(cmd);
-        inp = new BufferedReader( new InputStreamReader(p.getInputStream()) );
-        out = new BufferedWriter( new OutputStreamWriter(p.getOutputStream()) );
+        inp = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        out = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
         String ret;
         try {
             out.write(news + "\n");
@@ -24,9 +24,7 @@ public class KeyWords {
             out.close();
             System.out.println(ret);
             return ret.split(" ");
-        }
-        catch (Exception err) {
-        }
+        } catch (Exception err) {}
 
         return null;
     }

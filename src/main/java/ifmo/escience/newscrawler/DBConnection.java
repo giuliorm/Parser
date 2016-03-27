@@ -1,16 +1,16 @@
 package ifmo.escience.newscrawler;
 
-import com.mongodb.*;
-import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 import ifmo.escience.newscrawler.helpers.ConfigReader;
-import java.io.IOException;
-import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bson.Document;
+
+import java.io.IOException;
 
 public class DBConnection {
-    static ArrayList dbConfig;
     static MongoClient mongoClient;
     static DB db;
     static DBCollection coll;
@@ -36,18 +36,21 @@ public class DBConnection {
     
     public void addMissingLink(String link){
         try{
-        Document document = (Document) missingCollection.findOne(eq("url", link));
+            BasicDBObject document = (BasicDBObject) missingCollection.findOne(new BasicDBObject("url", link));
+            System.out.println(document);
         if(document != null){
-            int count = document.getInteger("count");
-            count++;
-            document.put("count", String.valueOf(count));
+            BasicDBObject newDocument =
+                    new BasicDBObject().append("$inc",
+                            new BasicDBObject().append("count", 1));
+            missingCollection.update(new BasicDBObject().append("url", link), newDocument);
         }
         else{
-            document = new Document();
+            document = new BasicDBObject();
             document.append("url", link);
             document.append("count", 1);
+            missingCollection.insert(document);
+            System.out.println(document);
         }
-        missingCollection.save((DBObject) document);
         }
         catch(Exception ex){
             logger.error("Error on adding missing link!", ex);

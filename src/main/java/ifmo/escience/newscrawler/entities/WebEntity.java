@@ -11,7 +11,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -42,6 +41,7 @@ public class WebEntity extends Thread {
     }
     
     public void transmitToParser(String link){
+        //TODO: When we use RootEntity parser is not initialized
         parser.addPage(link);
     }
     
@@ -56,13 +56,10 @@ public class WebEntity extends Thread {
                 + "\n" + this.newsListPath);
     }
 
-    protected List<String> getLinks(String addon) throws Exception {
+    protected List<String> getLinks(String targetUrl) throws Exception {
         List<String> arrayOfWebPages = new ArrayList<>();
-        FirefoxDriver driver = new FirefoxDriver();
-        String targetUrl = entityUrl;
-        if(addon != null){
-            targetUrl += addon;
-        }
+        HtmlUnitDriver driver = new HtmlUnitDriver();
+
         logger.trace("Loading links from: " + targetUrl);
         driver.get(targetUrl);
         List<WebElement> links = driver.findElements(By.xpath(newsListPath));

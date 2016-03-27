@@ -9,10 +9,6 @@ import java.util.logging.Level;
 public class Main {
     static {
         LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-
-        //TODO: Write TESTs for every SOURCE.
-
-
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
         java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
@@ -21,6 +17,7 @@ public class Main {
     }
 
     private static Logger logger = LogManager.getLogger(Main.class.getName());
+
     public static void main(String[] args) {
         try{
             DBConnection.getDbConfigs();

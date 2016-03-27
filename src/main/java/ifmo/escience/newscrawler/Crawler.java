@@ -3,8 +3,6 @@ package ifmo.escience.newscrawler;
 import ifmo.escience.newscrawler.entities.RootEntity;
 import ifmo.escience.newscrawler.entities.WebEntity;
 import java.io.File;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,11 +47,12 @@ public class Crawler {
         fillMap(webEntities);
 
         for (int i = 0; i < webEntities.size(); i++) {
-            webEntities.get(i).start();
+            /*just for debug new feature*/
+            //webEntities.get(i).start();
             logger.info("Thread for " + webEntities.get(i).getEntityName() + " was created");
         }
         logger.info("Starting root entities...");
-        for (int i = 0; i < rootEntities.size(); i++) {
+        for (int i = 0; i < rootEntities.size()-1; i++) {
             rootEntities.get(i).setCrawler(this);
             rootEntities.get(i).start();
             logger.info("Thread for " + rootEntities.get(i).getEntityName() + " was created");
@@ -88,7 +87,7 @@ public class Crawler {
             entityForLink.transmitToParser(link);
         }
         else{
-            dbConnection.addMissingLink(link);
+            dbConnection.addMissingLink(linkUrl);
         }
     }
 
