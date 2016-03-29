@@ -27,11 +27,12 @@ public class WebEntity extends Thread {
             similarNews = "",
             regExpForDate, 
             dateFormat;
-    private long refreshTimeout;
+    protected long refreshTimeout;
 
     protected Crawler crawler;
-    private WebPageParser parser;
-    
+    protected WebPageParser parser = new WebPageParser(new ArrayList<>(), this);
+
+
     static {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
     }
@@ -75,7 +76,6 @@ public class WebEntity extends Thread {
     @Override
     public void run() {
         try {
-            parser = new WebPageParser(new ArrayList<>(), this);
             List<String> links = getLinks(null);
             for(String link : links){
                 parser.addPage(link);
