@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * Created by gp on 30.03.16.
  */
 public class ProxyManager {
-    public static List<String> proxyList = new ArrayList<>();
+    public List<String> proxyList = new ArrayList<>();
     public ProxyManager() throws IOException {
         proxyList =  updateList();
     }
@@ -36,6 +36,7 @@ public class ProxyManager {
             }
         }
         in.close();
+        System.out.println(proxyList.size());
     return proxyList;
     }
 
