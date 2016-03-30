@@ -40,7 +40,7 @@ public class RootEntity extends WebEntity {
                     LocalDateTime newDate = currentDate.minusDays(1);
 
                     for (int page = 0; page < 83; page++) {
-                        int t = 5 * (60_000 + random.nextInt(60_000) - 30_000);
+                        //int t = 5 * (60_000 + random.nextInt(60_000) - 30_000);
                         LocalDateTime dateOfParse = LocalDateTime.now();
                         addon.delete(0, addon.length());
                         addon.append(this.entityUrl);
@@ -63,8 +63,7 @@ public class RootEntity extends WebEntity {
                                 } catch (Exception e) {
                                     System.out.println("BadProxy3");
                                 }
-                            }while(links.size()==0);
-
+                            }while(links==null);
                     }
                 }
             }
