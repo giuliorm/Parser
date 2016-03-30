@@ -52,7 +52,7 @@ public class Crawler {
             logger.info("Thread for " + webEntities.get(i).getEntityName() + " was created");
         }
         logger.info("Starting root entities...");
-        for (int i = 0; i < rootEntities.size()-1; i++) {
+        for (int i = 0; i < rootEntities.size(); i++) {
             rootEntities.get(i).setCrawler(this);
             rootEntities.get(i).start();
             logger.info("Thread for " + rootEntities.get(i).getEntityName() + " was created");

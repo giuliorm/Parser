@@ -42,7 +42,6 @@ public class WebEntity extends Thread {
     }
     
     public void transmitToParser(String link){
-        //TODO: When we use RootEntity parser is not initialized
         parser.addPage(link);
     }
     

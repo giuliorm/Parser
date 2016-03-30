@@ -1,37 +1,48 @@
 package ifmo.escience.newscrawler.entities;
 
+import ifmo.escience.newscrawler.ProxyManager;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RootEntity extends WebEntity {
     Random random = new Random();
-    public RootEntity(WebEntity from){
+    ProxyManager pm = new ProxyManager();
+    HtmlUnitDriver driver = new HtmlUnitDriver();
+
+    public RootEntity(WebEntity from) throws IOException {
         this.newsListPath = from.newsListPath;
         this.entityName = from.entityName;
         this.entityUrl = from.entityUrl;
-    }
-    
-    @Override
-    public void run(){
 
+    }
+
+    @Override
+    public void run() {
         int syncDays = 60;
         StringBuffer addon = new StringBuffer();
         try {
-            while(true){
-                for(int day = 0; day < syncDays; day++){
+            while (true) {
+                for (int day = 0; day < syncDays; day++) {
                     LocalDateTime currentDate = LocalDateTime.now();
                     LocalDateTime newDate = currentDate.minusDays(1);
 
-//                    System.out.println(t);
-                    for(int page = 0; page < 83; page++){
-                        int t=5 *(60_000 + random.nextInt(60_000)-30_000);
+                    for (int page = 0; page < 83; page++) {
+                        int t = 5 * (60_000 + random.nextInt(60_000) - 30_000);
                         LocalDateTime dateOfParse = LocalDateTime.now();
-                        addon.delete(0,addon.length());
+                        addon.delete(0, addon.length());
                         addon.append(this.entityUrl);
                         addon.append("&from_day=" + String.valueOf(newDate.getDayOfMonth()));
                         addon.append("&from_month=" + String.valueOf(newDate.getMonthValue()));
@@ -40,33 +51,57 @@ public class RootEntity extends WebEntity {
                         addon.append("&to_month=" + String.valueOf(currentDate.getMonthValue()));
                         addon.append("&to_year=" + String.valueOf(currentDate.getYear()));
                         addon.append("&p=" + String.valueOf(page));
-                        System.out.println(addon.toString());
-                        List<String> links;
-                        System.out.println("Start parse");
-                        System.out.println(getResponseCode(addon.toString()));
-                        if(getResponseCode(addon.toString())==200) {
-                            links = getLinks(addon.toString());
-                            if (links.isEmpty()) {
-                                System.out.println("Не удалось, кулдаун=" + t + "  " + dateOfParse);
-                                Thread.sleep(t);
-                            } else {
-//                                System.out.println("Удалось, " + currentDate1);
-                                crawler.addLinks(links);
-                                Thread.sleep(t);
-                            }
-                        }
+                        List<String> links = null;
+                            do {
+                                try {
+                                    links = getLinks(addon.toString());
+                                    crawler.addLinks(links);
+                                } catch (SocketTimeoutException exception) {
+                                    System.out.println("BadProxy1");
+                                } catch (ConnectTimeoutException exception) {
+                                    System.out.println("Bad proxy2");
+                                } catch (Exception e) {
+                                    System.out.println("BadProxy3");
+                                }
+                            }while(links.size()==0);
+
                     }
                 }
             }
-        } catch (Exception ex) {
+        }
+
+        catch(Exception ex)
+        {
             logger.error("Error on collecting web pages!", ex);
         }
-    }
+
+}
     public static int getResponseCode(String urlString) throws MalformedURLException, IOException {
         URL url = new URL(urlString);
         HttpURLConnection huc = (HttpURLConnection)url.openConnection();
         huc.setRequestMethod("GET");
         huc.connect();
         return huc.getResponseCode();
+    }
+
+    @Override
+    protected List<String> getLinks(String targetUrl) throws Exception {
+        List<String> arrayOfWebPages = new ArrayList<>();
+        logger.trace("Loading links from: " + targetUrl);
+        Proxy proxy = new Proxy();
+
+        proxy.setHttpProxy(pm.getProxy());
+        driver.setProxySettings(proxy);
+        driver.get(targetUrl);
+
+        List<WebElement> links = driver.findElements(By.xpath(newsListPath));
+        if (links.size()>0) {
+            for (WebElement link : links) {
+                String href = link.getAttribute("href");
+                arrayOfWebPages.add(href);
+            }
+            crawler.addLinks(arrayOfWebPages);
+        }
+        return arrayOfWebPages;
     }
 }

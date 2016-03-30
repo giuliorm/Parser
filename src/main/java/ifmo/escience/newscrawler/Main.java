@@ -4,6 +4,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
 
     private static Logger logger = LogManager.getLogger(Main.class.getName());
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try{
             DBConnection.getDbConfigs();
             Crawler crawler = new Crawler();
