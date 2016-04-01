@@ -47,7 +47,6 @@ public class Crawler {
         fillMap(webEntities);
 
         for (int i = 0; i < webEntities.size(); i++) {
-            /*just for debug new feature*/
             webEntities.get(i).start();
             logger.info("Thread for " + webEntities.get(i).getEntityName() + " was created");
         }
@@ -90,7 +89,6 @@ public class Crawler {
             dbConnection.addMissingLink(linkUrl);
         }
     }
-
     public void addLinks(List<String> links) {
         for (int i = 0; i < links.size(); i++) {
             routeLink(links.get(i));

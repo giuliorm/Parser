@@ -101,7 +101,8 @@ public class WebPageParser {
 //            System.out.println(Header);
 //            System.out.println(Body);
 //            System.out.println(date);
-            System.out.println(articleDate + " "+ newPage.getPageUrl());
+            System.out.println(articleDate + " " + newPage.getPageUrl() + "\n" +Header + "\n" + Body
+                    + "\n" + Tags + similarLinks );
 //            System.out.println(similarLinks.toString());
 //            System.out.println(Tags);
 

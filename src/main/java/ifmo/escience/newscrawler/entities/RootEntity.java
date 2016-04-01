@@ -15,10 +15,9 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class RootEntity extends WebEntity {
-    Random random = new Random();
+//    Random random = new Random();
     ProxyManager pm = new ProxyManager();
     HtmlUnitDriver driver = new HtmlUnitDriver();
 
@@ -38,10 +37,7 @@ public class RootEntity extends WebEntity {
                 for (int day = 0; day < syncDays; day++) {
                     LocalDateTime currentDate = LocalDateTime.now();
                     LocalDateTime newDate = currentDate.minusDays(1);
-
                     for (int page = 0; page < 83; page++) {
-                        //int t = 5 * (60_000 + random.nextInt(60_000) - 30_000);
-                        LocalDateTime dateOfParse = LocalDateTime.now();
                         addon.delete(0, addon.length());
                         addon.append(this.entityUrl);
                         addon.append("&from_day=" + String.valueOf(newDate.getDayOfMonth()));
