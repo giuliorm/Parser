@@ -48,7 +48,7 @@ public class Crawler {
 
         for (int i = 0; i < webEntities.size(); i++) {
             /*just for debug new feature*/
-            //webEntities.get(i).start();
+            webEntities.get(i).start();
             logger.info("Thread for " + webEntities.get(i).getEntityName() + " was created");
         }
         logger.info("Starting root entities...");

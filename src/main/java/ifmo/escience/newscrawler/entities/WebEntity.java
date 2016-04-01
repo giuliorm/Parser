@@ -75,7 +75,7 @@ public class WebEntity extends Thread {
     @Override
     public void run() {
         try {
-            List<String> links = getLinks(null);
+            List<String> links = getLinks(this.entityUrl);
             for(String link : links){
                 parser.addPage(link);
             }

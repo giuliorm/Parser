@@ -23,7 +23,7 @@ public class DBConnection {
             doc.append("Number",page.parseTime()).append("Title", page.getArticleName()).append("MainText", page.getArticleText());
             doc.append("Date", page.getArticleDate()).append("Link", page.getPageUrl()).append("MainLink",page.getEntityUrl());
             coll.insert(doc);
-            System.out.println("Document inserted successfully");
+//            System.out.println("Document inserted successfully");
         }
         catch(Exception ex){
             logger.error("Error on loading news into database!", ex);
