@@ -37,8 +37,8 @@ public class DBConnection {
     public void addMissingLink(String link){
         try{
             BasicDBObject document = (BasicDBObject) missingCollection.findOne(new BasicDBObject("url", link));
-            System.out.println(document);
         if(document != null){
+            System.out.println(document);
             BasicDBObject newDocument =
                     new BasicDBObject().append("$inc",
                             new BasicDBObject().append("count", 1));
@@ -49,7 +49,7 @@ public class DBConnection {
             document.append("url", link);
             document.append("count", 1);
             missingCollection.insert(document);
-            System.out.println(document);
+
         }
         }
         catch(Exception ex){

@@ -79,19 +79,30 @@ public class Crawler {
         } else return "";
     }
 
-    private void routeLink(String link) {
+    private boolean routeLink(String link) {
         String linkUrl = getUrlStd(link);
         if (webEntities.containsKey(linkUrl)) {
             WebEntity entityForLink = webEntities.get(linkUrl);
             entityForLink.transmitToParser(link);
+            return true;
         }
         else{
             dbConnection.addMissingLink(linkUrl);
+            return false;
         }
     }
+
+
+
     public void addLinks(List<String> links) {
+        float goodLinks = 0;
         for (int i = 0; i < links.size(); i++) {
-            routeLink(links.get(i));
+            boolean res = routeLink(links.get(i));
+            if(res)
+                goodLinks++;
         }
+        if (!links.isEmpty())
+            System.out.println(goodLinks/links.size()*100);
     }
+
 }

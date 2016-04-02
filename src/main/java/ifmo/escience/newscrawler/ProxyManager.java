@@ -3,9 +3,6 @@ package ifmo.escience.newscrawler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +19,8 @@ public class ProxyManager {
     }
 
     List updateList() throws IOException {
-
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.ifmo.ru", 3128));
-        HttpURLConnection connection = (HttpURLConnection)new URL("http://txt.proxyspy.net/proxy.txt").openConnection(proxy);
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        URL url = new URL("http://txt.proxyspy.net/proxy.txt");
+        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
         String line;
         while ((line = in.readLine()) != null) {
             if (line.contains("+")) {

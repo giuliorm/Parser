@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RootEntity extends WebEntity {
-//    Random random = new Random();
     ProxyManager pm = new ProxyManager();
     HtmlUnitDriver driver = new HtmlUnitDriver();
 
@@ -34,8 +33,8 @@ public class RootEntity extends WebEntity {
         StringBuffer addon = new StringBuffer();
         try {
             while (true) {
+                LocalDateTime currentDate = LocalDateTime.now();
                 for (int day = 0; day < syncDays; day++) {
-                    LocalDateTime currentDate = LocalDateTime.now();
                     LocalDateTime newDate = currentDate.minusDays(1);
                     for (int page = 0; page < 83; page++) {
                         addon.delete(0, addon.length());
@@ -61,6 +60,7 @@ public class RootEntity extends WebEntity {
                                 }
                             }while(links==null);
                     }
+                    currentDate = newDate;
                 }
             }
         }
@@ -99,4 +99,5 @@ public class RootEntity extends WebEntity {
         }
         return arrayOfWebPages;
     }
+
 }

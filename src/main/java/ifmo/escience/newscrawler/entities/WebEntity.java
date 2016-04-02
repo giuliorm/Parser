@@ -59,14 +59,15 @@ public class WebEntity extends Thread {
     protected List<String> getLinks(String targetUrl) throws Exception {
         List<String> arrayOfWebPages = new ArrayList<>();
         HtmlUnitDriver driver = new HtmlUnitDriver();
-
-        logger.trace("Loading links from: " + targetUrl);
+        logger.error("Loading links from: " + targetUrl);
         driver.get(targetUrl);
-        List<WebElement> links = driver.findElements(By.xpath(newsListPath));
+        if(newsListPath!=""){
+            List<WebElement> links = driver.findElements(By.xpath(newsListPath));
 
-        for (WebElement link : links) {
-            String href = link.getAttribute("href");
-            arrayOfWebPages.add(href);
+            for (WebElement link : links) {
+                String href = link.getAttribute("href");
+                arrayOfWebPages.add(href);
+            }
         }
 
         return arrayOfWebPages;

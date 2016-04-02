@@ -96,7 +96,7 @@ public class WebPageParser {
             }
 
             String date = driver.findElement(By.xpath(entity.getArticleDatePath())).getText();
-            String articleDate = (checkWords(doRegExp(date), entity.getDateFormat()));
+            String articleDate = (checkWords(doRegExp(date.replaceAll("\n"," ")), entity.getDateFormat()));
 //            System.out.println(newPage.getPageUrl());
 //            System.out.println(Header);
 //            System.out.println(Body);
@@ -112,11 +112,12 @@ public class WebPageParser {
             newPage.setSimilarNews(similarLinks.toString());
             dbConnection.insert(newPage);
         }
+
     }
     private String checkWords(String date, String datePattern) throws ParseException {
         String hour, minute, day, month, year;
         LocalDateTime now = LocalDateTime.now();
-        date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ");
+        date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
         Calendar calendar = Calendar.getInstance(); // this would default to now
 
         if ((date.contains("cегодня"))|(date.contains("сегодня"))){
@@ -171,15 +172,16 @@ public class WebPageParser {
     }
 
     private String doRegExp(String date) {
-        List<String> allMatches = new ArrayList<String>();
-        Matcher m = Pattern.compile(entity.getRegExpForDate()).matcher(date);
-        while (m.find()) {
 
-            allMatches.add(m.group());
+            List<String> allMatches = new ArrayList<String>();
+            Matcher m = Pattern.compile(entity.getRegExpForDate()).matcher(date);
+            while (m.find()) {
+                allMatches.add(m.group());
+            }
+
+            return allMatches.size() > 0 ? allMatches.get(0) : date;
         }
 
-        return allMatches.size()>0? allMatches.get(0) : date;
-    }
 
 
     private String articleTextProcessing(String text, WebPage page) {
@@ -208,7 +210,7 @@ public class WebPageParser {
 
 
         //TODO regExp add for &#x97
-        String resultText = text.replaceAll(eraseRegex, "").replaceAll("(?s)<!--.*?-->", "").replaceAll("&#x200b", " ").replaceAll("&#x97", "").replaceAll("&nbsp;", " ");
+        String resultText = text.replaceAll(eraseRegex, " ").replaceAll("(?s)<!--.*?-->", " ").replaceAll("&#x200b", " ").replaceAll("&#x97", " ").replaceAll("&nbsp;", " ");
         return resultText;
 
     }
@@ -252,6 +254,5 @@ public class WebPageParser {
 
     private void transmitLinksToCrawler(ArrayList<String> links, WebPage page) {
         entity.transmitToCrawler(links);
-        
     }
 }
