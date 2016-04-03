@@ -49,7 +49,6 @@ public class DBConnection {
             document.append("url", link);
             document.append("count", 1);
             missingCollection.insert(document);
-
         }
         }
         catch(Exception ex){

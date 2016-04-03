@@ -8,15 +8,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RootEntity extends WebEntity {
+    Random rand = new Random();
     HtmlUnitDriver driver = new HtmlUnitDriver();
     public RootEntity(WebEntity from) throws IOException {
         this.newsListPath = from.newsListPath;
@@ -28,6 +27,8 @@ public class RootEntity extends WebEntity {
     @Override
     public void run() {
         int syncDays = 60;
+        int  time = 45_000 + rand.nextInt(30_000) + 1;
+
         StringBuffer addon = new StringBuffer();
         try {
             while (true) {
@@ -49,7 +50,6 @@ public class RootEntity extends WebEntity {
                                 do {
                                     try {
                                         links = getLinks(addon.toString());
-                                        crawler.addLinks(links);
                                     } catch (SocketTimeoutException exception) {
                                         System.out.println("BadProxy1");
                                     } catch (ConnectTimeoutException exception) {
@@ -58,9 +58,8 @@ public class RootEntity extends WebEntity {
                                         System.out.println("BadProxy3");
                                     }
                                 } while (links == null);
-                                System.out.println("оуч!");
                             }while (links.isEmpty());
-                        System.out.println("Success");
+                        Thread.sleep(time);
                     }
                     currentDate = newDate;
                 }
@@ -73,21 +72,13 @@ public class RootEntity extends WebEntity {
         }
 
 }
-    public static int getResponseCode(String urlString) throws MalformedURLException, IOException {
-        URL url = new URL(urlString);
-        HttpURLConnection huc = (HttpURLConnection)url.openConnection();
-        huc.setRequestMethod("GET");
-        huc.connect();
-        return huc.getResponseCode();
-    }
 
     @Override
     protected List<String> getLinks(String targetUrl) throws Exception {
         List<String> arrayOfWebPages = new ArrayList<>();
         logger.trace("Loading links from: " + targetUrl);
         Proxy proxy = new Proxy();
-
-        proxy.setHttpProxy(ProxyManager.getProxy());
+        proxy.setSslProxy(ProxyManager.getProxy());
         driver.setProxySettings(proxy);
         driver.get(targetUrl);
 

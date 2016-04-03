@@ -103,6 +103,7 @@ public class Crawler {
         }
         if (!links.isEmpty())
             System.out.println(goodLinks/links.size()*100);
+
     }
 
 }

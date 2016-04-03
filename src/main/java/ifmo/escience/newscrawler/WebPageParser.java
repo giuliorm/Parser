@@ -97,14 +97,8 @@ public class WebPageParser {
 
             String date = driver.findElement(By.xpath(entity.getArticleDatePath())).getText();
             String articleDate = (checkWords(doRegExp(date.replaceAll("\n"," ")), entity.getDateFormat()));
-//            System.out.println(newPage.getPageUrl());
-//            System.out.println(Header);
-//            System.out.println(Body);
-//            System.out.println(date);
             System.out.println(articleDate + " " + newPage.getPageUrl() + "\n" +Header + "\n" + Body
                     + "\n" + Tags + similarLinks );
-//            System.out.println(similarLinks.toString());
-//            System.out.println(Tags);
 
             newPage.setArticleName(Header);
             newPage.setArticleText(Body);
