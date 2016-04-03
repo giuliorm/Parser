@@ -49,6 +49,7 @@ public class RootEntity extends WebEntity {
                             do {
                                 do {
                                     try {
+                                        Thread.sleep(2_000);
                                         links = getLinks(addon.toString());
                                     } catch (SocketTimeoutException exception) {
                                         System.out.println("BadProxy1");
@@ -78,7 +79,8 @@ public class RootEntity extends WebEntity {
         List<String> arrayOfWebPages = new ArrayList<>();
         logger.trace("Loading links from: " + targetUrl);
         Proxy proxy = new Proxy();
-        proxy.setSslProxy(ProxyManager.getProxy());
+        String proxyFromSet = ProxyManager.getProxy();
+        proxy.setSslProxy(proxyFromSet);
         driver.setProxySettings(proxy);
         driver.get(targetUrl);
 
@@ -88,9 +90,9 @@ public class RootEntity extends WebEntity {
                 String href = link.getAttribute("href");
                 arrayOfWebPages.add(href);
             }
+            ProxyManager.feedBack(proxyFromSet);
             crawler.addLinks(arrayOfWebPages);
         }
         return arrayOfWebPages;
     }
-
 }

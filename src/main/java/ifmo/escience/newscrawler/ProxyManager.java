@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class ProxyManager {
     private static ProxyManager instance;
     private static Set<String> proxySet = new HashSet<String>();
+    private static Set<String> workableSet = new HashSet<>();
     private static Iterator<String> itr;
     ProxyManager() {
         itr = proxySet.iterator();
@@ -42,11 +43,29 @@ public class ProxyManager {
         if (instance == null) {
             instance = new ProxyManager();
         }
+
         if (!itr.hasNext()) {
-            proxySet = updateSet();
+            if (workableSet.size() == 0)
+            {
+                proxySet = updateSet();
+
+            }
+            else {
+                proxySet = workableSet;
+                workableSet.clear();
+            }
             itr = proxySet.iterator();
         }
-        return itr.next();
+
+        String id = itr.next();
+        System.out.println(id);
+        System.out.println(proxySet.size());
+        return id;
+    }
+
+    public static synchronized void feedBack(String workableId)
+    {
+        workableSet.add(workableId);
     }
 }
 
