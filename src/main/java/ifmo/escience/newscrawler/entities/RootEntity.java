@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RootEntity extends WebEntity {
-    ProxyManager pm = new ProxyManager();
     HtmlUnitDriver driver = new HtmlUnitDriver();
-
     public RootEntity(WebEntity from) throws IOException {
         this.newsListPath = from.newsListPath;
         this.entityName = from.entityName;
@@ -48,17 +46,21 @@ public class RootEntity extends WebEntity {
                         addon.append("&p=" + String.valueOf(page));
                         List<String> links = null;
                             do {
-                                try {
-                                    links = getLinks(addon.toString());
-                                    crawler.addLinks(links);
-                                } catch (SocketTimeoutException exception) {
-                                    System.out.println("BadProxy1");
-                                } catch (ConnectTimeoutException exception) {
-                                    System.out.println("Bad proxy2");
-                                } catch (Exception e) {
-                                    System.out.println("BadProxy3");
-                                }
-                            }while(links==null);
+                                do {
+                                    try {
+                                        links = getLinks(addon.toString());
+                                        crawler.addLinks(links);
+                                    } catch (SocketTimeoutException exception) {
+                                        System.out.println("BadProxy1");
+                                    } catch (ConnectTimeoutException exception) {
+                                        System.out.println("Bad proxy2");
+                                    } catch (Exception e) {
+                                        System.out.println("BadProxy3");
+                                    }
+                                } while (links == null);
+                                System.out.println("оуч!");
+                            }while (links.isEmpty());
+                        System.out.println("Success");
                     }
                     currentDate = newDate;
                 }
@@ -85,7 +87,7 @@ public class RootEntity extends WebEntity {
         logger.trace("Loading links from: " + targetUrl);
         Proxy proxy = new Proxy();
 
-        proxy.setHttpProxy(pm.getProxy());
+        proxy.setHttpProxy(ProxyManager.getProxy());
         driver.setProxySettings(proxy);
         driver.get(targetUrl);
 

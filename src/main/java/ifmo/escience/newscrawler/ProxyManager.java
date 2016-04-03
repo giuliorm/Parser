@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,12 +14,14 @@ import java.util.regex.Pattern;
  * Created by gp on 30.03.16.
  */
 public class ProxyManager {
-    public List<String> proxyList = new ArrayList<>();
-    public ProxyManager() throws IOException {
-        proxyList =  updateList();
+    private static ProxyManager instance;
+    private static Set<String> proxySet = new HashSet<String>();
+    private static Iterator<String> itr;
+    ProxyManager() {
+        itr = proxySet.iterator();
     }
 
-    List updateList() throws IOException {
+    private static Set updateSet() throws IOException {
         URL url = new URL("http://txt.proxyspy.net/proxy.txt");
         BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
         String line;
@@ -26,21 +29,26 @@ public class ProxyManager {
             if (line.contains("+")) {
                 Matcher m = Pattern.compile("\\d+.\\d+.\\d+.\\d+:\\d+ ").matcher(line);
                 while (m.find()) {
-                    proxyList.add(m.group().trim());
+                    proxySet.add(m.group().trim());
                 }
             }
         }
         in.close();
-        System.out.println(proxyList.size());
-    return proxyList;
+        System.out.println(proxySet.size());
+        return proxySet;
     }
 
-    public String getProxy() throws IOException {
-        if (proxyList.size()==0)
-            proxyList = updateList();
-        String link = proxyList.get(0);
-        proxyList.remove(0);
-        return  link;
+    public static synchronized String getProxy() throws IOException {
+        if (instance == null) {
+            instance = new ProxyManager();
         }
-
+        if (!itr.hasNext()) {
+            proxySet = updateSet();
+            itr = proxySet.iterator();
+        }
+        return itr.next();
+    }
 }
+
+
+

@@ -4,7 +4,6 @@
     "entityName": "https://news.yandex.ru/yandsearch?geonews=10174&rpt=nnews2",
     "entityUrl": "https://news.yandex.ru/yandsearch?geonews=10174&rpt=nnews2",
     "newsListPath": "//*[contains(@class,'document__title')]/a"
-
   },
   {
     "parserMode": "js",
