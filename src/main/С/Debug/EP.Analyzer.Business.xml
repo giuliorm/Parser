@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Business</name>
+    </assembly>
+    <members>
+        <member name="T:EP.FundsReferent">
+            <summary>
+            Ценные бумаги (акции, доли в уставном капитале и пр.)
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Kind">
+            <summary>
+            Классификатор ценной бумаги
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Source">
+            <summary>
+            Эмитент
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Typ">
+            <summary>
+            Тип (например, привелигированная акция)
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Percent">
+            <summary>
+            Процент от общего количества
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Count">
+            <summary>
+            Количество
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Sum">
+            <summary>
+            Сумма за все акции
+            </summary>
+        </member>
+        <member name="P:EP.FundsReferent.Price">
+            <summary>
+            Сумма за одну акцию
+            </summary>
+        </member>
+        <member name="T:EP.FundsKind">
+            <summary>
+            Типы ценных бумаг
+            </summary>
+        </member>
+        <member name="F:EP.FundsKind.Stock">
+            <summary>
+            Акция
+            </summary>
+        </member>
+        <member name="F:EP.FundsKind.Capital">
+            <summary>
+            Уставной капитал
+            </summary>
+        </member>
+        <member name="T:EP.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.BusinessFactReferent">
+            <summary>
+            Представление бизнес-факта
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.Kind">
+            <summary>
+            Классификатор бизнес-факта
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.Typ">
+            <summary>
+            Краткое описание факта
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.Who">
+            <summary>
+            Кто (действительный залог)
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.Who2">
+            <summary>
+            Второй "Кто" (действительный залог)
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.Whom">
+            <summary>
+            Кого (страдательный залог)
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.When">
+            <summary>
+            Когда (DateReferent или DateRangeReferent)
+            </summary>
+        </member>
+        <member name="P:EP.BusinessFactReferent.Whats">
+            <summary>
+            Что (артефакты события)
+            </summary>
+        </member>
+        <member name="T:EP.BusinessFactKind">
+            <summary>
+            Типы бизнес-фактов
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Create">
+            <summary>
+            Создан
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Delete">
+            <summary>
+            Упразднён
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Get">
+            <summary>
+            Приобретать, покупать
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Sell">
+            <summary>
+            Продавать
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Have">
+            <summary>
+            Владеть, иметь
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Profit">
+            <summary>
+            Прибыль, доход
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Damages">
+            <summary>
+            Убытки
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Agreement">
+            <summary>
+            Соглашение
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Subsidiary">
+            <summary>
+            Дочернее предприятие
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Finance">
+            <summary>
+            Финансировать, спонсировать
+            </summary>
+        </member>
+        <member name="F:EP.BusinessFactKind.Lawsuit">
+            <summary>
+            Судебный иск
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.BusinessAnalyzer">
+            <summary>
+            Семантический анализатор для бизнес-фактов
+            (относится к специфическим анализаторам)
+            </summary>
+        </member>
+    </members>
+</doc>

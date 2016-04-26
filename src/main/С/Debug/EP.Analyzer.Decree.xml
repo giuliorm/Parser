@@ -1,0 +1,810 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Decree</name>
+    </assembly>
+    <members>
+        <member name="T:EP.Semantix.Internal.DecreeHelper">
+            <summary>
+            Некоторые полезные функции для НПА
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.DecreeHelper.TryCreateCanonicDecreeRefUri(EP.Semantix.Token)">
+            <summary>
+            Это для оформления ссылок по некоторым стандартам (когда гиперссылкой нужно выделить не всю сущность,
+            а лишь некоторую её часть)
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.Internal.DecreeHelper.CheckNds(EP.Semantix.Token,System.Double)">
+            <summary>
+            Проверка корректности НДС для суммы
+            </summary>
+            <param name="t">Указывает на значение, для которой должно далее следовать НДС</param>
+            <param name="nds"></param>
+            <returns></returns>
+        </member>
+        <member name="F:EP.Semantix.Internal.CanonicDecreeRefUri.IsAdopted">
+            <summary>
+            Это есть ключ. слово "утв."
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.CanonicDecreeRefUri.TypeWithGeo">
+            <summary>
+            Это Закон Челябинской области
+            </summary>
+        </member>
+        <member name="T:EP.DecreePartReferent">
+            <summary>
+            Сущность, представляющая ссылку на структурную часть НПА
+            </summary>
+        </member>
+        <member name="M:EP.DecreePartReferent.AddHighLevelInfo(EP.DecreePartReferent)">
+            <summary>
+            Добавить информацию о вышележащих элементах
+            </summary>
+            <param name="dp"></param>
+        </member>
+        <member name="M:EP.DecreePartReferent.IsAllItemsLessLevel(EP.Referent,System.Boolean)">
+            <summary>
+            Проверить, что все элементы находятся на более низком уровне, чем у аргумента
+            </summary>
+            <param name="upperParts"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.DecreePartReferent.Name">
+            <summary>
+            Наименование (если несколько, то самое короткое)
+            </summary>
+        </member>
+        <member name="P:EP.DecreePartReferent.LocalTyp">
+            <summary>
+            Локальный тип (при ссылке на текущий документ)
+            </summary>
+        </member>
+        <member name="T:EP.DecreeReferent">
+            <summary>
+            Сущность, представляющая ссылку на НПА
+            </summary>
+        </member>
+        <member name="P:EP.DecreeReferent.Name">
+            <summary>
+            Наименование (если несколько, то самое короткое)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeReferent.Date">
+            <summary>
+            Дата подписания (для законов дат может быть много - по редакциям)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeReferent.Typ">
+            <summary>
+            Тип
+            </summary>
+        </member>
+        <member name="P:EP.DecreeReferent.IsLaw">
+            <summary>
+            Признак того, что это именно закон, а не подзаконный акт.
+            Для законов возможны несколько номеров и дат (редакций)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeReferent.Number">
+            <summary>
+            Номер (для законов номеров может быть много)
+            </summary>
+        </member>
+        <member name="F:EP.DecreeKind.Publisher">
+            <summary>
+            Источники опубликований
+            </summary>
+        </member>
+        <member name="F:EP.DecreeKind.Program">
+            <summary>
+            Госпрограммы
+            </summary>
+        </member>
+        <member name="F:EP.DecreeKind.Gost">
+            <summary>
+            Государственный стандарт
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.DecreeAnalyzer">
+            <summary>
+            Семантический анализатор для дат и диапазонов дат
+            </summary>
+            <summary>
+            Семантический анализатор для дат и диапазонов дат
+            </summary>
+            <summary>
+            Семантический анализатор для дат и диапазонов дат
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.DecreeAnalyzer.Process(EP.Semantix.AnalysisKit)">
+            <summary>
+            Основная функция выделения дат
+            </summary>
+            <param name="cnt"></param>
+            <param name="stage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.InstrumentBlockReferent">
+            <summary>
+            Представление нормативно-правового документа или его части
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.Kind">
+            <summary>
+            Классификатор
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.Kind2">
+            <summary>
+            Классификатор дополнительный
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.Value">
+            <summary>
+            Значение
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.Number">
+            <summary>
+            Номер (для диапазона - максимальный номер)
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.SubNumber">
+            <summary>
+            Дополнительный номер (через точку за основным)
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.SubNumber2">
+            <summary>
+            Дополнительный второй номер (через точку за дополнительным)
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.SubNumber3">
+            <summary>
+            Дополнительный третий номер (через точку за вторым дополнительным)
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.MinNumber">
+            <summary>
+            Минимальный номер, если задан диапазон
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentBlockReferent.Children">
+            <summary>
+            Внутреннее содержимое
+            </summary>
+        </member>
+        <member name="T:EP.InstrumentKind">
+            <summary>
+            Классы частей НПА
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Undefined">
+            <summary>
+            Неизвестно
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Document">
+            <summary>
+            Корневой документ
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.InternalDocument">
+            <summary>
+            Внутренний документ (например, который утверждается)
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Head">
+            <summary>
+            Заголовочная часть
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Content">
+            <summary>
+            Элемент с основным содержимым
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Tail">
+            <summary>
+            Хвостовая часть
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Appendix">
+            <summary>
+            Приложение
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.DocPart">
+            <summary>
+            Часть документа (деление самого верхнего уровня)
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Section">
+            <summary>
+            Раздел
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Subsection">
+            <summary>
+            Подраздел
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Chapter">
+            <summary>
+            Глава
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Paragraph">
+            <summary>
+            Параграф
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Subparagraph">
+            <summary>
+            Подпараграф
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Clause">
+            <summary>
+            Статья
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.ClausePart">
+            <summary>
+            Часть статьи
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Item">
+            <summary>
+            Пункт
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Subitem">
+            <summary>
+            Подпункт
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Indention">
+            <summary>
+            Абзац
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.ListItem">
+            <summary>
+            Элемент списка
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.ListHead">
+            <summary>
+            Заголовок списка (первый абзац перед перечислением)
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Preamble">
+            <summary>
+            Преамбула
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Index">
+            <summary>
+            Оглавление
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Notice">
+            <summary>
+            Примечание
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Number">
+            <summary>
+            Номер
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.CaseNumber">
+            <summary>
+            Номер дела (для судебных документов)
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.CaseInfo">
+            <summary>
+            Дополнительная информация (для судебных документов)
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Typ">
+            <summary>
+            Тип
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Signer">
+            <summary>
+            Подписант
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Organization">
+            <summary>
+            Организация
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Place">
+            <summary>
+            Место
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Date">
+            <summary>
+            Дата-время
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Contact">
+            <summary>
+            Контактные данные
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Initiator">
+            <summary>
+            Инициатор
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Directive">
+            <summary>
+            Директива
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Editions">
+            <summary>
+            Редакции
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Approved">
+            <summary>
+            Одобрен, утвержден
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.DocReference">
+            <summary>
+            Ссылка на документ
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Keyword">
+            <summary>
+            Ключевое слово (типа Приложение и т.п.)
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Comment">
+            <summary>
+            Комментарий
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Citation">
+            <summary>
+            Цитата
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Question">
+            <summary>
+            Вопрос
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Answer">
+            <summary>
+            Ответ
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Table">
+            <summary>
+            Таблица
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.TableRow">
+            <summary>
+            Строка таблицы
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.TableCell">
+            <summary>
+            Ячейка таблицы
+            </summary>
+        </member>
+        <member name="F:EP.InstrumentKind.Ignored">
+            <summary>
+            Для внутреннего использования
+            </summary>
+        </member>
+        <member name="T:EP.DecreeChangeReferent">
+            <summary>
+            Модель изменения структурной части НПА
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.Kind">
+            <summary>
+            Классификатор
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.Owners">
+            <summary>
+            Структурный элемент, в который вносится изменение (м.б. несколько)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.Children">
+            <summary>
+            Внутренние изменения
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.Value">
+            <summary>
+            Значение
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.Param">
+            <summary>
+            Дополнительный параметр (для типа Exchange - что заменяется, для Append - после чего)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.IsOwnerName">
+            <summary>
+            Признак того, что изменения касаются наименования структурного элемента
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.IsOnlyText">
+            <summary>
+            Признак того, что изменения касаются только текста (без заголовка)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeReferent.IsOwnerNameAndText">
+            <summary>
+            Признак того, что изменения касаются наименования и текста структурного элемента
+            </summary>
+        </member>
+        <member name="T:EP.DecreeChangeValueReferent">
+            <summary>
+            Значение изменения СЭ НПА
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeValueReferent.Kind">
+            <summary>
+            Тип значение
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeValueReferent.Value">
+            <summary>
+            Значение
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeValueReferent.Number">
+            <summary>
+            Номер (для предложений и сносок)
+            </summary>
+        </member>
+        <member name="P:EP.DecreeChangeValueReferent.NewItems">
+            <summary>
+            Новые структурные элементы, которые добавляются этим значением 
+            (дополнить ... статьями 10.1 и 10.2 следующего содержания)
+            </summary>
+        </member>
+        <member name="T:EP.DecreeChangeKind">
+            <summary>
+            Типы изменений структурных элементов (СЭ)
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.Container">
+            <summary>
+            Объединяет в себе другие изменения
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.Append">
+            <summary>
+            Дополнить другим СЭ-м или текстовыми конструкциями
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.Expire">
+            <summary>
+            СЭ утратил силу
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.New">
+            <summary>
+            Изложить в редакции
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.Exchange">
+            <summary>
+            Заменить одни текстовые конструкции другими
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.Remove">
+            <summary>
+            Удалить текстовые конструкции
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeKind.Consider">
+            <summary>
+            Считать как
+            </summary>
+        </member>
+        <member name="T:EP.DecreeChangeValueKind">
+            <summary>
+            Типы изменяющих СЭ значений
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.Text">
+            <summary>
+            Текстовой фрагмент
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.Words">
+            <summary>
+            Слова (в точном значении)
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.RobustWords">
+            <summary>
+            Слова (в неточном значений)
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.Numbers">
+            <summary>
+            Цифры
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.Sequence">
+            <summary>
+            Предложение
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.Footnote">
+            <summary>
+            Сноска
+            </summary>
+        </member>
+        <member name="F:EP.DecreeChangeValueKind.Block">
+            <summary>
+            Блок со словами
+            </summary>
+        </member>
+        <member name="T:EP.InstrumentReferent">
+            <summary>
+            Представление нормативно-правового документа или его части
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentReferent.Typ">
+            <summary>
+            Тип
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentReferent.RegNumber">
+            <summary>
+            Номер
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentReferent.CaseNumber">
+            <summary>
+            Номер дела
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentReferent.Date">
+            <summary>
+            Дата подписания
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.DecreeToken">
+            <summary>
+            Примитив, из которых состоит декрет
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DecreeToken.Typ">
+            <summary>
+            Тип примитива
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DecreeToken.Value">
+            <summary>
+            Значение
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DecreeToken.FullValue">
+            <summary>
+            Это длинное значение (для кодексов)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DecreeToken.Ref">
+            <summary>
+            Ссылка на сущность, если есть
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.DecreeToken.TryAttach(EP.Semantix.Token,EP.Semantix.DecreeToken,System.Boolean)">
+            <summary>
+            Привязать с указанной позиции один примитив
+            </summary>
+            <param name="cnt"></param>
+            <param name="indFrom"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.DecreeToken.TryAttachList(EP.Semantix.Token,EP.Semantix.DecreeToken,System.Int32,System.Boolean)">
+            <summary>
+            Привязать примитивы в контейнере с указанной позиции
+            </summary>
+            <param name="cnt"></param>
+            <param name="indFrom"></param>
+            <returns>Список примитивов</returns>
+        </member>
+        <member name="M:EP.Semantix.DecreeToken.AddNewType(System.String,System.String)">
+            <summary>
+            Добавить новый тип НПА
+            </summary>
+            <param name="typ"></param>
+            <param name="acronym"></param>
+        </member>
+        <member name="M:EP.Semantix.Internal.ContractHelper.CorrectDummyNewlines(EP.Semantix.Internal.FragToken)">
+            <summary>
+            Объединение абзацев в один фрагмент, если переход на новую строку
+            является сомнительным (для договоров обычно кривые документы)
+            </summary>
+            <param name="fr"></param>
+        </member>
+        <member name="F:EP.Semantix.Internal.InstrToken1.MinNumber">
+            <summary>
+            Это используется, когда задаются диапазоны ...
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.InstrToken1.IsStandardTitle">
+            <summary>
+            Признак того, что это стандартный заголовок (н-р, РЕКВИЗИТЫ И ПОДПИСИ СТОРОН)
+            </summary>
+        </member>
+        <member name="T:EP.InstrumentParticipant">
+            <summary>
+            Участник НПА (для договора: продавец, агент, исполнитель и т.п.)
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentParticipant.Typ">
+            <summary>
+            Тип участника
+            </summary>
+        </member>
+        <member name="P:EP.InstrumentParticipant.Ground">
+            <summary>
+            Основание
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.NumberingHelper">
+            <summary>
+            Поддержка анализа нумерации
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.NumberingHelper.CalcDelta(EP.Semantix.Internal.InstrToken1,EP.Semantix.Internal.InstrToken1,System.Boolean)">
+            <summary>
+            Разница между двумя номерами
+            </summary>
+            <param name="prev"></param>
+            <param name="next"></param>
+            <param name="canSubNumbers">может быть 1. - 1.1 - 2.</param>
+            <returns>больше 0 - отличаются на это число, 0 не стыкуются</returns>
+        </member>
+        <member name="M:EP.Semantix.Internal.NumberingHelper.ExtractMainSequence(System.Collections.Generic.List{EP.Semantix.Internal.InstrToken1},System.Boolean,System.Boolean)">
+            <summary>
+            Выделить базовую верхоуровневую последовательность номеров (строк, содержащих номера)
+            </summary>
+            <param name="lines">исходные строки</param>
+            <param name="checkSpecTexts">проверять ли строки на мусор</param>
+            <param name="canSubNumbers">могут ли быть подномера типа 1. - 1.1 - 2.</param>
+            <returns>null если не нашли или последовательность строк с номерами</returns>
+        </member>
+        <member name="M:EP.Semantix.Internal.NumberingHelper.CreateNumber(EP.Semantix.Internal.FragToken,EP.Semantix.Internal.InstrToken1)">
+            <summary>
+            Создать результирующий узел, представляющий номер
+            </summary>
+            <param name="owner"></param>
+            <param name="itok"></param>
+        </member>
+        <member name="M:EP.Semantix.Internal.NumberingHelper.ParseNumber(EP.Semantix.Token,EP.Semantix.Internal.InstrToken1,EP.Semantix.Internal.InstrToken1)">
+            <summary>
+            Распарсить нумерацию
+            </summary>
+            <param name="t"></param>
+            <param name="res"></param>
+        </member>
+        <member name="P:EP.InstrumentAnalyzer.IsSpecific">
+            <summary>
+            Этот анализатор является специфическим
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.EditionHelper">
+            <summary>
+            Поддержка анализа редакций для фрагментов НПА
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.ContentAnalyzeWhapper._analizeContentWithContainers(EP.Semantix.Internal.FragToken,System.Collections.Generic.List{EP.Semantix.Internal.InstrToken1},System.Int32,EP.Semantix.Internal.FragToken)">
+            <summary>
+            Анализ текстов, явно содержащих главы, разделы, статьи и т.п.
+            </summary>
+            <param name="lines"></param>
+            <param name="proc"></param>
+        </member>
+        <member name="M:EP.Semantix.Internal.ContentAnalyzeWhapper._analizeChapterWithoutKeywords(EP.Semantix.Internal.FragToken,System.Collections.Generic.List{EP.Semantix.Internal.InstrToken1},EP.Semantix.Internal.FragToken)">
+            <summary>
+            Анализ ситуации, когда главы без ключевых слов, только цифра + наименование
+            </summary>
+            <param name="lines"></param>
+            <param name="proc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.Internal.ContentAnalyzeWhapper._analizeContentWithDirectives(EP.Semantix.Internal.FragToken,System.Collections.Generic.List{EP.Semantix.Internal.InstrToken1})">
+            <summary>
+            Анализ текстов, содержащих директивы
+            </summary>
+            <param name="lines"></param>
+            <param name="proc"></param>
+        </member>
+        <member name="T:EP.InstrumentArtefact">
+            <summary>
+            Участник НПА (для договора: продавец, агент, исполнитель и т.п.)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.PartToken">
+            <summary>
+            Примитив, из которых состоит часть декрета (статья, пункт и часть)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PartToken.Typ">
+            <summary>
+            Тип примитива
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PartToken.Values">
+            <summary>
+            Значения
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PartToken.Ind">
+            <summary>
+            Эо для последующего перебора
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PartToken.AnaforRef">
+            <summary>
+            Анафорическая ссылка
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.PartToken.TryAttach(EP.Semantix.Token,EP.Semantix.PartToken,System.Boolean,System.Boolean)">
+            <summary>
+            Привязать с указанной позиции один примитив
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.PartToken.TryAttachList(EP.Semantix.Token,System.Boolean,System.Int32)">
+            <summary>
+            Привязать примитивы в контейнере с указанной позиции
+            </summary>
+            <returns>Список примитивов</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,432 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Biblio</name>
+    </assembly>
+    <members>
+        <member name="M:EP.Semantix.Internal.ChapterTextToken.PrimaryAnalyze">
+            <summary>
+            Сформировать для главы список потенциальных персонажей
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.MetaCharacter">
+            <summary>
+            Метаинформация о литературном персонаже
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.CharItemToken.FullValues">
+            <summary>
+            Полное имя для сокращённого
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.PeaceToken.GetPeace(EP.Semantix.Token)">
+            <summary>
+            Получить часть, которой принадлежит токен
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.Internal.PeaceToken.IsInOnePeace(EP.Semantix.Token,EP.Semantix.Token)">
+            <summary>
+            Проверка, что оба токена из одной части
+            </summary>
+            <param name="t1"></param>
+            <param name="t2"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.TitlePageReferent">
+            <summary>
+            Сущность, описывающая информацию из заголовков статей, книг, диссертация и пр.
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.Types">
+            <summary>
+            Список типов 
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.Names">
+            <summary>
+            Названия (одно или несколько)
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.Date">
+            <summary>
+            Дата
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.StudentYear">
+            <summary>
+            Номер курса (для студентов)
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.Org">
+            <summary>
+            Организация
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.City">
+            <summary>
+            Город
+            </summary>
+        </member>
+        <member name="P:EP.TitlePageReferent.Speciality">
+            <summary>
+            Специальность
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.OccuresContainer.IsAllInDialogs">
+            <summary>
+            Признак того, что встречается только в прямой речи диалогов
+            </summary>
+        </member>
+        <member name="T:EP.CharacterReferent">
+            <summary>
+            Литературный персонаж
+            </summary>
+        </member>
+        <member name="P:EP.CharacterReferent.Names">
+            <summary>
+            Собственные имена (все)
+            </summary>
+        </member>
+        <member name="P:EP.CharacterReferent.Typ">
+            <summary>
+            Тип персонажа
+            </summary>
+        </member>
+        <member name="P:EP.CharacterReferent.Gender">
+            <summary>
+            Пол
+            </summary>
+        </member>
+        <member name="P:EP.CharacterReferent.IsAuthor">
+            <summary>
+            Признак того, что повествования ведётся от этого лица
+            </summary>
+        </member>
+        <member name="T:EP.CharacterGender">
+            <summary>
+            Пол персонажа
+            </summary>
+        </member>
+        <member name="T:EP.CharacterType">
+            <summary>
+            Тип персонажа
+            </summary>
+        </member>
+        <member name="F:EP.CharacterType.Undefined">
+            <summary>
+            Неизвестно
+            </summary>
+        </member>
+        <member name="F:EP.CharacterType.Man">
+            <summary>
+            Человек
+            </summary>
+        </member>
+        <member name="F:EP.CharacterType.Animal">
+            <summary>
+            Животное
+            </summary>
+        </member>
+        <member name="F:EP.CharacterType.Mythic">
+            <summary>
+            Мифическое
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.TextPeaceReferent">
+            <summary>
+            Фрагмент текста
+            </summary>
+        </member>
+        <member name="T:EP.TextPeaceKind">
+            <summary>
+            Классы фрагментов
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceKind.Text">
+            <summary>
+            Текстовой фрагмент
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceKind.Title">
+            <summary>
+            Заголовок части, раздела, главы
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceKind.Head">
+            <summary>
+            Заголовок всего произведения
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceKind.Tail">
+            <summary>
+            Фрагмент в конце произведения
+            </summary>
+        </member>
+        <member name="T:EP.TextPeaceType">
+            <summary>
+            Типы и подптипы
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Book">
+            <summary>
+            Книга
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Volume">
+            <summary>
+            Том (для заголовков)
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Part">
+            <summary>
+            Часть (для заголовков)
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Chapter">
+            <summary>
+            Глава (для заголовков)
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Intro">
+            <summary>
+            Введение (для заголовков)
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Conclusion">
+            <summary>
+            Заключение
+            </summary>
+        </member>
+        <member name="F:EP.TextPeaceType.Remarks">
+            <summary>
+            Замечания
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.RefCharacter">
+            <summary>
+            Это тот персонах, на который ссылается атрибут!!!
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsAttr">
+            <summary>
+            Это атрибут
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsNeedNext">
+            <summary>
+            Значит обязательно далее должен быть другой элемент (например, де ...)
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsNeedPrev">
+            <summary>
+            Обязательно перед должен быть элемент
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsEmoAttr">
+            <summary>
+            Позитивная окраска атрибуда (сволочь, подлец, молодец)
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsAnimal">
+            <summary>
+            Это явно животное
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsCanBePersonAfter">
+            <summary>
+            За словом может быть персона в родительном падеже (слуга Хозяина, отец Ивана ...)
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsEmptyAttr">
+            <summary>
+            Пустой атрибут (типа: господин, мистер)
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsMan">
+            <summary>
+            Это явно человек
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.CharItemVar.IsMythical">
+            <summary>
+            Мифологическое существо
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.DocumentStructureAnalyzer.IsSpecific">
+            <summary>
+            Этот анализатор является специфическим
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.CharacterExType.FirstPerson">
+            <summary>
+            Первое лицо
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.DialogItemToken.Speaker">
+            <summary>
+            Кто говорит
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.DialogItemToken.Callers">
+            <summary>
+            К кому обращаются
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.MetaLink">
+            <summary>
+            Метаинформация о литературном персонаже
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.TitlePageAnalyzer">
+            <summary>
+            Семантический анализатор заголовочной информации
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.TitlePageAnalyzer.IsSpecific">
+            <summary>
+            Этот анализатор является специфическим
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.LitHelper.FindNearVerb(EP.Semantix.Token,EP.Text.MorphGender)">
+            <summary>
+            Найти ближайший грагол (слева или справа), согласованный с токеном,
+            который считается агентом глагола
+            </summary>
+            <param name="agent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.Internal.LitHelper.FindByName(EP.Semantix.Token,EP.Text.MorphGender@)">
+            <summary>
+            Проверить, что это шаблон типа "шарманщик по имени ..."
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="F:EP.Semantix.Internal.CharacterVariant.NormOccures">
+            <summary>
+            Это встречаемости в нормальной форме
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.CharacterVariant.LinkVariant">
+            <summary>
+            Это для "дочь Пупкина"
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.CharacterVariant.IsLinkProbableError">
+            <summary>
+            Проверить, что возможна ошибка стыковки
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:EP.Semantix.DocumentBlockReferent">
+            <summary>
+            Блок документа (часть, глава или весь документ целиком)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.DocumentBlockType">
+            <summary>
+            Типы текстов
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.TitleNameToken">
+            <summary>
+            Название статьи
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TitleNameToken.Rank">
+            <summary>
+            Ранг
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TitleNameToken.TypeValue">
+            <summary>
+            Это значение типа работы (если есть)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TitleNameToken.Speciality">
+            <summary>
+            Специальность (если есть)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.MetaPeace">
+            <summary>
+            Метаинформация о литературном персонаже
+            </summary>
+        </member>
+        <member name="T:EP.LinkReferent">
+            <summary>
+            Связь персонажа с другим персонажем
+            </summary>
+        </member>
+        <member name="P:EP.LinkReferent.Chars">
+            <summary>
+            Ссылки на персонажей
+            </summary>
+        </member>
+        <member name="P:EP.LinkReferent.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:EP.LinkReferent.ShortName">
+            <summary>
+            Краткое наименование
+            </summary>
+        </member>
+        <member name="P:EP.LinkReferent.Typ">
+            <summary>
+            Тип персонажа
+            </summary>
+        </member>
+        <member name="T:EP.LinkType">
+            <summary>
+            Пол персонажа
+            </summary>
+        </member>
+        <member name="T:EP.LiteratureAnalyzer">
+            <summary>
+            Анализатор литературных произведений
+            </summary>
+        </member>
+        <member name="M:EP.LiteratureAnalyzer.CreateReferent(System.String)">
+            <summary>
+            Создать объект нужного типа
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.LiteratureAnalyzer.IsSpecific">
+            <summary>
+            Этот анализатор является специфическим
+            </summary>
+        </member>
+        <member name="P:EP.LiteratureAnalyzer.TypeSystem">
+            <summary>
+            Это список типов объектов, которые выделяются анализатором
+            </summary>
+        </member>
+        <member name="P:EP.LiteratureAnalyzer.Images">
+            <summary>
+            Это список иконок для объектов
+            </summary>
+        </member>
+    </members>
+</doc>

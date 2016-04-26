@@ -1,0 +1,443 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Location</name>
+    </assembly>
+    <members>
+        <member name="M:EP.Semantix.MiscLocationHelper.CheckUnknownRegion(EP.Semantix.Token)">
+            <summary>
+            Проверка, что здесь какой-то непонятный регион типа "Европа", "Средняя Азия", "Дикий запад" и т.п.
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.MiscLocationHelper.GetGeoReferentByName(System.String)">
+            <summary>
+            Прлучить глобальный экземпляр существующего объекта по ALPHA2 или краткой текстовой форме (РФ, РОССИЯ, КИТАЙ ...)
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.MiscLocationHelper.TryAttachNordWest(EP.Semantix.Token)">
+            <summary>
+            Выделение существительных и прилагательных типа "северо-западное", "южное"
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.GeoAnalyzer">
+            <summary>
+            Семантический анализатор стран
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.GeoAnalyzer.ProcessReferent(EP.Semantix.Token,EP.Semantix.Token)">
+            <summary>
+            Это привязка стран к прилагательным (например, "французский лидер")
+            </summary>
+            <param name="begin"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.GeoAnalyzer.Try3(System.Collections.Generic.List{EP.Semantix.CityItemToken},EP.Semantix.IntOntologyItem@)">
+            <summary>
+            Это проверяем некоторые частные случаи
+            </summary>
+            <param name="li"></param>
+            <param name="oi"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.GeoAnalyzer.GetAllCountries">
+            <summary>
+            Получить список всех стран из внутреннего словаря
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:EP.Semantix.StreetItemToken">
+            <summary>
+            Токен для поддержки выделения улиц
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemToken.IsAbridge">
+            <summary>
+            Признак сокращения
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.Noun">
+            <summary>
+            Это существительное - улица, проезд и пр.
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.Name">
+            <summary>
+            Это название
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.Number">
+            <summary>
+            Номер
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.StdAdjective">
+            <summary>
+            Стандартное прилагательное (Большой, Средний ...)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.StdName">
+            <summary>
+            Стандартное имя
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.StdPartOfName">
+            <summary>
+            Стандартная часть имени
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.Age">
+            <summary>
+            40-летия чего-то там
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.StreetItemType.Fix">
+            <summary>
+            Некоторое фиусированное название (МКАД)
+            </summary>
+        </member>
+        <member name="T:EP.AddressReferent">
+            <summary>
+            Сущность, представляющая адрес
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Streets">
+            <summary>
+            Улица (кстати, их может быть несколько)
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.House">
+            <summary>
+            Дом
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Building">
+            <summary>
+            Строение
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Estate">
+            <summary>
+            Владение
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Corpus">
+            <summary>
+            Корпус
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.CorpusOrFlat">
+            <summary>
+            Корпус или квартира
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Floor">
+            <summary>
+            Этаж
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Potch">
+            <summary>
+            Подъезд
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Flat">
+            <summary>
+            Квартира
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Office">
+            <summary>
+            Номер офиса
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Plot">
+            <summary>
+            Номер участка
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Block">
+            <summary>
+            Блок (ряд)
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Box">
+            <summary>
+            Бокс (гараж)
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Metro">
+            <summary>
+            Станция метро
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Kilometer">
+            <summary>
+            Километр
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Zip">
+            <summary>
+            Почтовый индекс
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.PostOfficeBox">
+            <summary>
+            Почтовый ящик
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.CSP">
+            <summary>
+            ГСП (абонент городской служебной почты)
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Geos">
+            <summary>
+            Ссылки на географические объекты (самого нижнего уровня)
+            </summary>
+        </member>
+        <member name="P:EP.AddressReferent.Detail">
+            <summary>
+            ополнительная детализация места (пересечение, около ...)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.OntoItem">
+            <summary>
+            Ссылка на существующий объект 
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.TerminItem">
+            <summary>
+            Это термин для существительного и прилагательного
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.IsAdjective">
+            <summary>
+            Прилагательное (существующих объектов, для терминов или для собственного имени)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.AdjectiveRef">
+            <summary>
+            Это ссылка на страну для "китайская провинция"
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.CanBeCity">
+            <summary>
+            Это если есть такой же город
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.IsAdjInDictionary">
+            <summary>
+            Прилагательное находится в словаре
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.IsDoubt">
+            <summary>
+            Сомнительность...
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.TerrItemToken.TryParseDistrictName(EP.Semantix.Token,EP.Semantix.IntOntologyCollection)">
+            <summary>
+            Это пыделение возможного имени для городского района типа Владыкино, Тёплый Стан)
+            </summary>
+            <param name="t"></param>
+            <param name="intOnt"></param>
+            <param name="proc"></param>
+            <returns></returns>
+        </member>
+        <member name="F:EP.Semantix.TerrItemToken.m_TerrOntology">
+            <summary>
+            Словарь стран и некоторых терминов
+            </summary>
+        </member>
+        <member name="T:EP.StreetReferent">
+            <summary>
+            Улица, проспект, площадь, шоссе и т.п.
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.Typs">
+            <summary>
+            Тип(ы)
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.Names">
+            <summary>
+            Наименования
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.Number">
+            <summary>
+            Номер улицы (16-я Парковая)
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.SecNumber">
+            <summary>
+            Дополнительный номер (3-я 1 Мая)
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.Geos">
+            <summary>
+            Ссылка на географические объекты
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.City">
+            <summary>
+            Город
+            </summary>
+        </member>
+        <member name="P:EP.StreetReferent.Kind">
+            <summary>
+            Классификатор
+            </summary>
+        </member>
+        <member name="T:EP.StreetKind">
+            <summary>
+            Типы улиц
+            </summary>
+        </member>
+        <member name="F:EP.StreetKind.Undefined">
+            <summary>
+            Обычная улица-переулок-площадь
+            </summary>
+        </member>
+        <member name="F:EP.StreetKind.Road">
+            <summary>
+            Автодорога
+            </summary>
+        </member>
+        <member name="F:EP.StreetKind.Metro">
+            <summary>
+            Станция метро
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.Typ">
+            <summary>
+            Тип элемента
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.Value">
+            <summary>
+            Строковое значение
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.AltValue">
+            <summary>
+            Альтернативное значение
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.OntoItem">
+            <summary>
+            Ссылка на онтологический элемент (существующий город)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.Doubtful">
+            <summary>
+            Признак сомнительности
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.GeoObjectBefore">
+            <summary>
+            Есть ли перед элементом некоторый географический объект
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.GeoObjectAfter">
+            <summary>
+            Есть ли после элемента некоторый географический объект
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.HigherGeo">
+            <summary>
+            Столица Чечни
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.CityItemToken.OrgRef">
+            <summary>
+            Это ссылка на организацию (для: посёлок НИИ Радио)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.AddressAnalyzer">
+            <summary>
+            Семантический анализатор адресов
+            </summary>
+        </member>
+        <member name="T:EP.GeoReferent">
+            <summary>
+            Сущность, описывающая территорию как административную единицу.
+            Это страны, автономные образования, области, административные районы и пр.
+            </summary>
+        </member>
+        <member name="M:EP.GeoReferent.AddOrgReferent(EP.Referent)">
+            <summary>
+            Добавляем ссылку на организацию, также добавляем имена
+            </summary>
+            <param name="org"></param>
+        </member>
+        <member name="P:EP.GeoReferent.Typs">
+            <summary>
+            Тип(ы)
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.IsCity">
+            <summary>
+            Это может быть населенным пунктом
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.IsBigCity">
+            <summary>
+            Это именно город, а не деревня или поселок
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.IsState">
+            <summary>
+            Это может быть отдельным государством
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.IsRegion">
+            <summary>
+            Это может быть регионом в составе другого образования
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.IsTerritory">
+            <summary>
+            Просто территория (например, территория аэропорта Шереметьево)
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.IsUnion">
+            <summary>
+            Союз России и Белоруссии
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.Alpha2">
+            <summary>
+            2-х символьный идентификатор страны (ISO 3166)
+            </summary>
+        </member>
+        <member name="P:EP.GeoReferent.Higher">
+            <summary>
+            Вышестоящий объект
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Date</name>
+    </assembly>
+    <members>
+        <member name="T:EP.DateRangeReferent">
+            <summary>
+            Сущность, представляющая диапазон дат
+            </summary>
+        </member>
+        <member name="P:EP.DateRangeReferent.DateFrom">
+            <summary>
+            Начало диапазона
+            </summary>
+        </member>
+        <member name="P:EP.DateRangeReferent.DateTo">
+            <summary>
+            Конец диапазона
+            </summary>
+        </member>
+        <member name="P:EP.DateRangeReferent.QuarterNumber">
+            <summary>
+            Проверка, что диапазон задаёт квартал, возвращает номер 1..4
+            </summary>
+        </member>
+        <member name="P:EP.DateRangeReferent.HalfyearNumber">
+            <summary>
+            Проверка, что диапазон задаёт полугодие, возвращает номер 1..2
+            </summary>
+        </member>
+        <member name="T:EP.DateReferent">
+            <summary>
+            Сущность, представляющая дату
+            </summary>
+        </member>
+        <member name="M:EP.DateReferent.IsMonthDefined(EP.Referent)">
+            <summary>
+            Проверка, что дата или диапазон определены с точностью до одного месяца
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.DateReferent.Dt">
+            <summary>
+            Дата в стандартной структуре .NET (null, если что-либо неопределено или дата некорректна)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Century">
+            <summary>
+            Век (0 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Year">
+            <summary>
+            Год (0 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Month">
+            <summary>
+            Месяц (0 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Day">
+            <summary>
+            День месяца (0 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Hour">
+            <summary>
+            Час (-1 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Minute">
+            <summary>
+            Минуты (-1 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Second">
+            <summary>
+            Секунд (-1 - неопределён)
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Higher">
+            <summary>
+            Вышестоящая дата
+            </summary>
+        </member>
+        <member name="P:EP.DateReferent.Pointer">
+            <summary>
+            Дополнительный указатель примерной даты
+            </summary>
+        </member>
+        <member name="T:EP.DatePointerType">
+            <summary>
+            Дополнительные указатели для дат
+            </summary>
+        </member>
+        <member name="F:EP.DatePointerType.Begin">
+            <summary>
+            В начале
+            </summary>
+        </member>
+        <member name="F:EP.DatePointerType.Center">
+            <summary>
+            В середине
+            </summary>
+        </member>
+        <member name="F:EP.DatePointerType.End">
+            <summary>
+            В конце
+            </summary>
+        </member>
+        <member name="F:EP.DatePointerType.Today">
+            <summary>
+            В настоящее время, сегодня
+            </summary>
+        </member>
+        <member name="F:EP.DatePointerType.Undefined">
+            <summary>
+            Неопределено (например, 20__ года )
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.DateAnalyzer">
+            <summary>
+            Семантический анализатор для дат и диапазонов дат
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.DateAnalyzer.Process(EP.Semantix.AnalysisKit)">
+            <summary>
+            Основная функция выделения дат
+            </summary>
+            <param name="cnt"></param>
+            <param name="stage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.Semantix.DateItemToken">
+            <summary>
+            Примитив, из которых состоит дата
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DateItemToken.Typ">
+            <summary>
+            Тип примитива
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DateItemToken.StringValue">
+            <summary>
+            Строковое значение (для разделителя)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DateItemToken.IntValue">
+            <summary>
+            Числовое значение
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.DateItemToken.Lang">
+            <summary>
+            Язык
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.DateItemToken.TryAttach(EP.Semantix.Token,System.Collections.Generic.List{EP.Semantix.DateItemToken})">
+            <summary>
+            Привязать с указанной позиции один примитив
+            </summary>
+            <param name="cnt"></param>
+            <param name="indFrom"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.DateItemToken.TryAttachList(EP.Semantix.Token,System.Int32)">
+            <summary>
+            Привязать примитивы в контейнере с указанной позиции
+            </summary>
+            <param name="cnt"></param>
+            <param name="indFrom"></param>
+            <returns>Список примитивов</returns>
+        </member>
+    </members>
+</doc>

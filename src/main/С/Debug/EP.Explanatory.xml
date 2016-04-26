@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Explanatory</name>
+    </assembly>
+    <members>
+        <member name="T:EP.Text.Explanatory">
+            <summary>
+            Сервис для получение толковой информации о словах.
+            В настоящий момент поддержаны русский и украинский языки.
+            </summary>
+        </member>
+        <member name="M:EP.Text.Explanatory.Initialize(EP.Text.MorphLang)">
+            <summary>
+            Инициализация внутренних словарей.
+            Можно не вызывать, но тогда будет автоматически вызвано при первом обращении,
+            и соответственно первое обращение отработает на несколько секунд дольше.
+            <param name="langs">по умолчанию, русский</param>
+            </summary>
+        </member>
+        <member name="M:EP.Text.Explanatory.LoadLanguages(EP.Text.MorphLang)">
+            <summary>
+            Загрузить язык(и), если они ещё не загружены
+            </summary>
+            <param name="langs"></param>
+        </member>
+        <member name="M:EP.Text.Explanatory.UnloadLanguages(EP.Text.MorphLang)">
+            <summary>
+            Выгрузить язык(и), если они больше не нужны
+            </summary>
+            <param name="langs"></param>
+        </member>
+        <member name="M:EP.Text.Explanatory.FindByWord(System.String,System.Boolean,EP.Text.MorphLang)">
+            <summary>
+            Найти все связанные с словоформой варианты
+            </summary>
+            <param name="word"></param>
+            <param name="addAllInfo">при true добавит варианты и для эквивалентных слов других частей речи</param>
+            <param name="lang">язык (по умолчанию, русский)</param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Text.Explanatory.IsAnimated(System.String,EP.Text.MorphLang)">
+            <summary>
+            Может ли быть одушевлённым
+            </summary>
+            <param name="word"></param>
+            <param name="lang">язык (по умолчанию, русский)</param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Text.Explanatory.IsNamed(System.String,EP.Text.MorphLang)">
+            <summary>
+            Может ли иметь собственное имя
+            </summary>
+            <param name="word"></param>
+            <param name="lang">язык (по умолчанию, русский)</param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.Text.Explanatory.LoadedLanguages">
+            <summary>
+            Языки, морфологические словари для которых загружены в память
+            </summary>
+        </member>
+        <member name="T:EP.Text.ExplanWord">
+            <summary>
+            Слово толкового словаря
+            </summary>
+        </member>
+        <member name="F:EP.Text.ExplanWord.Class">
+            <summary>
+            Часть речи
+            </summary>
+        </member>
+        <member name="F:EP.Text.ExplanWord.Words">
+            <summary>
+            Варианты
+            </summary>
+        </member>
+        <member name="F:EP.Text.ExplanWord.VerbAspectPairs">
+            <summary>
+            Это пары "совершенный" - "несовершенный"
+            </summary>
+        </member>
+        <member name="F:EP.Text.ExplanWord.Nexts">
+            <summary>
+            Возможные продолжения (следующее слово):
+            Пары: (Предлог, Падежи)
+            </summary>
+        </member>
+        <member name="F:EP.Text.ExplanWord.Others">
+            <summary>
+            Ссылки на эквивалентные слова других частей речи.
+            Пары: (Слово, Часть речи)
+            </summary>
+        </member>
+        <member name="T:EP.Text.ExplanWordAttr">
+            <summary>
+            Дополнительные характеристики слова
+            </summary>
+        </member>
+        <member name="F:EP.Text.ExplanWordAttr.Undefined">
+            <summary>
+            Неопределённое
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsUndefined">
+            <summary>
+            Неопределённый тип
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsAnimated">
+            <summary>
+            Одушевлённое
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsNamed">
+            <summary>
+            Может иметь собственное имя
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsNumbered">
+            <summary>
+            Может иметь номер (например, Олимпиада 80)
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsMeasured">
+            <summary>
+            Может ли иметь числовую характеристику (длина, количество, деньги ...)
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsEmoPositive">
+            <summary>
+            Позитивная окраска
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsEmoNegative">
+            <summary>
+            Негативная окраска
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsAnimal">
+            <summary>
+            Это животное, а не человек (для IsAnimated = true)
+            </summary>
+        </member>
+        <member name="P:EP.Text.ExplanWordAttr.IsCanCanPersonAfter">
+            <summary>
+            За словом может быть персона в родительном падеже (слуга Хозяина, отец Ивана ...)
+            </summary>
+        </member>
+        <member name="T:EP.Text.DerivateGroup">
+            <summary>
+            Дериватная группа
+            </summary>
+        </member>
+        <member name="T:EP.Text.DerivateWord">
+            <summary>
+            Слово в дериватной группе
+            </summary>
+        </member>
+        <member name="F:EP.Text.DerivateWord.Class">
+            <summary>
+            Часть речи
+            </summary>
+        </member>
+        <member name="F:EP.Text.DerivateWord.Aspect">
+            <summary>
+            Совершенный\несовершенный
+            </summary>
+        </member>
+        <member name="F:EP.Text.DerivateWord.Voice">
+            <summary>
+            Действительный\страдательный
+            </summary>
+        </member>
+        <member name="F:EP.Text.DerivateWord.Tense">
+            <summary>
+            Время (для причастий)
+            </summary>
+        </member>
+        <member name="F:EP.Text.DerivateWord.Reflexive">
+            <summary>
+            Возвратный
+            </summary>
+        </member>
+        <member name="T:EP.Text.Internal.ExplanDictionary">
+            <summary>
+            Толковый словарь.
+            По нему можно узнать про эквивалентность слов разных частей речи, а также
+            варианты продолжений слов.
+            </summary>
+        </member>
+        <member name="M:EP.Text.Internal.ExplanDictionary.FindByWord(System.String,System.Boolean)">
+            <summary>
+            Найти все связанные с словоформой варианты
+            </summary>
+            <param name="word"></param>
+            <param name="addAllInfo">при true добавит варианты и для эквивалентных слов других частей речи</param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Text.Internal.ExplanDictionary.IsAnimated(System.String)">
+            <summary>
+            Может ли быть одушевлённым
+            </summary>
+            <param name="word"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Text.Internal.ExplanDictionary.IsNamed(System.String)">
+            <summary>
+            Может ли иметь собственное имя
+            </summary>
+            <param name="word"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Text.Internal.ExplanDictionary.TranslateToUA(System.Collections.Generic.IDictionary{System.String,System.String},System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Перевести всё на украинский язык
+            </summary>
+            <param name="map"></param>
+        </member>
+    </members>
+</doc>

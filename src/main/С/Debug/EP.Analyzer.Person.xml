@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Person</name>
+    </assembly>
+    <members>
+        <member name="T:EP.PersonPropertyReferent">
+            <summary>
+            Сущность, описывающая некоторое свойство физического лица
+            </summary>
+        </member>
+        <member name="M:EP.PersonPropertyReferent.CanHasRef(EP.Referent)">
+            <summary>
+            Проверка, что этот референт может выступать в качестве ATTR_REF
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.PersonPropertyReferent.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:EP.PersonPropertyReferent.Higher">
+            <summary>
+            Вышестоящая должность
+            </summary>
+        </member>
+        <member name="T:EP.PersonPropertyKind">
+            <summary>
+            Типы свойств
+            </summary>
+        </member>
+        <member name="F:EP.PersonPropertyKind.Boss">
+            <summary>
+            Начальник
+            </summary>
+        </member>
+        <member name="F:EP.PersonPropertyKind.King">
+            <summary>
+            Вельможные и духовные особы
+            </summary>
+        </member>
+        <member name="F:EP.PersonPropertyKind.Kin">
+            <summary>
+            Родственники
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.PersonAttrToken">
+            <summary>
+            ИСпользуется внутренним образом
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.PersonAttrToken.KingSurname">
+            <summary>
+            Например, патриарх Московский и всея Руси - это будет Московский
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.PersonAttrToken.Age">
+            <summary>
+            ВОзраст
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.chinasurnames">
+            <summary>
+              Looks up a localized string similar to  Ан
+            Гиль
+            Ём
+            Им
+            Ин
+            Каль
+            Кан
+            Квак
+            Квон
+            Кён
+            Киль
+            Ким
+            Ко
+            Ку
+            Кук
+            Кым
+            Ли
+            Лим
+            Лю
+            Ма
+            Мён
+            Мин
+            Мо
+            Мун
+            Мэн
+            На
+            Нам
+            Намгун
+            Но
+            О
+            Ок
+            Ом
+            Пак
+            Пан
+            Пён
+            Пом
+            Пу
+            Пэ
+            Пэк
+            То
+            Тон
+            Хo
+            Ха
+            Хам
+            Хан
+            Хван
+            Хван
+            Хён
+            Хо
+            Хон
+            Ху
+            Цой
+            Чан
+            Чи
+            Чин
+            Чо
+            Чон
+            Чу
+            Чха
+            Чхве
+            Чхон
+            Чу
+            Чху
+            Чхэ
+            Ым
+            Ын.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ShortNames">
+             <summary>
+               Looks up a localized string similar to m Александр Саша Шура Сашенька Шурочка Алекс Шурик Саня Санька Санек
+            f Александра Саша Шура Сашенька Шурочка
+            m Алексей Леша Алекс Лешенька
+            f Алена Лена Леночка Аленушка
+            f Алеся Леся Алесенька
+            f Анастасия Настя Настенька
+            m Анатолий Толя Толик Толенька Толян
+            m Андрей Андрюша Андрюшенька Андрюшка Андрюха
+            f Анна Аня Аннушка
+            m Аркадий Аркаша Аркашенька
+            m Артем Тема Темочка
+            m Богдан Даня Данечка
+            m Борис  Боря Боренька
+            m Вадим  Вадик 
+            m Валентин Валя Валенька
+            f Валентина Валя Валенька
+            m Валерий   В [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="T:EP.PersonReferent">
+            <summary>
+            Сущность, описывающее физическое лицо
+            </summary>
+        </member>
+        <member name="F:EP.PersonReferent.ShowLastnameOnFirstPosition">
+            <summary>
+            При выводе в ToString() первым ставить фамилию, а не имя
+            </summary>
+        </member>
+        <member name="M:EP.PersonReferent.CompareSurnames(System.String,System.String)">
+            <summary>
+            Сравнение с учётом возможных окончаний
+            </summary>
+            <param name="s1"></param>
+            <param name="s2"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.PersonReferent.IsMale">
+            <summary>
+            Это мужчина
+            </summary>
+        </member>
+        <member name="P:EP.PersonReferent.IsFemale">
+            <summary>
+            Это женщина
+            </summary>
+        </member>
+        <member name="P:EP.PersonReferent.Age">
+            <summary>
+            Возраст
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.PersonAnalyzer">
+            <summary>
+            Семантический анализатор выделения персон
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PersonAnalyzer.DoLatinPersons">
+            <summary>
+            Распознавать персон на латыни (английском)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PersonAnalyzer.NominativeCaseAlways">
+            <summary>
+            Все персоны идут в именительном падеже
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PersonAnalyzer.TextStartsWithLastnameFirstnameMiddlename">
+            <summary>
+            Текст начинается с Фамилии Имени Отчества
+            </summary>
+        </member>
+        <member name="T:EP.PersonIdentityReferent">
+            <summary>
+            Удостоверение личности (паспорт и пр.)
+            </summary>
+        </member>
+        <member name="P:EP.PersonIdentityReferent.Typ">
+            <summary>
+            Тип документа
+            </summary>
+        </member>
+        <member name="P:EP.PersonIdentityReferent.Number">
+            <summary>
+            Номер (вместе с серией)
+            </summary>
+        </member>
+        <member name="P:EP.PersonIdentityReferent.State">
+            <summary>
+            Государство
+            </summary>
+        </member>
+        <member name="P:EP.PersonIdentityReferent.Address">
+            <summary>
+            Адрес регистрации
+            </summary>
+        </member>
+    </members>
+</doc>

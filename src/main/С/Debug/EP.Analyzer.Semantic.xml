@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Semantic</name>
+    </assembly>
+    <members>
+        <member name="F:EP.Semantix.Internal.History.Abbrs">
+            <summary>
+            Список возможных сокращений
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.History.Names">
+            <summary>
+            Список возможных собственных имён
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.History.Aliases">
+            <summary>
+            Список возможных псевдонимов
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.Fragment.IsWhich">
+            <summary>
+            Признак того, что начинается "о которой", "которая" ... или ЧТО
+            </summary>
+        </member>
+        <member name="T:EP.SentenceReferent">
+            <summary>
+            Семантический объект
+            </summary>
+        </member>
+        <member name="F:EP.SentenceReferent.IgnoredPart">
+            <summary>
+            Это для аннотаций
+            </summary>
+        </member>
+        <member name="P:EP.SentenceReferent.Kind">
+            <summary>
+            Тип предложения
+            </summary>
+        </member>
+        <member name="P:EP.SentenceReferent.SemRefs">
+            <summary>
+            Ссылка на семантические объекты
+            </summary>
+        </member>
+        <member name="P:EP.SentenceReferent.SynRefs">
+            <summary>
+            Ссылка на синтаксические объекты (для аннотации - предложения, входящие в аннотацию)
+            </summary>
+        </member>
+        <member name="P:EP.SentenceReferent.Content">
+            <summary>
+            Содержимое
+            </summary>
+        </member>
+        <member name="T:EP.SentenceKind">
+            <summary>
+            Классы синтаксических элементов
+            </summary>
+        </member>
+        <member name="F:EP.SentenceKind.Annotation">
+            <summary>
+            Аннотация всего текста (реферат)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.SentenceContainer">
+            <summary>
+            Анализатор предложений
+            </summary>
+        </member>
+        <member name="T:EP.ActantReferent">
+            <summary>
+            Актант - связь предиката с объектами или объекта с объектами
+            </summary>
+        </member>
+        <member name="P:EP.ActantReferent.Role">
+            <summary>
+            Роль актанта
+            </summary>
+        </member>
+        <member name="P:EP.ActantReferent.Refs">
+            <summary>
+            Ссылки на объекты, предикаты или другие актанты
+            </summary>
+        </member>
+        <member name="P:EP.ActantReferent.Value">
+            <summary>
+            Исходное значение из текста
+            </summary>
+        </member>
+        <member name="P:EP.ActantReferent.Count">
+            <summary>
+            Количественная характеристика
+            </summary>
+        </member>
+        <member name="P:EP.ActantReferent.Prep">
+            <summary>
+            Предлог (если есть)
+            </summary>
+        </member>
+        <member name="T:EP.ActantRole">
+            <summary>
+            Роли актанта
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.ObjectsLinks.ObjLink.Prepare">
+            <summary>
+            Формирование результата (ссылки)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.PredicateReferent">
+            <summary>
+            Предикат (действие, глагол)
+            </summary>
+        </member>
+        <member name="P:EP.PredicateReferent.Attrs">
+            <summary>
+            Морфологические атрибуты
+            </summary>
+        </member>
+        <member name="P:EP.PredicateReferent.Bases">
+            <summary>
+            Глагол(ы)
+            </summary>
+        </member>
+        <member name="P:EP.PredicateReferent.Props">
+            <summary>
+            Наречия
+            </summary>
+        </member>
+        <member name="P:EP.PredicateReferent.Actants">
+            <summary>
+            Актанты
+            </summary>
+        </member>
+        <member name="T:EP.PredicateAttr">
+            <summary>
+            Атрибут глагола
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Not">
+            <summary>
+            Отрицание (не)
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Verb">
+            <summary>
+            Глагол
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Participle">
+            <summary>
+            Причастие
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Transregressive">
+            <summary>
+            Деепричастие
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Infinitive">
+            <summary>
+            Инфинитив
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Past">
+            <summary>
+            Прошедшее время
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Present">
+            <summary>
+            Настоящее время
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Future">
+            <summary>
+            Будущее время
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Imperative">
+            <summary>
+            Повелительное наклонение
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Reflexive">
+            <summary>
+            Возвратный
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Imperfective">
+            <summary>
+            Несовершенный
+            </summary>
+        </member>
+        <member name="F:EP.PredicateAttr.Perfective">
+            <summary>
+            Совершенный
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.SynToken._ObjVarTyp">
+            <summary>
+            Это используется внутренним образом для алгоритма стыковки объектов
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.SynToken._LastPredicate">
+            <summary>
+            Это используется внутренним образом для алгоритма формирования актантов предикатов
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.SynToken._UseThisToken">
+            <summary>
+            Использовать это токен вместо текущего
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.SynToken.IsPredicateBe">
+            <summary>
+            Это предикат с ключевым словом "БЫТЬ" ("ЯВЛЯТЬСЯ")
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.SynToken.IsPredicateSelf">
+            <summary>
+            Возвратные предикат
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.SemanticAnalyzer">
+            <summary>
+            Семантический анализатор выделения персон
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.SemanticAnalyzer.IgnoreActions">
+            <summary>
+            Не выделять действия
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.Actant">
+            <summary>
+            Поддержка анализа актантов у предикатов
+            </summary>
+        </member>
+        <member name="T:EP.ObjectReferent">
+            <summary>
+            Семантический объект
+            </summary>
+        </member>
+        <member name="F:EP.ObjectReferent.Rank">
+            <summary>
+            Ранг значимости элемента в рамках анализируемого текста
+            </summary>
+        </member>
+        <member name="F:EP.ObjectReferent.IsSignific">
+            <summary>
+            Уситывается при построении автоаннотаций
+            </summary>
+        </member>
+        <member name="P:EP.ObjectReferent.PropRefs">
+            <summary>
+            Все ссылка с другими объектами или предикатами (прямые и через актанты)
+            </summary>
+        </member>
+        <member name="T:EP.SemanticKind">
+            <summary>
+            Классы синтаксических элементов
+            </summary>
+        </member>
+        <member name="F:EP.SemanticKind.Object">
+            <summary>
+            Объект
+            </summary>
+        </member>
+        <member name="F:EP.SemanticKind.Pronoun">
+            <summary>
+            Неизвестный (местоимение)
+            </summary>
+        </member>
+    </members>
+</doc>

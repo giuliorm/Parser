@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Misc</name>
+    </assembly>
+    <members>
+        <member name="T:EP.UriReferent">
+            <summary>
+            URI, а также ISBN, УДК, ББК, ICQ и пр.
+            </summary>
+        </member>
+        <member name="P:EP.UriReferent.Value">
+            <summary>
+            Значение
+            </summary>
+        </member>
+        <member name="P:EP.UriReferent.Scheme">
+            <summary>
+            Схема
+            </summary>
+        </member>
+        <member name="T:EP.DenominationReferent">
+            <summary>
+            Сущность, моделирующая непонятные комбинации (например, Си++, СС-300)
+            </summary>
+        </member>
+        <member name="P:EP.DenominationReferent.Value">
+            <summary>
+            Значение (одно или несколько)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.DefinitionAnalyzer">
+            <summary>
+            Анализатор определений
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.DefinitionAnalyzer.Process(EP.Semantix.AnalysisKit)">
+            <summary>
+            Основная функция выделения объектов
+            </summary>
+            <param name="container"></param>
+            <param name="lastStage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.DefinitionAnalyzer.TryAttachEnd(EP.Semantix.Token,EP.Semantix.TerminCollection,System.Int32)">
+            <summary>
+            Это распознавание случая, когда термин находится в конце
+            </summary>
+            <param name="t"></param>
+            <param name="onto"></param>
+            <param name="maxChar"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.BankDataReferent">
+            <summary>
+            Банковские данные (реквизиты)
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.UriAnalyzer">
+            <summary>
+            Картридж для выделения интернетных объектов (URL, E-mail)
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.UriAnalyzer.Process(EP.Semantix.AnalysisKit)">
+            <summary>
+            Основная функция выделения объектов
+            </summary>
+            <param name="container"></param>
+            <param name="lastStage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.Semantix.PhoneItemToken">
+            <summary>
+            Примитив, из которых состоит телефонный номер
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PhoneItemToken.ItemType">
+            <summary>
+            Тип примитива
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.PhoneItemToken.Value">
+            <summary>
+            Строковое значение
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.PhoneItemToken.TryAttach(EP.Semantix.Token)">
+            <summary>
+            Привязать с указанной позиции один примитив
+            </summary>
+            <param name="cnt"></param>
+            <param name="indFrom"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.PhoneItemToken.TryAttachAll(EP.Semantix.Token)">
+            <summary>
+            Привязать примитивы в контейнере с указанной позиции
+            </summary>
+            <param name="cnt"></param>
+            <param name="indFrom"></param>
+            <returns>Список примитивов</returns>
+        </member>
+        <member name="T:EP.Semantix.DenominationAnalyzer">
+            <summary>
+            Анализатор деноминаций и обозначений
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.DenominationAnalyzer.Process(EP.Semantix.AnalysisKit)">
+            <summary>
+            Основная функция выделения объектов
+            </summary>
+            <param name="container"></param>
+            <param name="lastStage"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.PhoneReferent">
+            <summary>
+            Сущность, представляющая телефонные номера
+            </summary>
+        </member>
+        <member name="P:EP.PhoneReferent.Number">
+            <summary>
+            Основной номер (без кода города)
+            </summary>
+        </member>
+        <member name="P:EP.PhoneReferent.AddNumber">
+            <summary>
+            Добавочный номер (если есть)
+            </summary>
+        </member>
+        <member name="P:EP.PhoneReferent.CountryCode">
+            <summary>
+            Код страны
+            </summary>
+        </member>
+        <member name="T:EP.MoneyReferent">
+            <summary>
+            Представление денежных сумм
+            </summary>
+        </member>
+        <member name="P:EP.MoneyReferent.Currency">
+            <summary>
+            Тип валюты (3-х значный код ISO 4217)
+            </summary>
+        </member>
+        <member name="P:EP.MoneyReferent.Value">
+            <summary>
+            Значение
+            </summary>
+        </member>
+        <member name="P:EP.MoneyReferent.AltValue">
+            <summary>
+            Альтернативное значение (если есть, то значит неправильно написали сумму
+            числом и далее прописью в скобках)
+            </summary>
+        </member>
+        <member name="P:EP.MoneyReferent.Rest">
+            <summary>
+            Остаток (от 0 до 99) - копеек, центов и т.п.
+            </summary>
+        </member>
+        <member name="P:EP.MoneyReferent.AltRest">
+            <summary>
+            Остаток (от 0 до 99) - копеек, центов и т.п.
+            </summary>
+        </member>
+        <member name="P:EP.MoneyReferent.RealValue">
+            <summary>
+            Действительное значение
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.CountryPhoneCodes">
+             <summary>
+               Looks up a localized string similar to AU	61
+            AT	43
+            AZ	994
+            AL	355
+            DZ	213
+            AS	684
+            AI	1264
+            AO	244
+            AD	336
+            AQ	67
+            AG	1268
+            AE	971
+            AR	54
+            AM	374
+            AW	297
+            AF	93
+            BS	1242
+            BD	880
+            BB	1246
+            BH	973
+            BY	375
+            BZ	501
+            BE	32
+            BJ	229
+            CI	225
+            BM	1441
+            MM	95
+            BG	359
+            BO	591
+            BA	387
+            BW	267
+            BR	55
+            BN	673
+            BF	226
+            BU	95
+            BI	257
+            BT	975
+            VU	678
+            VA	379
+            GB	44
+            HU	36
+            VE	58
+            VG	1284
+            VN	84
+            WF	681
+            GA	41
+            HT	509
+            GY	592
+            GM	220
+            GH	233
+            GP	590
+            GT	502
+            GN	224
+            GW	245
+            DE	49
+            GI	350
+            NL	31
+            AN	599
+            HN	504
+            HK	852
+            GD	473
+            GL	299
+            GR	30
+            GE	788
+            GU	671
+            DK	 [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.UriSchemes">
+             <summary>
+               Looks up a localized string similar to aaa
+            aaas
+            acap
+            cap
+            cid
+            consultantplus
+            crid
+            data
+            dav
+            dict
+            dns
+            file
+            ftp
+            geo
+            go
+            gopher
+            h323
+            http
+            https
+            iax
+            icap
+            im
+            imap
+            info
+            ipp
+            iris
+            iris.beep
+            iris.xpc
+            iris.xpcs
+            iris.lws
+            ldap
+            lsid
+            mailto
+            mid
+            modem
+            msrp
+            msrps
+            mtqp
+            mupdate
+            news
+            nfs
+            nntp
+            opaquelocktoken
+            pop
+            pres
+            prospero
+            rsync
+            rtsp
+            service
+            shttp
+            sieve
+            sip
+            sips
+            sms
+            snmp
+            soap.beep
+            soap.beeps
+            telnet
+            tftp
+            thismessage
+            tip
+            tv
+            urn
+            vemmi
+            wais
+            xmlrpc.beep
+            xmlrpc.beeps
+            xmpp
+            about
+            adiumxtra
+            aim
+            apt
+            afp [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="T:EP.Semantix.ParenthesisToken">
+            <summary>
+            Анализ вводных слов и словосочетаний
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.PhoneAnalyzer">
+            <summary>
+            Семантический картридж для выделения телефонов
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.PhoneAnalyzer.Process(EP.Semantix.AnalysisKit)">
+            <summary>
+            Основная функция выделения телефонов
+            </summary>
+            <param name="cnt"></param>
+            <param name="stage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.Semantix.PhoneHelper.GetCountryPrefix(System.String)">
+            <summary>
+            Выделить телефонный префикс из "полного" номера
+            </summary>
+            <param name="fullNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EP.DefinitionReferent">
+            <summary>
+            Сущность, моделирующая определение (утверждение, тезис)
+            </summary>
+        </member>
+        <member name="P:EP.DefinitionReferent.Termin">
+            <summary>
+            Термин
+            </summary>
+        </member>
+        <member name="P:EP.DefinitionReferent.TerminAdd">
+            <summary>
+            Дополнительный атрибут термина ("как наука", "в широком смысле" ...)
+            </summary>
+        </member>
+        <member name="P:EP.DefinitionReferent.Value">
+            <summary>
+            Собственно определение (правая часть)
+            </summary>
+        </member>
+        <member name="P:EP.DefinitionReferent.Kind">
+            <summary>
+            Тип определение
+            </summary>
+        </member>
+        <member name="T:EP.DefinitionKind">
+            <summary>
+            Тип определения
+            </summary>
+        </member>
+        <member name="F:EP.DefinitionKind.Undefined">
+            <summary>
+            Непонятно
+            </summary>
+        </member>
+        <member name="F:EP.DefinitionKind.Assertation">
+            <summary>
+            Просто утрерждение
+            </summary>
+        </member>
+        <member name="F:EP.DefinitionKind.Definition">
+            <summary>
+            Строгое определение
+            </summary>
+        </member>
+        <member name="F:EP.DefinitionKind.Negation">
+            <summary>
+            Отрицание
+            </summary>
+        </member>
+    </members>
+</doc>

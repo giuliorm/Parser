@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EP.Analyzer.Organization</name>
+    </assembly>
+    <members>
+        <member name="T:EP.Semantix.OrganizationAnalyzer">
+            <summary>
+            Семантический анализатор организаций
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:EP.Semantix.Internal.OrgItemTypeToken">
+            <summary>
+            Используется внутренним образом
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.Name">
+            <summary>
+            Если непусто, то это была именная группа
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.AltTyp">
+            <summary>
+            Это дополнительный тип вместе с возможными прилагательными
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.Number">
+            <summary>
+            Это номер бывает в начале
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.Geo">
+            <summary>
+            Это если среди прилагательных ключевого слова есть территория
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.Geo2">
+            <summary>
+            Для совместных предприятий может быть несколько стран
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.CharsRoot">
+            <summary>
+            Это относится только к корневому слову
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.CanBeDepBeforeOrganization">
+            <summary>
+            Это может быть отдельное подразделение перед какой-либо организацией
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.IsDouterOrg">
+            <summary>
+            Дочерняя организация
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTypeToken.CanBeOrganization">
+            <summary>
+            Это значит тип может полностью описывать организацию
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.Internal.OrgItemTypeToken.CheckOrgSpecialWordBefore(EP.Semantix.Token)">
+            <summary>
+            Проверка, что перед токеном есть специфическое слово типа "Президент" и т.п.
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.Semantix.Internal.OrgItemTypeToken.NameWordsCount">
+            <summary>
+            Количество слов в имени
+            </summary>
+        </member>
+        <member name="P:EP.Semantix.Internal.OrgItemTypeToken.IsDoubtRootWord">
+            <summary>
+            Корень - сомнительное слово (типа: организация или движение)
+            </summary>
+        </member>
+        <member name="M:EP.Semantix.OrgOwnershipHelper.CanBeHigher(EP.OrganizationReferent,EP.OrganizationReferent,System.Boolean)">
+            <summary>
+            Проверка на отношения "вышестоящий - нижестоящий"
+            </summary>
+            <param name="higher"></param>
+            <param name="lower"></param>
+            <returns></returns>
+        </member>
+        <member name="F:EP.Semantix.OrgItemNameToken.IsStdTail">
+            <summary>
+            Стандартное окончание (типа Ltd, Inc)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.OrgItemNameToken.IsStdName">
+            <summary>
+            Стандартное название (типа "Разработки ПО", ")
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.OrgItemNameToken.IsEmptyWord">
+            <summary>
+            Это паразитные слова типа "Заказчик", "Вкладчик" и т.п.
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.OrgItemNameToken.IsIgnoredPart">
+            <summary>
+            Это "паразитная" комбинация типа "ордена Трудового Красного знамени"
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.OrgItemNameToken.StdOrgNameNouns">
+            <summary>
+            Имя состоит из слов, которыми обычно называются госучреждения, министерства, департаменты и т.п.
+            </summary>
+        </member>
+        <member name="T:EP.OrganizationReferent">
+            <summary>
+            Организация как сущность
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationReferent.ExtOntologyAttached">
+            <summary>
+            Признак того, что была попытка привязаться к внешней онтологии
+            </summary>
+        </member>
+        <member name="M:EP.OrganizationReferent.CanBeSecondDefinition(EP.OrganizationReferent,EP.OrganizationReferent)">
+            <summary>
+            Проверка, что организация slave может быть дополнительным описанием основной организации
+            </summary>
+            <param name="master"></param>
+            <param name="slave"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EP.OrganizationReferent.CanBeHigher(EP.OrganizationReferent,EP.OrganizationReferent)">
+            <summary>
+            Проверка на отношения "вышестоящий - нижестоящий"
+            </summary>
+            <param name="higher"></param>
+            <param name="lower"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EP.OrganizationReferent.INN">
+            <summary>
+            Номер ИНН
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.OGRN">
+            <summary>
+            Номер ОГРН
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Names">
+            <summary>
+            Список имён организации
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Profile">
+            <summary>
+            Профиль деятельности
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Types">
+            <summary>
+            Список типов и префиксов организации (ЗАО, компания, институт ...)
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Number">
+            <summary>
+            Номер (если есть)
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Owner">
+            <summary>
+            Типа владелец - (Аппарат Президента)
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Higher">
+            <summary>
+            Вышестоящая организация
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Eponyms">
+            <summary>
+            Список объектов, которым посвящена организации (имени кого)
+            </summary>
+        </member>
+        <member name="P:EP.OrganizationReferent.Kind">
+            <summary>
+            Коласс организации (некоторая экспертная оценка на основе названия и типов)
+            </summary>
+        </member>
+        <member name="T:EP.OrganizationKind">
+            <summary>
+            Разновидности организаций
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Undefined">
+            <summary>
+            Неопределённая
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Science">
+            <summary>
+            Научно-исследовательские
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Department">
+            <summary>
+            Подразделение
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Federation">
+            <summary>
+            Федерация, Союз и т.п. непонятность
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Hotel">
+            <summary>
+            Отели, Санатории, Пансионаты ...
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Justice">
+            <summary>
+            Суды, тюрьмы ...
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Church">
+            <summary>
+            Церкви, религиозное
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Military">
+            <summary>
+            Военные
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Airport">
+            <summary>
+            Аэропорт
+            </summary>
+        </member>
+        <member name="F:EP.OrganizationKind.Festival">
+            <summary>
+            События (фестиваль, чемпионат)
+            </summary>
+        </member>
+        <member name="T:EP.OrgProfile">
+            <summary>
+            Профили деятельности (хранятся в атрибутах, может быть несколько)
+            </summary>
+        </member>
+        <member name="F:EP.OrgProfile.Press">
+            <summary>
+            Издательства, газеты, журналы ... (обычно вместе с Media)
+            </summary>
+        </member>
+        <member name="F:EP.OrgProfile.Union">
+            <summary>
+            Различные объединения людей (фонды, движения, партии, ассоциации)
+            </summary>
+        </member>
+        <member name="F:EP.Semantix.Internal.OrgItemTermin.IsDoubtWord">
+            <summary>
+            Корень - сомнительное слово (типа: организация или движение)
+            </summary>
+        </member>
+    </members>
+</doc>
