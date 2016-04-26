@@ -1,6 +1,9 @@
 package ifmo.escience.newscrawler;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class KeyWords {
@@ -8,24 +11,30 @@ public class KeyWords {
     public static BufferedReader inp;
     public static BufferedWriter out;
 
-    public static String[] doIt(String news) throws IOException, InterruptedException {
+    public static String doIt(String news) throws IOException, InterruptedException {
 
-        String cmd = "python3 " + System.getProperty("user.dir") + "/src/main/python/KeyWords.py";
-        Process p = Runtime.getRuntime().exec(cmd);
-        inp = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        out = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
-        String ret;
+        Set<String> set = new HashSet<String>();
         try {
-            out.write(news + "\n");
-            out.flush();
-            ret = inp.readLine();
-            p.waitFor();
-            inp.close();
-            out.close();
-            System.out.println(ret);
-            return ret.split(" ");
-        } catch (Exception err) {}
+            ProcessBuilder pb = new ProcessBuilder("mono", System.getProperty("user.dir") + "/src/main/С/Debug/ConsoleApplication1.exe", news);
+            Process p = pb.start();
 
-        return null;
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null ) {
+               if (!line.isEmpty())
+                set.add(line.replaceAll("[\\pP\\s]", " "));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        StringBuilder sb = new StringBuilder();
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            sb.append("\"");
+            sb.append(iterator.next());
+            sb.append("\"");
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 }
