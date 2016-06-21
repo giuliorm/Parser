@@ -257,12 +257,13 @@ public class WebPageParser {
             //driver.get(newPage.getPageUrl());
             resetDriver(entity.getEntityUrl());
 
-            if (parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath())) &&
-            parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath())) &&
-            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath())) &&
-            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath())) &&
-            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath())) )
-                dbConnection.insert(newPage);
+            parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath()));
+            parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath()));
+            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath()));
+            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath()));
+            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath()));
+
+            dbConnection.insert(newPage);
 
 
 
