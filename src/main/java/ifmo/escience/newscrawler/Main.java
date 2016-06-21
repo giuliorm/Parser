@@ -1,5 +1,7 @@
 package ifmo.escience.newscrawler;
 
+import ifmo.escience.newscrawler.database.DbConfig;
+import ifmo.escience.newscrawler.database.NewsMongoDb;
 import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +22,23 @@ public class Main {
     private static Logger logger = LogManager.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException, InterruptedException {
+
+        NewsMongoDb db = new NewsMongoDb(DbConfig.dbConfigsFromProperties());
+
+        try {
+            db.connect();
+        }
+        catch(Exception e) {
+            logger.error("Failed to connect to the database in Main");
+        }
+        db.clear();
+
+        Crawler crawler = new Crawler();
+        System.out.println("Crawler has started working!");
+        crawler.start(db);
+        System.out.println("Crawler has stopped working");
+        db.close();
+       // db.close();
         /*try{
             DBConnection.getDbConfigs();
             Crawler crawler = new Crawler();

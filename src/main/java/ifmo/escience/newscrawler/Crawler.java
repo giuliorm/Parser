@@ -1,26 +1,27 @@
 package ifmo.escience.newscrawler;
-
+import ifmo.escience.newscrawler.database.NewsMongoDb;
 import ifmo.escience.newscrawler.entities.RootEntity;
 import ifmo.escience.newscrawler.entities.WebEntity;
 import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class Crawler {
-    Logger logger =  LogManager.getLogger(Crawler.class.getName());
-    private Map<String, WebEntity> webEntities;
-    DBConnection dbConnection = new DBConnection();
-    
-    public ArrayList<WebEntity> getEntitiesList(String cfgPath) {
+    static Logger logger =  LogManager.getLogger(Crawler.class.getName());
+   // private Map<String, WebEntity> webEntities;
+
+    public static ArrayList<WebEntity> getEntitiesList(String cfgPath) {
         try{
             ObjectMapper mapper = new ObjectMapper();
             ArrayList<WebEntity> webEntityList = mapper.readValue(new File(cfgPath),
@@ -33,52 +34,69 @@ public class Crawler {
         }
     }
 
-    public void start() throws IOException, InterruptedException {
+    public void start(NewsMongoDb connection) throws IOException, InterruptedException {
+
         ArrayList<RootEntity> rootEntities = new ArrayList<RootEntity>();
         ArrayList<WebEntity> rootEntitiesBase = getEntitiesList("config.json");
+
+        //WebPageParser parser = ;
+        HashMap<String, WebEntity> webEntities = fillMap(getEntitiesList("multiConfig.json"));
+
         for(WebEntity rootBase : rootEntitiesBase){
-            rootEntities.add(new RootEntity(rootBase));
+            RootEntity entity = new RootEntity(rootBase, connection, webEntities);
+            rootEntities.add(entity);
         }
-        ArrayList<WebEntity> webEntities = getEntitiesList("multiConfig.json");
+
         if(webEntities == null){
             logger.error("List of entities in empty!");
             return;
         }
-        fillMap(webEntities);
 
-        for (int i = 0; i < webEntities.size(); i++) {
-            webEntities.get(i).start();
-            logger.info("Thread for " + webEntities.get(i).getEntityName() + " was created");
-        }
+        ExecutorService executor = Executors.newCachedThreadPool();
+       //         threadPoolCount(webEntities.size() + rootEntities.size()));
+
+       // for (int i = 0; i < webEntities.size(); i++) {
+       //     WebEntity entity = webEntities.get(i);
+            //new Thread(entity).start();
+        //    executor.execute(entity);
+          //  logger.info("Thread for " + entity.getEntityName() + " was created");
+      //  }
+
         logger.info("Starting root entities...");
         for (int i = 0; i < rootEntities.size(); i++) {
-            rootEntities.get(i).setCrawler(this);
-            rootEntities.get(i).start();
-            logger.info("Thread for " + rootEntities.get(i).getEntityName() + " was created");
+            //rootEntities.get(i).setCrawler(this)
+           executor.execute(rootEntities.get(i));
+           // executor.execute(rootEntities.get(i));
+           // new Thread(entity).start();
+
+         //   logger.info("Thread for " + rootEntities.get(i).getEntityName() + " was created");
         }
+        executor.shutdown();
+        while(!executor.isTerminated()) {
+
+        }
+
+   //     executor.shutdown();
+     //   while (!executor.isTerminated()) {
+            ;
+       // }
     }
 
-    private void fillMap(ArrayList<WebEntity> webEntityList) {
-        webEntities = new HashMap<String, WebEntity>();
+    private HashMap<String, WebEntity> fillMap(ArrayList<WebEntity> webEntityList) {
+        HashMap<String, WebEntity> webEntities = new HashMap<String, WebEntity>();
         for (int i = 0; i < webEntityList.size(); i++) {
             String entityUrl = webEntityList.get(i).getEntityUrl();
-            entityUrl = getUrlStd(entityUrl);
-            webEntityList.get(i).setCrawler(this);
+            entityUrl = Utils.getUrlStd(entityUrl);
+            //webEntityList.get(i).setCrawler(this);
             webEntities.put(entityUrl, webEntityList.get(i));
         }
+        return webEntities;
     }
 
-    private String getUrlStd(String url) {
-        String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
-                "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
-                "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
-        Pattern urlPattern = Pattern.compile(urlRegex);
-        Matcher urlMatcher = urlPattern.matcher(url);
-        if (urlMatcher.find()) {
-            return urlMatcher.group(2);
-        } else return "";
-    }
 
+
+
+ /*
     private boolean routeLink(String link) {
         String linkUrl = getUrlStd(link);
         if (webEntities.containsKey(linkUrl)) {
@@ -90,10 +108,9 @@ public class Crawler {
             dbConnection.addMissingLink(linkUrl);
             return false;
         }
-    }
+    } */
 
-
-
+ /*
     public void addLinks(List<String> links) {
         float goodLinks = 0;
         for (int i = 0; i < links.size(); i++) {
@@ -104,6 +121,6 @@ public class Crawler {
         if (!links.isEmpty())
             System.out.println(goodLinks/links.size()*100);
 
-    }
+    } */
 
 }

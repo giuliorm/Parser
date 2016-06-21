@@ -1,21 +1,71 @@
-package ifmo.escience.newscrawler;
+package ifmo.escience.newscrawler.database;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import ifmo.escience.newscrawler.helpers.ConfigReader;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import ifmo.escience.newscrawler.WebPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bson.Document;
 
-import java.io.IOException;
+import java.util.HashMap;
 
+
+public class MongoDbConnection {
+
+    protected MongoClient client;
+    protected MongoDatabase db;
+    protected DbConfig config;
+
+    protected static Logger logger =  LogManager.getLogger(MongoDbConnection.class.getName());
+
+    public MongoDbConnection(DbConfig config) {
+        this.config = config;
+    }
+
+    public void connect () throws Exception {
+        try {
+            client = new MongoClient(config.getHost(), config.getPort());
+            db = client.getDatabase(config.getDbName());
+        }
+        catch(Exception ex) {
+            logger.error("Error while connecting to the database !", ex);
+        }
+
+        initCollections();
+    }
+
+    public void clear() {
+        for (String collectionName : config.getCollectionNames()) {
+            db.getCollection(collectionName).deleteMany(new Document());
+        }
+    }
+
+    protected void initCollections () {
+
+    }
+
+    public void close() {
+        try {
+            client.close();
+        }
+        catch(Exception e) {
+            logger.error("Exception while trying to close the database client: " + e.getMessage() );
+        }
+    }
+}
+
+
+
+
+/*
 public class DBConnection {
     static MongoClient mongoClient;
     static DB db;
     static DBCollection coll;
     static DBCollection missingCollection;
-    static Logger logger =  LogManager.getLogger(DBConnection.class.getName());
+   // static Logger logger =  LogManager.getLogger(DBConnection.class.getName());
 
     public void insert(WebPage page) {
         try{
@@ -23,15 +73,14 @@ public class DBConnection {
             doc.append("Number",page.parseTime()).append("Title", page.getArticleName()).append("MainText", page.getArticleText());
             doc.append("Date", page.getArticleDate()).append("Link", page.getPageUrl()).append("MainLink",page.getEntityUrl());
             coll.insert(doc);
-//            System.out.println("Document inserted successfully");
         }
         catch(Exception ex){
             logger.error("Error on loading news into database!", ex);
         }
     }
 
-    public boolean exists(String pageUrl ){
-        return (coll.find(new BasicDBObject("Link", pageUrl)).count()) > 0 ? true : false;
+    public boolean urlExists(String pageUrl){
+        return coll.find(new BasicDBObject("Link", pageUrl)).count() > 0 ;
     }
     
     public void addMissingLink(String link){
@@ -73,3 +122,4 @@ public class DBConnection {
         }
     }
 }
+*/

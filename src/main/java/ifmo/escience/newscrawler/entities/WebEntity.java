@@ -1,7 +1,7 @@
 package ifmo.escience.newscrawler.entities;
 
-import ifmo.escience.newscrawler.Crawler;
 import ifmo.escience.newscrawler.WebPageParser;
+import ifmo.escience.newscrawler.database.NewsMongoDb;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -9,12 +9,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WebEntity extends Thread {
+public class WebEntity implements Runnable {
 
     protected static Logger logger = LogManager.getLogger(WebEntity.class.getName());
     protected String entityName, 
@@ -27,26 +29,47 @@ public class WebEntity extends Thread {
             similarNews = "",
             regExpForDate, 
             dateFormat;
-    protected long refreshTimeout;
 
-    protected Crawler crawler;
-    protected WebPageParser parser = new WebPageParser(new ArrayList<>(), this);
-
-
+    //protected long refreshTimeout;
+   // protected Crawler crawler;
+    NewsMongoDb connection;
     static {
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
     }
 
-    public void setCrawler(Crawler crawler){
-        this.crawler = crawler;
+    public WebEntity() {
+
     }
+   // public void setCrawler(Crawler crawler){
+   //     this.crawler = crawler;
+   // }
     
-    public void transmitToParser(String link){
+   /* public void transmitToParser(String link){
         parser.addPage(link);
     }
     
     public void transmitToCrawler(List<String> links){
         crawler.addLinks(links);
+    } */
+
+    public NewsMongoDb getConnection() {
+        return  this.connection;
+    }
+    public WebEntity(WebEntity from, String url, NewsMongoDb connection) {
+        this.entityUrl = url;
+        this.connection = connection;
+
+        if (from != null) {
+            this.entityName = from.getEntityName();
+            this.newsListPath = from.getNewsListPath();
+            this.articleNamePath = from.getArticleNamePath();
+            this.articleDatePath = from.getArticleDatePath();
+            this.articleTextPath = from.getArticleTextPath();
+            this.tags = from.getTagsPath();
+            this.similarNews = from.getSimilarNewsPath();
+            this.regExpForDate = from.getRegExpForDate();
+            this.dateFormat = from.getDateFormat();
+        }
     }
 
     @Override
@@ -57,11 +80,15 @@ public class WebEntity extends Thread {
     }
 
     protected List<String> getLinks(String targetUrl) throws Exception {
+
         List<String> arrayOfWebPages = new ArrayList<>();
         HtmlUnitDriver driver = new HtmlUnitDriver();
-        logger.error("Loading links from: " + targetUrl);
+        logger.trace("Loading links from: " + targetUrl);
+
         driver.get(targetUrl);
+
         if(newsListPath!=""){
+
             List<WebElement> links = driver.findElements(By.xpath(newsListPath));
 
             for (WebElement link : links) {
@@ -73,20 +100,34 @@ public class WebEntity extends Thread {
         return arrayOfWebPages;
     }
 
+
     @Override
     public void run() {
+
+        System.out.println("Web entity " + getEntityUrl() + "  thread #" + Thread.currentThread().getName() + " is started");
+
         try {
-            List<String> links = getLinks(this.entityUrl);
-            for(String link : links){
-                parser.addPage(link);
-            }
-            while(true){
-                parser.parse();
-                Thread.sleep(refreshTimeout);
-            }
+            new WebPageParser().parsePage(this, connection);
+        }
+        catch(ParseException e) {
+            System.out.println(e.getMessage());
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+       /* if (parser == null || this.links == null || this.links.size() < 1)
+            return;
+
+        try {
+            //while(true){
+            parser.parse(this);
+            // Thread.sleep(refreshTimeout); //what for?
+            // }
         } catch (Exception e) {
             logger.error("Error on collecting web pages!", e);
         }
+        */
+        System.out.println("Web entity " + getEntityUrl() + " thread #" + Thread.currentThread().getName() + " is exiting");
     }
 
     public String getArticleTextPath() {
@@ -119,10 +160,6 @@ public class WebEntity extends Thread {
 
     public String getSimilarNewsPath() {
         return similarNews;
-    }
-
-    public long getRefreshTimeout() {
-        return refreshTimeout;
     }
 
     public String getDateFormat() {

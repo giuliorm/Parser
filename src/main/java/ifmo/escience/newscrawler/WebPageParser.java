@@ -1,5 +1,7 @@
 package ifmo.escience.newscrawler;
 
+import ifmo.escience.newscrawler.database.NewsMongoDb;
+import ifmo.escience.newscrawler.entities.RootEntity;
 import ifmo.escience.newscrawler.entities.WebEntity;
 import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
@@ -16,18 +18,22 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.concurrent.*;
 
 public class WebPageParser {
     HtmlUnitDriver driver;
 
     private static Logger logger = LogManager.getLogger(WebPageParser.class.getName());
 
-    DBConnection dbConnection = new DBConnection();
+    private static final String ARTICLE_NAME = "ARTICLE NAME";
+    private static final String ARTICLE_TEXT = "ARTICLE TEXT";
+    private static final String TAGS = "TAGS";
+    private static final String SIMILAR_NEWS = "SIMILAR NEWS";
+    private static final String DATE = "DATE";
+   // NewsMongoDb dbConnection;
+   // private List<String> webLinks;
+    //private WebEntity entity;
 
-    private List<String> webLinks;
-    private WebEntity entity;
-    
     static {
         LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
         java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
@@ -36,79 +42,252 @@ public class WebPageParser {
         java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
     }
 
-    public WebPageParser(List<String> arrayOfWebPage, WebEntity entity) {
+    public WebPageParser() { //, List<String> arrayOfWebPage
 
-        this.webLinks = arrayOfWebPage;
-        this.entity = entity;
+        //this.webLinks = arrayOfWebPage;
+        //this.entity = entity;
         driver = new HtmlUnitDriver();
+        //dbConnection = connection;
 //        Proxy proxy = new Proxy();
 //        proxy.setHttpProxy("proxy.ifmo.ru:3128");
 //        driver.setProxySettings(proxy);
     }
 
-    public void addPage(String page) {
-        webLinks.add(page);
+  //  public NewsMongoDb getDbConnection() {
+     //   return this.dbConnection;
+   // }
+
+    //public void addPage(String page) {
+     //   webLinks.add(page);
+    //}
+    public void resetDriver(String link) {
+        driver.get(link);
     }
 
-    public void parse() {
-        while (webLinks.size() != 0) {
+   // public HtmlUnitDriver getDriver() {
+   //     return driver;
+  //  }
+
+  /*  public void parse(List<String> links, NewsMongoDb connection) {
+
+        for(String link : links) {
             try {
-                parsePage(webLinks.get(0));
+
+               // HashMap<String, WebEntity> existingEntities = entity.getExistingEntities();
+              //  String key = getUrlStd(link);
+              //  if (existingEntities.containsKey(key)) {
+                    parsePage(link, connection, entity);
+              //  }
+            }
+            catch(Exception e) {
+                logger.error("Cannot parse the link  " + link + " exception " + e.getMessage());
+            }
+        }  */
+
+        /*while (webLinks.size() != 0) {
+            try {
+                parsePage(webLinks.get(0));//......
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("Web page is not starting " + webLinks.get(0));
             }
             webLinks.remove(0);
+        } */
+    //}
+    public boolean parseHeader(WebPage page, WebElement header) {
+        if (header == null) {
+
+            return false;
         }
+
+
+        String headerString = header.getText();
+        if (headerString == null || headerString.isEmpty())
+            System.out.println("Header is null or empty for entity " + page.getEntityUrl());
+
+        page.setArticleName(header.getText());
+        return true;
+
     }
 
-    private void parsePage(String link) throws Exception {
-        if (!dbConnection.exists(link)) {
-            WebPage newPage = new WebPage(link);
+    public boolean parseBody(WebPage page, List<WebElement> bodyElement) {
+
+        if (bodyElement == null)
+            return false;
+
+        String body = "";
+            for (WebElement element : bodyElement) {
+                body += element.getText();
+            }
+        if (body.equals(""))
+            return false;
+
+        page.setArticleText(body);
+        return true;
+    }
+
+    public boolean parseSimilarLinks(WebPage page, WebEntity entity, List<WebElement> onlyLinks) {
+
+        List<String> similarLinks = new LinkedList<String>();
+
+        if (!entity.getSimilarNewsPath().isEmpty() && onlyLinks.size() > 0) {
+
+
+            for (WebElement similarLink : onlyLinks) {
+                similarLinks.add(similarLink.getAttribute("href"));
+            }
+            page.setSimilarNews(similarLinks.toString());
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean parseTags(WebPage page, WebEntity entity, List<WebElement> tagsElement) {
+        String tags = null;
+        if (!entity.getTagsPath().isEmpty() && tagsElement.size() > 0) {
+
+            List<String> tagsList = new LinkedList<String>();
+            for (WebElement element : tagsElement) {
+                tagsList.add(element.getText());
+            }
+            tags = tagsList.toString();
+            page.setTags(tags);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkDate(WebEntity entity, String dateString) {
+
+        if (dateString == null)
+            return false;
+
+        List<DateFormat> formats = new LinkedList<DateFormat>();
+        formats.add(new SimpleDateFormat("dd.mm.yyyy"));
+
+        for (DateFormat format : formats) {
+            try {
+                format.parse(dateString);
+            }
+            catch(ParseException ex) {
+          /*      System.out.println("Date " + dateString + " DOES NOT COMPLY to pattern " + format.toString() + " of entity "
+                       + entity != null ? entity.getEntityUrl() : "" +
+                       " in thread #" + Thread.currentThread().getName()); */
+                return false;
+            }
+        }
+       /* System.out.println("Date " + dateString + "  COMPLIES to all patterns in thread #" +
+                Thread.currentThread().getName() + " of entity "
+                + (entity != null ? entity.getEntityUrl() : "")); */
+        return true;
+
+    }
+
+    public boolean parseDate(WebPage page, WebEntity entity, WebElement date) {
+
+        String articleDate = null;
+        if (date == null)
+            return false;
+
+        try {
+             articleDate = checkWords(dateRegexpMatch(date.getText().replaceAll("\n", " "),
+                             entity.getRegExpForDate()),
+                     entity.getDateFormat());
+        }
+        catch(ParseException pe) {
+            logger.error("Parse exception at " + pe.getMessage());
+            return false;
+        }
+        //System.out.println(articleDate + " " + newPage.getPageUrl() + "\n" +Header + "\n" + Body
+        //       + "\n" + Tags + similarLinks );
+        if (!checkDate(entity, articleDate))
+        {
+            System.out.println("Date " + articleDate + " is NOT COMPLY to suitable format");
+            return false;
+        }
+
+        page.setArticleDate(articleDate);
+
+        return true;
+        //System.out.print("Parsed date " + articleDate + " for url " + entity.getEntityUrl());
+    }
+
+    private WebElement tryGetElement(String elementName, String path) {
+        WebElement element = null;
+
+        if (path != null && !path.isEmpty()) {
+            try {
+                element = driver.findElement(By.xpath(path));
+            }
+            catch(Exception e) {
+                System.out.println("Unable to get " + elementName +
+                        " from url " + driver.getCurrentUrl() + " by path " + path);
+                //logger.error(e.getMessage());
+            }
+        }
+        return element;
+    }
+
+    private List<WebElement> tryGetElements(String elementName, String path) {
+        List<WebElement> elements = new LinkedList<>();
+
+        if (path != null && !path.isEmpty()) {
+            try {
+                elements = driver.findElements(By.xpath(path));
+            }
+            catch(Exception e) {
+                System.out.println("Unable to get " + elementName +
+                        " from url " + driver.getCurrentUrl() + " by path " + path);
+                logger.error(e.getMessage());
+            }
+        }
+
+        return elements;
+    }
+    public void parsePage(WebEntity entity, NewsMongoDb dbConnection) throws Exception {
+
+        if (!dbConnection.urlExists(entity.getEntityUrl())) {
+
+            WebPage newPage = new WebPage(entity.getEntityUrl());
+            // WebEntity coreEntity = existingEntities.get(key);
             newPage.setParseTime(System.nanoTime());
 
-            driver.get(newPage.getPageUrl());
+            //driver.get(newPage.getPageUrl());
+            resetDriver(entity.getEntityUrl());
 
-            String Header = driver.findElement(By.xpath(entity.getArticleNamePath())).getText();
-            List<WebElement> BodyElement = driver.findElements(By.xpath(entity.getArticleTextPath()));
-            String Body = "";
-            for (WebElement element : BodyElement) {
-                Body += element.getText();
-            }
+            if (parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath())) &&
+            parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath())) &&
+            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath())) &&
+            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath())) &&
+            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath())) )
+                dbConnection.insert(newPage);
 
-            String Tags = null;
-            if (!entity.getTagsPath().isEmpty()) {
-                List<WebElement> TagsElement = driver.findElements(By.xpath(entity.getTagsPath()));
-                List<String> tagsList = new LinkedList<String>();
-                for (WebElement element : TagsElement) {
-                    tagsList.add(element.getText());
-                }
-                Tags = tagsList.toString();
-            }
-            newPage.setTags(Tags);
 
-            List<String> similarLinks = new LinkedList<String>();
-            if (!entity.getSimilarNewsPath().isEmpty()) {
-                List<WebElement> OnlyLinks = driver.findElements(By.xpath(entity.getSimilarNewsPath()));
-                for (WebElement similarLink : OnlyLinks) {
-                    similarLinks.add(similarLink.getAttribute("href"));
-                }
-            }
 
-            String date = driver.findElement(By.xpath(entity.getArticleDatePath())).getText();
-            String articleDate = (checkWords(doRegExp(date.replaceAll("\n"," ")), entity.getDateFormat()));
-            System.out.println(articleDate + " " + newPage.getPageUrl() + "\n" +Header + "\n" + Body
-                    + "\n" + Tags + similarLinks );
+            /*System.out.println("Parsed entity " + entity.getEntityUrl() + " in thread #" +
+                    Thread.currentThread().getName());
+*/
 
-            newPage.setArticleName(Header);
-            newPage.setArticleText(Body);
-            newPage.setArticleDate(articleDate);
-            newPage.setSimilarNews(similarLinks.toString());
-            dbConnection.insert(newPage);
+
+  //          System.out.println("Entity " + entity.getEntityUrl() + " inserted to db in thread #" +
+    //                Thread.currentThread().getName());
         }
 
     }
-    private String checkWords(String date, String datePattern) throws ParseException {
+/*
+    public static String getUrlStd(String url) {
+
+        Pattern urlPattern = Pattern.compile(Utils.urlRegex);
+        Matcher urlMatcher = urlPattern.matcher(url);
+        if (urlMatcher.find()) {
+            return urlMatcher.group(2);
+        } else return "";
+    }
+*/
+    public String checkWords(String date, String datePattern) throws ParseException {
+
         String hour, minute, day, month, year;
         LocalDateTime now = LocalDateTime.now();
         date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
@@ -123,7 +302,7 @@ public class WebPageParser {
         }
 
         if (date.toLowerCase().contains("вчера")) {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             calendar.add(Calendar.DATE, -1);
             //System.out.println("date = [" + date + "], datePattern = [" + datePattern + "]");
             year = String.valueOf(now.getYear());
@@ -153,6 +332,7 @@ public class WebPageParser {
                 hour = String.valueOf((24 + Integer.parseInt(hour)));
             minute = String.valueOf(String.format("%02d", dateFinal.getMinutes()));
             date = day + "." + month + "." + year + " " + hour + ":" + minute;
+
         } catch (ParseException e) {
         }
         return date;
@@ -165,19 +345,17 @@ public class WebPageParser {
         String result = month + "." + year;
     }
 
-    private String doRegExp(String date) {
+    private String dateRegexpMatch(String date, String regexp) {
 
             List<String> allMatches = new ArrayList<String>();
-            Matcher m = Pattern.compile(entity.getRegExpForDate()).matcher(date);
+            Matcher m = Pattern.compile(regexp).matcher(date);
             while (m.find()) {
                 allMatches.add(m.group());
             }
 
             return allMatches.size() > 0 ? allMatches.get(0) : date;
         }
-
-
-
+ /*
     private String articleTextProcessing(String text, WebPage page) {
 
         String entityUrl = page.getEntityUrl();
@@ -198,9 +376,9 @@ public class WebPageParser {
             linksFromText.add(foundHref);
         }
 
-        if (linksFromText.size() > 0) {
-            transmitLinksToCrawler(linksFromText, page);
-        }
+       // if (linksFromText.size() > 0) {
+       //     transmitLinksToCrawler(linksFromText, page);
+       // }
 
 
         //TODO regExp add for &#x97
@@ -210,9 +388,7 @@ public class WebPageParser {
     }
 
     private boolean isUrl(String checkedString) {
-        String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
-                "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
-                "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
+
         Pattern urlPattern = Pattern.compile(urlRegex);
         Matcher urlMatcher = urlPattern.matcher(checkedString);
         if (urlMatcher.find()) {
@@ -221,9 +397,7 @@ public class WebPageParser {
     }
 
     private String makeUrl(String interLink, String entityUrl) {
-        String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
-                "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
-                "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
+
         Pattern urlPattern = Pattern.compile(urlRegex);
         Matcher urlMatcher = urlPattern.matcher(entityUrl);
         String targetUrl = entityUrl;
@@ -245,8 +419,8 @@ public class WebPageParser {
 
         return correctedUrl;
     }
-
-    private void transmitLinksToCrawler(ArrayList<String> links, WebPage page) {
+  */
+    /*private void transmitLinksToCrawler(ArrayList<String> links, WebPage page) {
         entity.transmitToCrawler(links);
-    }
+    }*/
 }

@@ -28,6 +28,9 @@ public class WebPage {
         this.similarNews = sameNews;
     }
 
+    public void setEntityUrl(String entityUrl) {
+        this.entityUrl = entityUrl;
+    }
     public Long parseTime() {
         return parseTime;
     }
