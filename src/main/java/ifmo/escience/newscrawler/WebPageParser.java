@@ -95,15 +95,12 @@ public class WebPageParser {
         } */
     //}
     public boolean parseHeader(WebPage page, WebElement header) {
-        if (header == null) {
-
+        if (header == null)
             return false;
-        }
-
 
         String headerString = header.getText();
         if (headerString == null || headerString.isEmpty())
-            System.out.println("Header is null or empty for entity " + page.getEntityUrl());
+            System.out.println("Header is null or empty for entity " + page.getPageUrl());
 
         page.setArticleName(header.getText());
         return true;
@@ -115,14 +112,15 @@ public class WebPageParser {
         if (bodyElement == null)
             return false;
 
-        String body = "";
+        StringBuilder body = new StringBuilder();
             for (WebElement element : bodyElement) {
-                body += element.getText();
+                body.append(element.getText());
             }
-        if (body.equals(""))
-            return false;
 
-        page.setArticleText(body);
+        if (body.length() < 1)
+            System.out.println("Body is empty for entity " + page.getPageUrl());
+
+        page.setArticleText(body.toString());
         return true;
     }
 
@@ -131,7 +129,6 @@ public class WebPageParser {
         List<String> similarLinks = new LinkedList<String>();
 
         if (!entity.getSimilarNewsPath().isEmpty() && onlyLinks.size() > 0) {
-
 
             for (WebElement similarLink : onlyLinks) {
                 similarLinks.add(similarLink.getAttribute("href"));
@@ -224,6 +221,7 @@ public class WebPageParser {
             catch(Exception e) {
                 System.out.println("Unable to get " + elementName +
                         " from url " + driver.getCurrentUrl() + " by path " + path);
+                String body = driver.findElement(By.tagName("body")).getText();
                 //logger.error(e.getMessage());
             }
         }
@@ -251,18 +249,23 @@ public class WebPageParser {
         if (!dbConnection.urlExists(entity.getEntityUrl())) {
 
             WebPage newPage = new WebPage(entity.getEntityUrl());
+            newPage.setEntityUrl(Utils.getUrlStd(entity.getEntityUrl()));
             // WebEntity coreEntity = existingEntities.get(key);
             newPage.setParseTime(System.nanoTime());
 
-            //driver.get(newPage.getPageUrl());
-            resetDriver(entity.getEntityUrl());
-            String body = driver.findElement(By.tagName("body")).getText();
+            if (newPage.getPageUrl() == null || newPage.getPageUrl().isEmpty()) {
+                System.out.println("ACHTUNG! ACHTUNG!");
+            }
 
-            parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath()));
-            parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath()));
-            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath()));
-            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath()));
-            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath()));
+            //driver.get(newPage.getPageUrl());
+            resetDriver(newPage.getPageUrl());
+        //    String body = driver.findElement(By.tagName("body")).getText();
+
+            if (parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath()))
+             && (parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath())) ||
+            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath())) ||
+            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath())) ||
+            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath()))))
 
             dbConnection.insert(newPage);
 
