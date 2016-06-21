@@ -23,13 +23,14 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        NewsMongoDb db = new NewsMongoDb(DbConfig.dbConfigsFromProperties());
+        NewsMongoDb db = new NewsMongoDb(DbConfig.dbConfigsFromProperties("config.properties"));
 
         try {
             db.connect();
         }
         catch(Exception e) {
             logger.error("Failed to connect to the database in Main");
+            System.exit(-1);
         }
         db.clear();
 

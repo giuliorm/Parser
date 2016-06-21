@@ -31,6 +31,7 @@ public class MongoDbConnection {
         }
         catch(Exception ex) {
             logger.error("Error while connecting to the database !", ex);
+            throw ex;
         }
 
         initCollections();

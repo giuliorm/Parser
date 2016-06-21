@@ -29,7 +29,7 @@ public class NewsMongoDb extends MongoDbConnection {
 
         return resources.count(new Document("link", pageUrl)) > 0;
     }
-
+/*
     public void addMissingLink(String link){
 
         try{
@@ -55,17 +55,18 @@ public class NewsMongoDb extends MongoDbConnection {
             logger.error("Error on adding missing link!", ex);
         }
     }
+     */
 
     public void insert(WebPage page) {
         try{
             Document doc = new Document();
-            doc.append("Number",page.parseTime())
-                    .append("Title", page.getArticleName())
-                    .append("MainText", page.getArticleText());
+            doc.append("number",page.parseTime())
+                    .append("title", page.getArticleName())
+                    .append("mainText", page.getArticleText());
 
-            doc.append("Date", page.getArticleDate())
-                    .append("Link", page.getPageUrl())
-                    .append("MainLink",page.getEntityUrl());
+            doc.append("date", page.getArticleDate())
+                    .append("link", page.getPageUrl())
+                    .append("mainLink",page.getEntityUrl());
 
             resources.insertOne(doc);
         }

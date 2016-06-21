@@ -99,6 +99,12 @@ public class RootEntity extends WebEntity {
         List<String> links = null;
 
         try {
+
+            /*
+                Thread.sleep is necessary for avoiding server's 'Your queries look like automatic' responses.
+                If we increase query time gap, server will return correct answer.
+             */
+
             Thread.sleep(2_000);
             links = getLinks(url);
         }
@@ -143,8 +149,10 @@ public class RootEntity extends WebEntity {
 
                         parseLinks(links);
 
-                      //  Thread.sleep(time);
-
+                        /*
+                           Thread.sleep is necessary for avoiding server's 'Your queries look like automatic' responses.
+                           If we increase query time gap, server will return correct answer.
+                        */
                         Thread.sleep(time);
                     }
                     currentDate = newDate;
@@ -163,10 +171,6 @@ public class RootEntity extends WebEntity {
     }
 
 
-    public void setProxy() {
-
-    }
-
     @Override
     protected List<String> getLinks(String targetUrl) throws Exception {
 
@@ -180,7 +184,6 @@ public class RootEntity extends WebEntity {
         driver.setProxySettings(proxy);
 
         driver.get(targetUrl);
-
 
         String body = driver.findElement(By.tagName("body")).getText();
 

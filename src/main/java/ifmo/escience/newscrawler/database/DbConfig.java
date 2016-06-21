@@ -18,6 +18,9 @@ public class DbConfig{
     private ArrayList<String> collectionNames;
 
     static Logger logger =  LogManager.getLogger(NewsMongoDb.class.getName());
+    static final String defaultDbName = "news_db";
+    static final String defaultHost = "127.0.0.1";
+    static final Integer defaultPort = 27017;
 
     public DbConfig(String host, Integer port, String dbName, String... collectionNames) {
         this.host = host;
@@ -41,13 +44,25 @@ public class DbConfig{
         return this.dbName;
     }
 
-    public static DbConfig dbConfigsFromProperties() {
+    public static DbConfig dbConfigsFromProperties(String configFileName) {
+
+        ConfigReader reader = new ConfigReader(configFileName);
 
         try{
-            String dbHost = ConfigReader.getProperty("dbHost");
-            Integer dbPort = Integer.parseInt(ConfigReader.getProperty("dbPort"));
-            String dbName = ConfigReader.getProperty("dbName");
-            String linksCollection = ConfigReader.getProperty("dbCollection");
+            String dbHost = reader.getProperty("dbHost");
+            Integer dbPort = Integer.parseInt(reader.getProperty("dbPort"));
+            String dbName = reader.getProperty("dbName");
+
+            if (dbHost == null)
+                dbHost = defaultHost;
+
+            if (dbPort == null)
+                dbPort = defaultPort;
+
+            if (dbName == null)
+                dbName = defaultDbName;
+
+            String linksCollection = reader.getProperty("dbCollection");
             //String dbMissingCollection = ConfigReader.getProperty("dbMissingCollection");
             // mongoClient = new MongoClient(dbHost, dbPort);
             //  db = mongoClient.getDB(dbName);
