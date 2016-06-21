@@ -256,6 +256,7 @@ public class WebPageParser {
 
             //driver.get(newPage.getPageUrl());
             resetDriver(entity.getEntityUrl());
+            String body = driver.findElement(By.tagName("body")).getText();
 
             parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath()));
             parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath()));

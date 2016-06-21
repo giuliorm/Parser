@@ -99,6 +99,7 @@ public class RootEntity extends WebEntity {
         List<String> links = null;
 
         try {
+            Thread.sleep(2_000);
             links = getLinks(url);
         }
         catch (SocketTimeoutException exception) {
@@ -126,7 +127,7 @@ public class RootEntity extends WebEntity {
         int  time = 45_000 + rand.nextInt(30_000) + 1;
 
         try {
-            while (max >= 0) {
+            while (true) {
 
                 LocalDateTime currentDate = LocalDateTime.now();
 
@@ -142,21 +143,13 @@ public class RootEntity extends WebEntity {
 
                         parseLinks(links);
 
-                          /*  do {
-                                do {
-                                    try {
+                      //  Thread.sleep(time);
 
-
-                                    }
-                                } while (links == null);
-                            }while (links.isEmpty());
-                            */
-
-                        //Thread.sleep(time);
+                        Thread.sleep(time);
                     }
                     currentDate = newDate;
                 }
-                max --;
+              //  max --;
             }
         }
 
@@ -166,6 +159,11 @@ public class RootEntity extends WebEntity {
         }
 
         System.out.println("Root thread #" + Thread.currentThread().getName() + " is exiting");
+
+    }
+
+
+    public void setProxy() {
 
     }
 
@@ -183,6 +181,7 @@ public class RootEntity extends WebEntity {
 
         driver.get(targetUrl);
 
+
         String body = driver.findElement(By.tagName("body")).getText();
 
         List<String> links = driver.findElements(By.xpath(newsListPath))
@@ -191,7 +190,8 @@ public class RootEntity extends WebEntity {
                 .collect(Collectors.toList());
                 //.forEach(ProxyManager::feedBack(proxyFromSet));
 
-
+        if (links.size() > 0)
+            ProxyManager.feedBack(proxyFromSet);
 
        /* if (links.size()>0) {
             for (WebElement link : links) {
