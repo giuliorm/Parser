@@ -189,6 +189,9 @@ public class WebPageParser {
             return false;
 
         try {
+
+             System.out.println("Date " + date.getText() + " for url " + page.getPageUrl());
+
              articleDate = checkWords(dateRegexpMatch(date.getText().replaceAll("\n", " "),
                              entity.getRegExpForDate()),
                      entity.getDateFormat());
@@ -211,7 +214,7 @@ public class WebPageParser {
         //System.out.print("Parsed date " + articleDate + " for url " + entity.getEntityUrl());
     }
 
-    private WebElement tryGetElement(String elementName, String path) {
+    public WebElement tryGetElement(String elementName, String path) {
         WebElement element = null;
 
         if (path != null && !path.isEmpty()) {
@@ -228,7 +231,7 @@ public class WebPageParser {
         return element;
     }
 
-    private List<WebElement> tryGetElements(String elementName, String path) {
+    public List<WebElement> tryGetElements(String elementName, String path) {
         List<WebElement> elements = new LinkedList<>();
 
         if (path != null && !path.isEmpty()) {

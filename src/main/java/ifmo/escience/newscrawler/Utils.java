@@ -1,5 +1,13 @@
 package ifmo.escience.newscrawler;
 
+import ifmo.escience.newscrawler.entities.WebEntity;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +19,20 @@ public class Utils {
     public  static String urlRegex = "((([A-Za-z]{3,9}:(?:\\/\\/)?)(?:[-;:&=\\+\\$,\\w]+@)?" +
             "[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)" +
             "((?:\\/[\\+~%\\/.\\w-_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[.\\!\\/\\\\w]*))?)";
+
+
+    public static ArrayList<WebEntity> getEntitiesList(String cfgPath) {
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayList<WebEntity> webEntityList = mapper.readValue(new File(cfgPath),
+                    mapper.getTypeFactory().constructCollectionType(ArrayList.class, WebEntity.class));
+            return webEntityList;
+        }
+        catch(IOException ex){
+            System.out.println("Error loading entitites from file! " + ex.getMessage());
+            return null;
+        }
+    }
 
     public static String getUrlStd(String url) {
 

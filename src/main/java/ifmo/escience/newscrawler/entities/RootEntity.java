@@ -20,7 +20,7 @@ public class RootEntity extends WebEntity {
 
     Random rand = new Random();
     HtmlUnitDriver driver = new HtmlUnitDriver();
-    protected HashMap<String, WebEntity> existingEntities;
+    protected Map<String, WebEntity> existingEntities;
 
     public RootEntity() {
 
@@ -28,8 +28,7 @@ public class RootEntity extends WebEntity {
 
     public RootEntity(WebEntity from,
                       NewsMongoDb connection,
-                      HashMap<String,WebEntity> existingEntities)
-            throws IOException {
+                      Map<String,WebEntity> existingEntities) {
 
         super(null, from.entityUrl, connection);
         this.newsListPath = from.newsListPath;
@@ -38,7 +37,7 @@ public class RootEntity extends WebEntity {
         this.existingEntities = existingEntities;
     }
 
-    public HashMap<String, WebEntity> getExistingEntities() {
+    public Map<String, WebEntity> getExistingEntities() {
         return this.existingEntities;
     }
 

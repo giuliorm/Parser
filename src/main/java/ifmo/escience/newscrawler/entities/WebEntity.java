@@ -15,8 +15,14 @@ import java.util.Collections;
 import java.util.List;
 
 
+
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WebEntity implements Runnable {
+
+    static {
+        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
+    }
 
     protected static Logger logger = LogManager.getLogger(WebEntity.class.getName());
     protected String entityName, 
@@ -33,28 +39,12 @@ public class WebEntity implements Runnable {
     //protected long refreshTimeout;
    // protected Crawler crawler;
     NewsMongoDb connection;
-    static {
-        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
-    }
+
 
     public WebEntity() {
 
     }
-   // public void setCrawler(Crawler crawler){
-   //     this.crawler = crawler;
-   // }
-    
-   /* public void transmitToParser(String link){
-        parser.addPage(link);
-    }
-    
-    public void transmitToCrawler(List<String> links){
-        crawler.addLinks(links);
-    } */
 
-    public NewsMongoDb getConnection() {
-        return  this.connection;
-    }
     public WebEntity(WebEntity from, String url, NewsMongoDb connection) {
         this.entityUrl = url;
         this.connection = connection;
@@ -71,6 +61,24 @@ public class WebEntity implements Runnable {
             this.dateFormat = from.getDateFormat();
         }
     }
+
+   // public void setCrawler(Crawler crawler){
+   //     this.crawler = crawler;
+   // }
+    
+   /* public void transmitToParser(String link){
+        parser.addPage(link);
+    }
+    
+    public void transmitToCrawler(List<String> links){
+        crawler.addLinks(links);
+    } */
+
+    public NewsMongoDb getConnection() {
+        return  this.connection;
+    }
+
+
 
     @Override
     public String toString() {
