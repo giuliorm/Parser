@@ -2,12 +2,14 @@ package ifmo.escience.newscrawler;
 
 import ifmo.escience.newscrawler.entities.WebEntity;
 
+import java.util.Date;
+
 public class WebPage {
     private Long parseTime;
     private String entityUrl;
     private String pageUrl;
     private String articleName;
-    private String articleDate;
+    private Date articleDate;
     private String articleText;
     private String tags;
     private String similarNews;
@@ -41,7 +43,7 @@ public class WebPage {
     public void setArticleName(String articleName) {
         this.articleName = articleName;
     }
-    public void setArticleDate(String articleDate) {
+    public void setArticleDate(Date articleDate) {
         this.articleDate = articleDate;
     }
     public void setArticleText(String articleText) {
@@ -57,7 +59,7 @@ public class WebPage {
     public String getArticleName() {
         return articleName;
     }
-    public String getArticleDate() {
+    public Date getArticleDate() {
         return articleDate;
     }
     public String getArticleText() {

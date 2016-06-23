@@ -67,7 +67,7 @@ public class NewsMongoDb extends MongoDbConnection {
             doc.append("date", page.getArticleDate())
                     .append("link", page.getPageUrl())
                     .append("mainLink",page.getEntityUrl());
-
+            //TODO: how to insert date object?
             resources.insertOne(doc);
         }
         catch(Exception ex){

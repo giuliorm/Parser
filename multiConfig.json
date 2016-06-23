@@ -1,4 +1,5 @@
 [
+  //reviewed
   {
     "entityName": "http://rustelegraph.ru/",
     "entityUrl": "http://rustelegraph.ru/archive/citynews/",
@@ -10,21 +11,23 @@
     "tags":"",
     "refreshTimeout": "30000",
     "regExpForDate":"\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}",
-    "dateFormat":"yyyy MM dd hh:mm:ss"
+    "dateFormat":"yyyy-MM-dd hh:mm:ss" //changed from yyyy MM dd ...
   },
+ //reviewed
   {
     "entityName": "http://47news.ru/",
     "entityUrl": "http://47news.ru/",
     "newsListPath": "//*[contains(@class, \"news-list\")]/li/a",
     "articleNamePath": "//*[contains(@class, \"text\")]/h1",
-    "articleTextPath": "//*[contains(@class, \"article-text\")]",
-    "articleDatePath": "//*[contains(@class, \"text article\")]/p/span",
+    "articleTextPath": "//*[contains(@class, \"article-text\")]/p",
+    "articleDatePath": "//*[contains(@class, \"article\")]/p/span",
     "sameNews": "",
     "tags":"",
     "refreshTimeout": "30000",
-    "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
+    "regExpForDate":"\\d{2}:\\d{2} \\d{2}.\\d{2}.\\d{4}",
     "dateFormat":"hh:mm dd.MM.yyyy"
   },
+//checked
   {
     "entityName": "https://nevnov.ru/",
     "entityUrl": "https://nevnov.ru/category/v-gorode",
@@ -38,19 +41,21 @@
     "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
     "dateFormat":"dd.MM.yy hh:mm"
   },
+//checked, date has 'today' and 'yesterday' words here
   {
     "entityName": "http://piter.tv",
     "entityUrl": "http://piter.tv/news/2530/",
     "newsListPath": "//*[contains(@class, \"news-list\")]/article/header/a",
-    "articleNamePath": "//*[contains(@class, \"left-content\")]/article/div/h1",
+    "articleNamePath": "//*[contains(@class, \"text-block\")]/h1",
     "articleTextPath": "(//div[contains(@id,'articleBody')]/p | //div[contains(@id,'articleBody')]/div)",
     "articleDatePath": "//*[contains(@class, \"article-full\")]//*[contains(@class, \"date\")]",
     "refreshTimeout": "30000",
     "tags":"//*[contains(@class, \"text-block\")]//*[contains(@class, \"tags\")]/span/a",
     "sameNews": "",
-    "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
-    "dateFormat":"dd MMMM hh:mm"
+    "regExpForDate": "", //"(Вчера | Сегодня), \\d{2}:\\d{2}", //"regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
+    "dateFormat": "dd.MM.yyyy hh:mm" //"dd MMMM hh:mm"
   },
+  //reviewed
   {
     "entityName": "http://spbvoditel.ru/",
     "entityUrl": "http://spbvoditel.ru/",
@@ -62,34 +67,37 @@
     "tags":"",
     "sameNews":"",
     "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
-    "dateFormat":""
+    "dateFormat":" dd.MM.yyyy hh:mm"
   },
+  //NEED FOR CHECK ON PRACTICE
   {
     "entityName": "https://saint-petersburg.ru/",
     "entityUrl": "https://saint-petersburg.ru/",
     "newsListPath": "/html/body/div[3]/div[2]/div/ul/li/a",
-    "articleNamePath": "/html/body/div[3]/div[1]/div[1]/h1/a",
-    "articleDatePath": "/html/body/div[3]/div[1]/div[1]/time",
-    "articleTextPath": "/html/body/div[3]/div[1]/div[1]/div",
+    "articleNamePath": "/html/body/div[3]/div[1]/div[1]/h1/", //removed a
+    "articleDatePath":  "//*[contains(@itemprop,'datePublished')]",//"/html/body/div[3]/div[1]/div[1]/time",
+    "articleTextPath": "//*[contains(@itemprop, 'articleBody')]/p", //removed .../div[3]/div[1]/div[1]/div that's not that way on the page
     "refreshTimeout": "30000",
     "tags":"",
     "sameNews":  "//div/table/tbody/tr/td/a",
-    "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
-    "dateFormat":""
+    "regExpForDate": "", //"\\d{2}.(Января|Февраля|Марта|Апреля|Мая|Июня|Июля|Августа|Сентября|Октября|Ноября|Декабря).\\d{4} \\d{2}:\\d{2}", //"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
+    "dateFormat":"dd MMMM yyyy hh:mm"
   },
+  //NEED FOR CHECK ON PRACTICE
   {
     "entityName": "http://lifenews78.ru/",
     "entityUrl": "http://lifenews78.ru/",
     "newsListPath": "//*[contains(@class, \"list\")]//*[contains(@class, \"container\")]/article/h1/a",
     "articleNamePath": "/html/body/div[3]/main/div/div/section/article/header/h1",
-    "articleTextPath": "//*[contains(@class, \"note\")]",
-    "articleDatePath": "//*[contains(@class, \"container\")]//*[contains(@class, \"info\")]/time",
+    "articleTextPath": "//*[contains(@class, \"note\")] | //*[contains(@class, \"content-note\")]/p", // added with p
+    "articleDatePath": "//*[contains(@class, \"container\")]//*[contains(@class, \"info\")]/time", //unchanged but i think wrong
     "refreshTimeout": "30000",
     "tags":"//*[contains(@class, \"tags\")]/li/a",
     "sameNews":"",
     "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
     "dateFormat":"hh:mm dd MMMM yyyy"
   },
+  //
   {
     "entityName": "http://online47.ru/",
     "entityUrl": "http://online47.ru/",

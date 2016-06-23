@@ -156,35 +156,34 @@ public class WebPageParser {
         return false;
     }
 
-    public boolean checkDate(WebEntity entity, String dateString) {
+   /* public boolean checkDate(WebEntity entity, Date articleDate) {
 
-        if (dateString == null)
+        if (articleDate == null)
             return false;
+         DateFormat format = new SimpleDateFormat(entity.getDateFormat());
+//        String date = dateRegexpMatch(dateString, entity.getRegExpForDate());
 
-        List<DateFormat> formats = new LinkedList<DateFormat>();
-        formats.add(new SimpleDateFormat("dd.mm.yyyy"));
-
-        for (DateFormat format : formats) {
             try {
                 format.parse(dateString);
             }
             catch(ParseException ex) {
-          /*      System.out.println("Date " + dateString + " DOES NOT COMPLY to pattern " + format.toString() + " of entity "
+
+
+                System.out.println("Date " + dateString + " DOES NOT COMPLY to pattern " + format.toString() + " of entity "
                        + entity != null ? entity.getEntityUrl() : "" +
-                       " in thread #" + Thread.currentThread().getName()); */
+                       " in thread #" + Thread.currentThread().getName());
                 return false;
             }
-        }
-       /* System.out.println("Date " + dateString + "  COMPLIES to all patterns in thread #" +
+        System.out.println("Date " + dateString + "  COMPLIES to all patterns in thread #" +
                 Thread.currentThread().getName() + " of entity "
-                + (entity != null ? entity.getEntityUrl() : "")); */
+                + (entity != null ? entity.getEntityUrl() : ""));
         return true;
 
-    }
+    } */
 
     public boolean parseDate(WebPage page, WebEntity entity, WebElement date) {
 
-        String articleDate = null;
+        Date articleDate = null;
         if (date == null)
             return false;
 
@@ -202,12 +201,12 @@ public class WebPageParser {
         }
         //System.out.println(articleDate + " " + newPage.getPageUrl() + "\n" +Header + "\n" + Body
         //       + "\n" + Tags + similarLinks );
-        if (!checkDate(entity, articleDate))
+       /* if (!checkDate(entity, articleDate))
         {
             System.out.println("Date " + articleDate + " is NOT COMPLY to suitable format");
             return false;
         }
-
+*/
         page.setArticleDate(articleDate);
 
         return true;
@@ -294,56 +293,66 @@ public class WebPageParser {
         } else return "";
     }
 */
-    public String checkWords(String date, String datePattern) throws ParseException {
+    private String  removeUnnecessarySymbols(String date) {
+        return date.replaceAll(",+-.[)(]"," ");
+    }
+    public Date checkWords(String date, String datePattern) throws ParseException {
+
+        if (date == null || datePattern == null)
+            return null;
 
         String hour, minute, day, month, year;
         LocalDateTime now = LocalDateTime.now();
-        date = date.toLowerCase().replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
+        date = date.toLowerCase();//.replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
         Calendar calendar = Calendar.getInstance(); // this would default to now
 
-        if ((date.contains("cегодня"))|(date.contains("сегодня"))){
+        if (date.contains("cегодня")){
+            date = removeUnnecessarySymbols(date);
+
             year = String.valueOf(now.getYear());
             day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
             month = String.valueOf(String.format("%02d", now.getMonthValue()));
-            String a = day + "." + month + "." + year;
-            date = date.replaceAll("сегодня", a).replaceAll("сегодня", a).replaceAll("[)(]","");
+
+            String dateString = day + "." + month + "." + year;
+            date = date.replaceAll("сегодня", dateString);
         }
 
-        if (date.toLowerCase().contains("вчера")) {
+        if (date.contains("вчера")) {
+            date = removeUnnecessarySymbols(date);
             //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             calendar.add(Calendar.DATE, -1);
             //System.out.println("date = [" + date + "], datePattern = [" + datePattern + "]");
             year = String.valueOf(now.getYear());
-            day = String.valueOf(String.format("%02d", calendar.getTime().getDate()));
-            month = String.valueOf(String.format("%02d", calendar.getTime().getMonth()+1));
+            day = String.valueOf(String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)));
+            month = String.valueOf(String.format("%02d", calendar.get(Calendar.MONTH) + 1));
             String a = day + "." + month + "." + year;
             date = date.replaceAll("вчера", a);
         }
-
+        Date dateFinal = null;
         Locale rusLocale = new Locale.Builder().setLanguage("ru").build();
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, rusLocale);
 
-            Date dateFinal = dateFormat.parse(date);
+            dateFinal = dateFormat.parse(date);
 
-            if (datePattern.contains("yyyy")){
+            /*if (datePattern.contains("yyyy")){
                 year = String.valueOf(dateFinal.getYear()+1900);
             }
             else {
                 year = String.valueOf(now.getYear());
-            }
+            }*/
 
-            day = String.valueOf(String.format("%02d", dateFinal.getDate()));
+            /*day = String.valueOf(String.format("%02d", dateFinal.getDate()));
             month = String.valueOf(String.format("%02d", dateFinal.getMonth() + 1));
             hour = String.valueOf(String.format("%02d", dateFinal.getHours()));
             if( Integer.parseInt(hour) < 0)
                 hour = String.valueOf((24 + Integer.parseInt(hour)));
             minute = String.valueOf(String.format("%02d", dateFinal.getMinutes()));
-            date = day + "." + month + "." + year + " " + hour + ":" + minute;
+            date = day + "." + month + "." + year + " " + hour + ":" + minute; */
 
         } catch (ParseException e) {
         }
-        return date;
+        return dateFinal;
     }
 
     private void dateProc(String date, int monthNumber) {
@@ -353,7 +362,13 @@ public class WebPageParser {
         String result = month + "." + year;
     }
 
-    private String dateRegexpMatch(String date, String regexp) {
+    public String dateRegexpMatch(String date, String regexp) {
+
+            if (date == null || regexp == null )
+                return  null;
+
+            if(regexp.isEmpty())
+                return date;
 
             List<String> allMatches = new ArrayList<String>();
             Matcher m = Pattern.compile(regexp).matcher(date);

@@ -8,6 +8,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.parameterized.ParametersRunnerFactory;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.Arrays;
@@ -25,45 +26,52 @@ public class ResourceTest extends TestCase {
     private static Map<String, WebEntity> existingEntities;
     static {
         existingEntities = Utils.getEntitiesList("multiConfig.json")
-                    .stream()
-                    .collect(Collectors.toMap(item -> Utils.getUrlStd(item.getEntityUrl()), item->item));
+                .stream()
+                .collect(Collectors.toMap(item -> Utils.getUrlStd(item.getEntityUrl()), item->item));
     }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {  "url", "name", "text", "date"  },
+                {}, {}
         });
     };
 
     private  String url;
-    private String expectedName;
-    private String expectedText;
-    private String expectedDate;
-    private HtmlUnitDriver driver;
+    private String date;
 
-    public ResourceTest(String url, String expectedName, String expectedText, String expectedDate) {
-        this.driver = new HtmlUnitDriver();
+    private WebPage page;
+    private WebPageParser parser;
+    private WebEntity resource;
+
+    public ResourceTest(String url) {
         this.url = url;
-        this.expectedName = expectedName;
-        this.expectedText = expectedText;
-        this.expectedDate = expectedDate;
+        this.page = new WebPage(url);
+        this.parser = new WebPageParser();
+        parser.resetDriver(url);
+        String key = Utils.getUrlStd(url);
+        this.resource = existingEntities.containsKey(key) ? existingEntities.get(Utils.getUrlStd(url)) : null;
     }
 
     @Test
     public void testName() {
-        WebPage page = new WebPage(url);
-        WebPageParser parser = new WebPageParser();
-        WebEntity resource = existingEntities.get(Utils.getUrlStd(url));
 
-        parser.resetDriver(url);
-        parser.parseHeader(page, parser.tryGetElement("ARTICLE HEADER", resource.getArticleNamePath()));
-        assertEquals(expectedName, page.getArticleName());
+        if (resource != null) {
+            WebElement element = parser.tryGetElement("ARTICLE HEADER", resource.getArticleNamePath());
+            if (element == null)
+                fail();
 
-    }
+            parser.parseHeader(page, element);
 
-    @Test
-    public void testDate() {
+            String parsedName = page.getArticleName();
+
+            if (parsedName == null)
+                fail();
+            if (parsedName.isEmpty())
+                fail();
+
+        }
+
     }
 
     @Test
@@ -72,6 +80,29 @@ public class ResourceTest extends TestCase {
 
 
     }
+
+
+    @Test
+    public void parseDateTest() {
+
+
+
+    }
+
+    @Test
+    public void checkWordsTest() {
+
+
+
+    }
+
+    @Test
+    public void RegExpMatcherTest() {
+
+        if (date == null)
+            fail();
+    }
+
 }
 
 
