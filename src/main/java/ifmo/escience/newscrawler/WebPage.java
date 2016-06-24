@@ -3,6 +3,7 @@ package ifmo.escience.newscrawler;
 import ifmo.escience.newscrawler.entities.WebEntity;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class WebPage {
     private Long parseTime;
@@ -14,29 +15,17 @@ public class WebPage {
     private String tags;
     private String similarNews;
 
-    public String getTags() {
-        return tags;
-    }
+
 
     public void setTags(String tags) {
         this.tags = tags;
     }
-
-    public String getSimilarNews() {
-        return similarNews;
-    }
-
     public void setSimilarNews(String sameNews) {
         this.similarNews = sameNews;
     }
-
     public void setEntityUrl(String entityUrl) {
         this.entityUrl = entityUrl;
     }
-    public Long parseTime() {
-        return parseTime;
-    }
-    
     public void setParseTime(Long parseTime) {
         this.parseTime = parseTime;
     }
@@ -65,7 +54,24 @@ public class WebPage {
     public String getArticleText() {
         return articleText;
     }
+    public Long getParseTime() {
+        return parseTime;
+    }
+    public String getTags() {
+        return tags;
+    }
+    public String getSimilarNews() {
+        return similarNews;
+    }
+
     public WebPage(String pageUrl) {
         this.pageUrl = pageUrl;
     }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        return "";
+
+    }
+
 }

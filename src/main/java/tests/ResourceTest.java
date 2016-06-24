@@ -1,15 +1,13 @@
 package tests;
 import ifmo.escience.newscrawler.Utils;
 import ifmo.escience.newscrawler.WebPage;
-import ifmo.escience.newscrawler.WebPageParser;
+import ifmo.escience.newscrawler.parser.WebPageParser;
 import ifmo.escience.newscrawler.entities.WebEntity;
 import junit.framework.TestCase;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.parameterized.ParametersRunnerFactory;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +31,7 @@ public class ResourceTest extends TestCase {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {}, {}
+                {  "",  }, {}
         });
     };
 
@@ -80,29 +78,6 @@ public class ResourceTest extends TestCase {
 
 
     }
-
-
-    @Test
-    public void parseDateTest() {
-
-
-
-    }
-
-    @Test
-    public void checkWordsTest() {
-
-
-
-    }
-
-    @Test
-    public void RegExpMatcherTest() {
-
-        if (date == null)
-            fail();
-    }
-
 }
 
 

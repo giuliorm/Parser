@@ -1,6 +1,6 @@
 package ifmo.escience.newscrawler.entities;
 
-import ifmo.escience.newscrawler.WebPageParser;
+import ifmo.escience.newscrawler.parser.WebPageParser;
 import ifmo.escience.newscrawler.database.NewsMongoDb;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +11,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 

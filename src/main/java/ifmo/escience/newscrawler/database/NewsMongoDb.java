@@ -60,7 +60,7 @@ public class NewsMongoDb extends MongoDbConnection {
     public void insert(WebPage page) {
         try{
             Document doc = new Document();
-            doc.append("number",page.parseTime())
+            doc.append("number",page.getParseTime())
                     .append("title", page.getArticleName())
                     .append("mainText", page.getArticleText());
 

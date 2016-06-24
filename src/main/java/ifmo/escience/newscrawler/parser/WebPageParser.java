@@ -1,7 +1,8 @@
-package ifmo.escience.newscrawler;
+package ifmo.escience.newscrawler.parser;
 
+import ifmo.escience.newscrawler.Utils;
+import ifmo.escience.newscrawler.WebPage;
 import ifmo.escience.newscrawler.database.NewsMongoDb;
-import ifmo.escience.newscrawler.entities.RootEntity;
 import ifmo.escience.newscrawler.entities.WebEntity;
 import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
@@ -9,20 +10,15 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.concurrent.*;
 
 public class WebPageParser {
-    HtmlUnitDriver driver;
 
+    HtmlUnitDriver driver = new HtmlUnitDriver();
     private static Logger logger = LogManager.getLogger(WebPageParser.class.getName());
 
     private static final String ARTICLE_NAME = "ARTICLE NAME";
@@ -30,6 +26,7 @@ public class WebPageParser {
     private static final String TAGS = "TAGS";
     private static final String SIMILAR_NEWS = "SIMILAR NEWS";
     private static final String DATE = "DATE";
+
    // NewsMongoDb dbConnection;
    // private List<String> webLinks;
     //private WebEntity entity;
@@ -44,9 +41,9 @@ public class WebPageParser {
 
     public WebPageParser() { //, List<String> arrayOfWebPage
 
+
         //this.webLinks = arrayOfWebPage;
         //this.entity = entity;
-        driver = new HtmlUnitDriver();
         //dbConnection = connection;
 //        Proxy proxy = new Proxy();
 //        proxy.setHttpProxy("proxy.ifmo.ru:3128");
@@ -99,11 +96,10 @@ public class WebPageParser {
             return false;
 
         String headerString = header.getText();
-        if (headerString == null || headerString.isEmpty())
-            System.out.println("Header is null or empty for entity " + page.getPageUrl());
+            //System.out.println("Header is null or empty for entity " + page.getPageUrl());
 
         page.setArticleName(header.getText());
-        return true;
+        return headerString != null && !headerString.isEmpty();
 
     }
 
@@ -113,15 +109,15 @@ public class WebPageParser {
             return false;
 
         StringBuilder body = new StringBuilder();
-            for (WebElement element : bodyElement) {
-                body.append(element.getText());
-            }
+        for (WebElement element : bodyElement) {
+            body.append(element.getText());
+        }
 
-        if (body.length() < 1)
-            System.out.println("Body is empty for entity " + page.getPageUrl());
+     //  if (body.length() < 1)
+       //     System.out.println("Body is empty for entity " + page.getPageUrl());
 
         page.setArticleText(body.toString());
-        return true;
+        return page.getArticleText() != null && !page.getArticleText().isEmpty();
     }
 
     public boolean parseSimilarLinks(WebPage page, WebEntity entity, List<WebElement> onlyLinks) {
@@ -134,7 +130,7 @@ public class WebPageParser {
                 similarLinks.add(similarLink.getAttribute("href"));
             }
             page.setSimilarNews(similarLinks.toString());
-            return true;
+            return true; // TODO: review method because now it is not clear what it does
         }
 
         return false;
@@ -151,7 +147,7 @@ public class WebPageParser {
             }
             tags = tagsList.toString();
             page.setTags(tags);
-            return true;
+            return true; // TODO: review method because now it is not clear what it does
         }
         return false;
     }
@@ -183,17 +179,18 @@ public class WebPageParser {
 
     public boolean parseDate(WebPage page, WebEntity entity, WebElement date) {
 
-        Date articleDate = null;
-        if (date == null)
+        Date articleDate;
+        if (date == null || page == null || entity == null)
             return false;
 
         try {
 
              System.out.println("Date " + date.getText() + " for url " + page.getPageUrl());
 
-             articleDate = checkWords(dateRegexpMatch(date.getText().replaceAll("\n", " "),
+             articleDate = dateFromString(date.getText(), entity.getDateFormat());
+           /*  articleDate = checkWords(dateRegexpMatch(date.getText().replaceAll("\n", " "),
                              entity.getRegExpForDate()),
-                     entity.getDateFormat());
+                     entity.getDateFormat()); */
         }
         catch(ParseException pe) {
             logger.error("Parse exception at " + pe.getMessage());
@@ -209,7 +206,7 @@ public class WebPageParser {
 */
         page.setArticleDate(articleDate);
 
-        return true;
+        return articleDate != null;
         //System.out.print("Parsed date " + articleDate + " for url " + entity.getEntityUrl());
     }
 
@@ -246,6 +243,7 @@ public class WebPageParser {
 
         return elements;
     }
+
     public void parsePage(WebEntity entity, NewsMongoDb dbConnection) throws Exception {
 
         if (!dbConnection.urlExists(entity.getEntityUrl())) {
@@ -255,9 +253,9 @@ public class WebPageParser {
             // WebEntity coreEntity = existingEntities.get(key);
             newPage.setParseTime(System.nanoTime());
 
-            if (newPage.getPageUrl() == null || newPage.getPageUrl().isEmpty()) {
-                System.out.println("ACHTUNG! ACHTUNG!");
-            }
+           // if (newPage.getPageUrl() == null || newPage.getPageUrl().isEmpty()) {
+          //      System.out.println("ACHTUNG! ACHTUNG!");
+          //  }
 
             //driver.get(newPage.getPageUrl());
             resetDriver(newPage.getPageUrl());
@@ -270,9 +268,6 @@ public class WebPageParser {
             parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath()))))
 
             dbConnection.insert(newPage);
-
-
-
             /*System.out.println("Parsed entity " + entity.getEntityUrl() + " in thread #" +
                     Thread.currentThread().getName());
 */
@@ -293,75 +288,113 @@ public class WebPageParser {
         } else return "";
     }
 */
-    private String  removeUnnecessarySymbols(String date) {
-        return date.replaceAll(",+-.[)(]"," ");
+
+
+/*
+    private Date tryGetDate(String date, String format, Locale locale) {
+
+        DateFormat dateFormat = new SimpleDateFormat(format, locale);
+        try  {
+            return dateFormat.parse(date);
+        }
+        catch (ParseException e) {
+
+        }
+        catch (Exception e) {
+
+        }
+        return null;
     }
-    public Date checkWords(String date, String datePattern) throws ParseException {
+
+    private String allMatches(Matcher matcher) {
+        List<String> allMatches = new ArrayList<String>();
+        while (matcher.find()) {
+            allMatches.add(matcher.group());
+        }
+
+        return allMatches.size() > 0 ? allMatches.get(0) : null;
+    } */
+
+/*
+    public Date handleYesterdayWord(String date, String format) {
+        LocalDateTime now = LocalDateTime.now();
+        Pattern todayPattern = Pattern.compile("(вчера)");
+        date = preHandleDate(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+
+        String year = String.valueOf(now.getYear());
+        String day =  String.valueOf(String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)));
+        String month = String.valueOf(String.format("%02d", calendar.get(Calendar.MONTH) + 1));
+        String dateString = day + "." + month + "." + year;
+
+        Matcher patternMatcher = todayPattern.matcher(date);
+        String newDate = patternMatcher.replaceFirst(dateString);
+
+        return tryGetDate(newDate, format, LocaleHolder.getRusLocale());
+    }
+
+    public Date handleTodayWord(String date, String format) {
+        LocalDateTime now = LocalDateTime.now();
+        Pattern todayPattern = Pattern.compile("(сегодня)");
+
+        date = preHandleDate(date);
+        String year = String.valueOf(now.getYear());
+        String day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
+        String month = String.valueOf(String.format("%02d", now.getMonthValue()));
+        String dateString = day + "." + month + "." + year;
+
+        Matcher patternMatcher = todayPattern.matcher(date);
+        String newDate = patternMatcher.replaceFirst(dateString);
+
+        return tryGetDate(newDate, format, LocaleHolder.getRusLocale());
+    } */
+
+    public Date dateFromString(String date, String datePattern) throws ParseException {
 
         if (date == null || datePattern == null)
             return null;
 
-        String hour, minute, day, month, year;
-        LocalDateTime now = LocalDateTime.now();
-        date = date.toLowerCase();//.replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
-        Calendar calendar = Calendar.getInstance(); // this would default to now
-
-        if (date.contains("cегодня")){
-            date = removeUnnecessarySymbols(date);
-
-            year = String.valueOf(now.getYear());
-            day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
-            month = String.valueOf(String.format("%02d", now.getMonthValue()));
-
-            String dateString = day + "." + month + "." + year;
-            date = date.replaceAll("сегодня", dateString);
-        }
-
-        if (date.contains("вчера")) {
-            date = removeUnnecessarySymbols(date);
-            //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            calendar.add(Calendar.DATE, -1);
-            //System.out.println("date = [" + date + "], datePattern = [" + datePattern + "]");
-            year = String.valueOf(now.getYear());
-            day = String.valueOf(String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)));
-            month = String.valueOf(String.format("%02d", calendar.get(Calendar.MONTH) + 1));
-            String a = day + "." + month + "." + year;
-            date = date.replaceAll("вчера", a);
-        }
+        //String dateHandled = preHandleDate(date);//.replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
+        DateFormat format = new SimpleDateFormat(datePattern);
+     //   date = preHandleDate(date);
         Date dateFinal = null;
-        Locale rusLocale = new Locale.Builder().setLanguage("ru").build();
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, rusLocale);
+        DateHandler todayHandler = new DateTodayHandler(date, format);
+        DateHandler yesterdayHandler = new DateYesterdayHandler(date, format);
+        DateHandler dateFromFormat = new DateFromFormatHandler(date, format, false);
+        DateHandler endDateTimeFormat = new DateFromFormatHandler(date, format, true);
 
-            dateFinal = dateFormat.parse(date);
+        DateHandler iterator = dateFromFormat;
 
-            /*if (datePattern.contains("yyyy")){
-                year = String.valueOf(dateFinal.getYear()+1900);
+        dateFromFormat.setNext(todayHandler);
+        todayHandler.setNext(yesterdayHandler);
+        yesterdayHandler.setNext(endDateTimeFormat);
+
+        while(iterator.hasNext()) {
+            if (dateFinal == null) {
+                dateFinal = iterator.handle();
             }
-            else {
-                year = String.valueOf(now.getYear());
-            }*/
-
-            /*day = String.valueOf(String.format("%02d", dateFinal.getDate()));
-            month = String.valueOf(String.format("%02d", dateFinal.getMonth() + 1));
-            hour = String.valueOf(String.format("%02d", dateFinal.getHours()));
-            if( Integer.parseInt(hour) < 0)
-                hour = String.valueOf((24 + Integer.parseInt(hour)));
-            minute = String.valueOf(String.format("%02d", dateFinal.getMinutes()));
-            date = day + "." + month + "." + year + " " + hour + ":" + minute; */
-
-        } catch (ParseException e) {
+            else break;
+            iterator = iterator.getNext();
         }
+     /*   Date dateFinal = handleTodayWord(date, datePattern);
+        if (dateFinal == null)
+            dateFinal = handleYesterdayWord(date, datePattern);
+
+        if (dateFinal == null)
+            dateFinal = tryGetDate(date, datePattern, LocaleHolder.getRusLocale());
+*/
         return dateFinal;
     }
 
-    private void dateProc(String date, int monthNumber) {
+
+    /*private void dateProc(String date, int monthNumber) {
         LocalDateTime now = LocalDateTime.now();
         int year = now.getYear();
         int month = now.getMonthValue();
         String result = month + "." + year;
-    }
-
+    } */
+/*
     public String dateRegexpMatch(String date, String regexp) {
 
             if (date == null || regexp == null )
@@ -377,7 +410,7 @@ public class WebPageParser {
             }
 
             return allMatches.size() > 0 ? allMatches.get(0) : date;
-        }
+        } */
  /*
     private String articleTextProcessing(String text, WebPage page) {
 
