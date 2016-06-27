@@ -184,7 +184,7 @@ public class RootEntity extends WebEntity {
 
         driver.get(targetUrl);
 
-       // String body = driver.findElement(By.tagName("body")).getText();
+        String body = driver.findElement(By.tagName("body")).getText();
 
         List<String> links = driver.findElements(By.xpath(newsListPath))
                 .stream()

@@ -70,7 +70,13 @@ public class WebPage {
 
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        return "";
+        builder.append("--------------Entity: " + this.entityUrl + "--------------------\n");
+        builder.append("Page url: " + this.pageUrl + "\n");
+        builder.append("Article name: " + this.articleName + "\n");
+        builder.append("Article date: " + this.articleDate + "\n");
+        builder.append("Article text " + (this.articleText != null && !this.articleText.isEmpty() ?
+                "is not null\n" : "is null\n"));
+        return builder.toString();
 
     }
 

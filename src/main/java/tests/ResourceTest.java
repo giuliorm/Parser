@@ -29,14 +29,13 @@ public class ResourceTest extends TestCase {
     }
 
     @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                {  "",  }, {}
+    public static Collection<Object> data() {
+        return Arrays.asList(new Object[] {
+                 "http://47news.ru/articles/105139/"  ,
         });
     };
 
     private  String url;
-    private String date;
 
     private WebPage page;
     private WebPageParser parser;
@@ -52,9 +51,11 @@ public class ResourceTest extends TestCase {
     }
 
     @Test
-    public void testName() {
+    public void testName() throws InterruptedException {
 
         if (resource != null) {
+            Thread.sleep(2_000);
+            parser.resetDriver(url);
             WebElement element = parser.tryGetElement("ARTICLE HEADER", resource.getArticleNamePath());
             if (element == null)
                 fail();

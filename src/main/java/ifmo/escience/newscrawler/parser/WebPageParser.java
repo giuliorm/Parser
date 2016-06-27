@@ -212,7 +212,7 @@ public class WebPageParser {
 
     public WebElement tryGetElement(String elementName, String path) {
         WebElement element = null;
-
+      //  String b = driver.findElement(By.tagName("body")).getText();
         if (path != null && !path.isEmpty()) {
             try {
                 element = driver.findElement(By.xpath(path));
@@ -220,7 +220,6 @@ public class WebPageParser {
             catch(Exception e) {
                 System.out.println("Unable to get " + elementName +
                         " from url " + driver.getCurrentUrl() + " by path " + path);
-                String body = driver.findElement(By.tagName("body")).getText();
                 //logger.error(e.getMessage());
             }
         }
@@ -272,7 +271,7 @@ public class WebPageParser {
                     Thread.currentThread().getName());
 */
 
-
+            System.out.println("Thread " + Thread.currentThread().getName() + ":\n " + newPage.toString());
   //          System.out.println("Entity " + entity.getEntityUrl() + " inserted to db in thread #" +
     //                Thread.currentThread().getName());
         }
