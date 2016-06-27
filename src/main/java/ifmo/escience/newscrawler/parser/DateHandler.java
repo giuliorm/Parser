@@ -3,45 +3,44 @@ package ifmo.escience.newscrawler.parser;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by zotova on 24.06.2016.
  */
-public abstract class DateHandler {
+public abstract class DateHandler<TArgument, TResult> {
 
-    protected String date;
-    protected  DateHandler next;
+    List<DateHandler<TArgument, TArgument>> preHandlers;
+    protected TArgument date;
     protected  DateFormat format;
 
-    public DateHandler(String date, DateFormat format) {
+    public DateHandler(TArgument date, DateFormat format, DateHandler... preHandlers) {
+        this.preHandlers = preHandlers != null ? Arrays.asList(preHandlers) : null;
         this.date = date;
         this.format = format;
     }
 
-    public static String  removeUnnecessarySymbols(String date) {
-        return date.replaceAll(",*\\+*\\-*\\.*\\[*\\]*\\(*\\)*", "").trim();
+
+    protected TArgument handleDate() {
+        TArgument handledDate = date;
+        if (preHandlers != null && preHandlers.size() > 0) {
+            for(DateHandler h : preHandlers) {
+                try {
+                    handledDate = (TArgument) h.handle(handledDate);
+                }
+                catch(ClassCastException ex) {
+
+                }
+            }
+        }
+        return handledDate;
+    }
+
+    public DateHandler() {
 
     }
 
-    protected String preHandleDate(String date){
-        return removeUnnecessarySymbols(date).toLowerCase();
-    }
-
-    public void setNext(DateHandler next) {
-        this.next = next;
-    }
-
-    public DateHandler getNext() {
-        return next;
-    }
-
-    public abstract Date handle();
-
-    public boolean hasNext() {
-        return this.next != null;
-    }
+    protected abstract TResult handle(TArgument date);
 
     protected Date tryGetDateFromString(String date) {
 

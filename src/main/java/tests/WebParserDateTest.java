@@ -1,12 +1,14 @@
 package tests;
 
-import ifmo.escience.newscrawler.parser.DateHandler;
-import ifmo.escience.newscrawler.parser.DateTodayHandler;
-import ifmo.escience.newscrawler.parser.DateYesterdayHandler;
-import ifmo.escience.newscrawler.parser.WebPageParser;
+import ifmo.escience.newscrawler.Utils;
+import ifmo.escience.newscrawler.entities.WebEntity;
+import ifmo.escience.newscrawler.helpers.LocaleHolder;
+import ifmo.escience.newscrawler.parser.*;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,8 +23,17 @@ import static org.junit.Assert.fail;
  */
 public class WebParserDateTest extends TestCase {
 
+    DateStringSymbolsHandler symbols ;
+    DateStringLettersHandler letters ;
+    DateStringSimpleHandler simple;
     WebPageParser parser = new WebPageParser();
 
+
+    public WebParserDateTest() {
+        symbols = new DateStringSymbolsHandler();
+        letters = new DateStringLettersHandler();
+        simple =  new DateStringSimpleHandler();
+    }
     @Test
     public void testCheckWordsNormalFormat() {
 
@@ -30,9 +41,13 @@ public class WebParserDateTest extends TestCase {
         String format = "yyyy-MM-dd hh:mm:ss";
 
         Date dateResult = null;
+        WebEntity entity = new WebEntity(null, null, null);
+        entity.setDateFormat(format);
+        entity.setRegExpForDate("\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}");
         try {
             Date expected = new SimpleDateFormat(format).parse("2016-12-01 03:10:11");
-            dateResult = parser.dateFromString(date, format);
+
+            dateResult = parser.dateFromString(date, entity);
             assertEquals(dateResult.compareTo(expected), 0);
         }
         catch(ParseException e) {
@@ -50,8 +65,27 @@ public class WebParserDateTest extends TestCase {
         String formatString = "dd.MM.yy hh:mm";
         SimpleDateFormat format = new SimpleDateFormat(formatString);
 
-        Date result = new DateYesterdayHandler(date, format).handle();
+        Date result = new DateYesterdayHandler(date, format, simple, symbols).handle();
         assertEquals(result, expected);
+    }
+
+
+    @Test
+    public void testDateFromRegexp() {
+        String pattern = "\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}";
+        String date = "ывроыро \\\\ ололоо! 27.06.2016 12:15";
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+        Date expected = null;
+        Date result = null;
+        try {
+             expected = format.parse("27.06.2016 12:15");
+             result = format.parse(new DateFromRegexpHandler(pattern).handle(date));
+        }
+        catch(ParseException ex) {
+            fail();
+        }
+
+        assertEquals(expected.compareTo(result), 0);
     }
 
     @Test
@@ -64,22 +98,46 @@ public class WebParserDateTest extends TestCase {
         String formatString = "dd.MM.yy hh:mm";
         SimpleDateFormat format = new SimpleDateFormat(formatString);
 
-        Date result = new DateYesterdayHandler(date, format).handle();
+        Date result = new DateYesterdayHandler(date, format, simple, symbols).handle();
         assertEquals(result.compareTo(expected), 0);
+    }
+
+
+    @Test
+    public void testTimeFormat() {
+
+        String ds = "17:25";
+        String timeFormatString = "hh:mm";
+        String dateformatString = "hh:mm, dd MMMM";
+        Date result = null;
+        WebEntity entity = new WebEntity(null, null, null);
+        entity.setDateFormat(dateformatString);
+        entity.setRegExpForDate("\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}");
+        entity.setTimeFormat(timeFormatString);
+
+        try
+        {
+            Date exp = new SimpleDateFormat(timeFormatString).parse(ds);
+            result = parser.dateFromString(ds, entity);
+            assertEquals(exp.compareTo(result), 0);
+        }
+        catch (ParseException e) {
+
+        }
+        ;
     }
 
     @Test
     public void testHandleYesterdayWord() {
 
         String date = "вчера, 9:40";
-        LocalDateTime now = LocalDateTime.now();
         Date expected = Date.from(LocalDate.now().minusDays(1).atTime(9,40).atZone(ZoneId.systemDefault()).toInstant());
 
         String formatString = "dd.MM.yy hh:mm";
         SimpleDateFormat format = new SimpleDateFormat(formatString);
 
-        Date result = new DateYesterdayHandler(date, format).handle();
-        assertEquals(result.compareTo(expected), 0);
+        Date result = new DateYesterdayHandler(date, format, simple, symbols).handle();
+        assertEquals(expected.compareTo(result), 0);
     }
 
     @Test
@@ -91,16 +149,17 @@ public class WebParserDateTest extends TestCase {
         String formatString = "dd.MM.yy hh:mm";
         SimpleDateFormat format = new SimpleDateFormat(formatString);
 
-        Date result = new DateTodayHandler(date, format).handle();
-        assertEquals(result.compareTo(expected), 0);
+        Date result = new DateTodayHandler(date, format, simple, symbols).handle();
+        assertEquals(expected.compareTo(result), 0);
     }
+
 
     @Test
     public void testRemoveUnusedCharacters() {
 
         String date = "date ,,,s..+- [ ] ( )";
         String expected = "date s";
-        date = DateHandler.removeUnnecessarySymbols(date);
+        date = simple.handle(symbols.handle(date));
         assertEquals(date.compareTo(expected), 0);
 
     }

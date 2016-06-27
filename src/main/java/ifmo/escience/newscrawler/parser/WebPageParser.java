@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -185,9 +187,9 @@ public class WebPageParser {
 
         try {
 
-             System.out.println("Date " + date.getText() + " for url " + page.getPageUrl());
+          //   System.out.println("Date " + date.getText() + " for url " + page.getPageUrl());
 
-             articleDate = dateFromString(date.getText(), entity.getDateFormat());
+             articleDate = dateFromString(date.getText(), entity);
            /*  articleDate = checkWords(dateRegexpMatch(date.getText().replaceAll("\n", " "),
                              entity.getRegExpForDate()),
                      entity.getDateFormat()); */
@@ -212,7 +214,7 @@ public class WebPageParser {
 
     public WebElement tryGetElement(String elementName, String path) {
         WebElement element = null;
-      //  String b = driver.findElement(By.tagName("body")).getText();
+        String b = driver.findElement(By.tagName("body")).getText();
         if (path != null && !path.isEmpty()) {
             try {
                 element = driver.findElement(By.xpath(path));
@@ -260,11 +262,11 @@ public class WebPageParser {
             resetDriver(newPage.getPageUrl());
         //    String body = driver.findElement(By.tagName("body")).getText();
 
-            if (parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath()))
-             && (parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath())) ||
-            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath())) ||
-            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath())) ||
-            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath()))))
+            parseBody(newPage, tryGetElements(ARTICLE_TEXT, entity.getArticleTextPath()));
+            parseHeader(newPage, tryGetElement(ARTICLE_NAME, entity.getArticleNamePath()));
+            parseTags(newPage, entity, tryGetElements(TAGS, entity.getTagsPath()));
+            parseSimilarLinks(newPage, entity, tryGetElements(SIMILAR_NEWS, entity.getSimilarNewsPath()));
+            parseDate(newPage, entity, tryGetElement(DATE, entity.getArticleDatePath()));
 
             dbConnection.insert(newPage);
             /*System.out.println("Parsed entity " + entity.getEntityUrl() + " in thread #" +
@@ -349,32 +351,38 @@ public class WebPageParser {
         return tryGetDate(newDate, format, LocaleHolder.getRusLocale());
     } */
 
-    public Date dateFromString(String date, String datePattern) throws ParseException {
+    public Date dateFromString(String date, WebEntity entity) throws ParseException {
 
-        if (date == null || datePattern == null)
+        if (date == null || entity.getDateFormat() == null)
             return null;
 
         //String dateHandled = preHandleDate(date);//.replaceAll(",", " ").replaceAll(" +", " ").replaceAll("-", " ").trim();
-        DateFormat format = new SimpleDateFormat(datePattern);
+        DateFormat dateFormat = new SimpleDateFormat(entity.getDateFormat());
+
      //   date = preHandleDate(date);
         Date dateFinal = null;
-        DateHandler todayHandler = new DateTodayHandler(date, format);
-        DateHandler yesterdayHandler = new DateYesterdayHandler(date, format);
-        DateHandler dateFromFormat = new DateFromFormatHandler(date, format, false);
-        DateHandler endDateTimeFormat = new DateFromFormatHandler(date, format, true);
+        DateStringSimpleHandler simpleHandler = new DateStringSimpleHandler();
+        DateStringSymbolsHandler symbolsHandler = new DateStringSymbolsHandler();
 
-        DateHandler iterator = dateFromFormat;
+        ArrayList<DateHandler> handlers = new ArrayList<>() ;
 
-        dateFromFormat.setNext(todayHandler);
-        todayHandler.setNext(yesterdayHandler);
-        yesterdayHandler.setNext(endDateTimeFormat);
+        //Order of handlers is important!
+        handlers.add(new DateFromFormatHandler(date, dateFormat, new DateFromRegexpHandler(entity.getRegExpForDate())));
+        handlers.add(new DateFromFormatHandler(date, dateFormat, simpleHandler));
+        handlers.add(new DateTodayHandler(date, dateFormat, simpleHandler, symbolsHandler));
+        handlers.add(new DateYesterdayHandler(date, dateFormat, simpleHandler, symbolsHandler));
+        handlers.add(new DateFromFormatHandler(date, dateFormat, simpleHandler, symbolsHandler));
+        if (entity.getTimeFormat() != null && !entity.getTimeFormat().isEmpty())
+            handlers.add(new DateFromFormatHandler(date,  new SimpleDateFormat(entity.getTimeFormat()),
+                    simpleHandler, symbolsHandler));
 
-        while(iterator.hasNext()) {
+        for(DateHandler handler : handlers) {
+
             if (dateFinal == null) {
-                dateFinal = iterator.handle();
+                DateStringDateHandler h = (DateStringDateHandler) handler;
+                dateFinal = h.handle();
             }
             else break;
-            iterator = iterator.getNext();
         }
      /*   Date dateFinal = handleTodayWord(date, datePattern);
         if (dateFinal == null)

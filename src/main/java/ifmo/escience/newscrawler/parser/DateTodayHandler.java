@@ -11,18 +11,18 @@ import java.util.regex.Pattern;
 /**
  * Created by zotova on 24.06.2016.
  */
-public class DateTodayHandler extends  DateHandler {
+public class DateTodayHandler extends  DateStringDateHandler {
 
     Pattern ruTodayPattern = Pattern.compile("(сегодня)");
-    public DateTodayHandler(String date, DateFormat format) {
-        super(date, format);
+    public DateTodayHandler(String date, DateFormat format, DateStringHandler... preHandlers) {
+        super(date, format, preHandlers);
     }
 
     @Override
-    public Date handle() {
+    protected Date handle(String date) {
         LocalDateTime now = LocalDateTime.now();
 
-        String handledDate = preHandleDate(date);
+        String handledDate = handleDate();
         String year = String.valueOf(now.getYear());
         String day = String.valueOf(String.format("%02d", now.getDayOfMonth()));
         String month = String.valueOf(String.format("%02d", now.getMonthValue()));

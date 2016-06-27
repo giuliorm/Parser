@@ -6,17 +6,19 @@ import java.util.Date;
 /**
  * Created by zotova on 24.06.2016.
  */
-public class DateFromFormatHandler extends DateHandler {
+public class DateFromFormatHandler extends DateStringDateHandler {
 
-    boolean needsPreHandling;
-    public DateFromFormatHandler (String date, DateFormat format, boolean needsPreHandling) {
-        super (date, format);
-        this.needsPreHandling = needsPreHandling;
+
+    public DateFromFormatHandler (String date, DateFormat format, DateStringHandler... preHandlers) {
+        super (date, format, preHandlers);
+
     }
 
     @Override
-    public Date handle() {
-        String handleDate = needsPreHandling ? preHandleDate(date) : date;
-        return tryGetDateFromString(handleDate);
+    protected Date handle(String date) {
+
+        String handledDate = handleDate();
+
+        return tryGetDateFromString(handledDate);
     }
 }

@@ -6,12 +6,11 @@ import ifmo.escience.newscrawler.entities.WebEntity;
 import junit.framework.TestCase;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.junit.runner.notification.RunListener;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +30,10 @@ public class ResourceTest extends TestCase {
     @Parameterized.Parameters
     public static Collection<Object> data() {
         return Arrays.asList(new Object[] {
-                 "http://47news.ru/articles/105139/"  ,
+          //   "http://rustelegraph.ru/news/2016-06-26/Vypuskniki-v-sostoyanii-slegka-pod-parusom-60576/",
+           //  "http://47news.ru/articles/105203/",
+          //  "http://piter.tv/event/Napadayuschij_Sankt_Peterburgskogo_Zenita_otmetil_s_zhenoj_sitcevuyu_svad_bu/",
+                "http://spbvoditel.ru/2016/06/27/042/",
         });
     };
 
@@ -45,9 +47,10 @@ public class ResourceTest extends TestCase {
         this.url = url;
         this.page = new WebPage(url);
         this.parser = new WebPageParser();
-        parser.resetDriver(url);
         String key = Utils.getUrlStd(url);
         this.resource = existingEntities.containsKey(key) ? existingEntities.get(Utils.getUrlStd(url)) : null;
+
+        System.out.println("---------------Entity: " + url + "-----------------");
     }
 
     @Test
@@ -68,16 +71,51 @@ public class ResourceTest extends TestCase {
                 fail();
             if (parsedName.isEmpty())
                 fail();
+            System.out.println("Article name: " + parsedName);
+        }
 
+    }
+
+
+    @Test
+    public void testDate()throws InterruptedException {
+
+        if (resource != null) {
+            Thread.sleep(2_000);
+            parser.resetDriver(url);
+            WebElement element = parser.tryGetElement("ARTICLE DATE", resource.getArticleDatePath());
+            if (element == null)
+                fail();
+
+            parser.parseDate(page, resource, element);
+
+            Date date = page.getArticleDate();
+
+            if (date == null)
+                fail();
+            System.out.println("Article Date: " + date);
         }
 
     }
 
     @Test
-    public void testText() {
+    public void testText() throws InterruptedException {
 
+        if (resource != null) {
+            Thread.sleep(2_000);
+            parser.resetDriver(url);
+            List<WebElement> elements = parser.tryGetElements("ARTICLE TEXT", resource.getArticleTextPath());
+            if (elements == null || elements != null && elements.size() < 1)
+                fail();
 
+            parser.parseBody(page, elements);
 
+            String text = page.getArticleText();
+
+            if (text == null || text != null && text.isEmpty())
+                fail();
+          //  System.out.println("Article text: " + text);
+        }
     }
 }
 
