@@ -34,7 +34,8 @@ public class WebEntity implements Runnable {
             similarNews = "",
             regExpForDate, 
             dateFormat,
-            timeFormat;
+            timeFormat,
+            pageUrl;
 
     //protected long refreshTimeout;
    // protected Crawler crawler;
@@ -44,12 +45,12 @@ public class WebEntity implements Runnable {
     public WebEntity() {
 
     }
-
     public WebEntity(WebEntity from, String url, NewsMongoDb connection) {
-        this.entityUrl = url;
+        this.pageUrl = url;
         this.connection = connection;
 
         if (from != null) {
+            this.entityUrl = from.getEntityUrl();
             this.entityName = from.getEntityName();
             this.newsListPath = from.getNewsListPath();
             this.articleNamePath = from.getArticleNamePath();
@@ -147,6 +148,9 @@ public class WebEntity implements Runnable {
     public String getEntityUrl() {
         return entityUrl;
     }
+    public String getPageUrl() {
+        return pageUrl;
+    }
     public String getNewsListPath() {
         return newsListPath;
     }
@@ -170,6 +174,9 @@ public class WebEntity implements Runnable {
         return regExpForDate;
     }
 
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
+    }
     public void setDateFormat(String format) {
         dateFormat = format;
     }

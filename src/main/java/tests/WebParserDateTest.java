@@ -1,10 +1,8 @@
 package tests;
 
-import ifmo.escience.newscrawler.Utils;
 import ifmo.escience.newscrawler.entities.WebEntity;
-import ifmo.escience.newscrawler.helpers.LocaleHolder;
 import ifmo.escience.newscrawler.parser.*;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import ifmo.escience.newscrawler.parser.date.handlers.*;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -24,14 +22,12 @@ import static org.junit.Assert.fail;
 public class WebParserDateTest extends TestCase {
 
     DateStringSymbolsHandler symbols ;
-    DateStringLettersHandler letters ;
     DateStringSimpleHandler simple;
     WebPageParser parser = new WebPageParser();
 
 
     public WebParserDateTest() {
         symbols = new DateStringSymbolsHandler();
-        letters = new DateStringLettersHandler();
         simple =  new DateStringSimpleHandler();
     }
     @Test
