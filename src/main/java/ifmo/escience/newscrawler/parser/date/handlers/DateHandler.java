@@ -28,7 +28,7 @@ public abstract class DateHandler<TArgument, TResult> {
                     handledDate = (TArgument) h.handle(handledDate);
                 }
                 catch(ClassCastException ex) {
-
+                    handledDate = null;
                 }
             }
         }
