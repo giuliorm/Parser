@@ -1,12 +1,11 @@
 package tests;
-import ifmo.escience.newscrawler.Utils;
+import ifmo.escience.newscrawler.helpers.Utils;
 import ifmo.escience.newscrawler.WebPage;
 import ifmo.escience.newscrawler.parser.WebPageParser;
 import ifmo.escience.newscrawler.entities.WebEntity;
 import junit.framework.TestCase;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.RunListener;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebElement;
 

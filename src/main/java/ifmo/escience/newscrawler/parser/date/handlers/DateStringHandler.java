@@ -1,4 +1,4 @@
-package ifmo.escience.newscrawler.parser;
+package ifmo.escience.newscrawler.parser.date.handlers;
 
 /**
  * Created by JuriaSan on 27.06.2016.

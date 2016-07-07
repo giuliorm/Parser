@@ -1,4 +1,4 @@
-package ifmo.escience.newscrawler.parser;
+package ifmo.escience.newscrawler.parser.date.handlers;
 
 import java.text.DateFormat;
 import java.util.Date;

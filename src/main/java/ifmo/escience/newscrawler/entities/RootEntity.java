@@ -1,14 +1,13 @@
 package ifmo.escience.newscrawler.entities;
 
 import ifmo.escience.newscrawler.ProxyManager;
-import ifmo.escience.newscrawler.Utils;
+import ifmo.escience.newscrawler.helpers.Utils;
 import ifmo.escience.newscrawler.database.NewsMongoDb;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -184,7 +183,7 @@ public class RootEntity extends WebEntity {
 
         driver.get(targetUrl);
 
-        String body = driver.findElement(By.tagName("body")).getText();
+        //String body = driver.findElement(By.tagName("body")).getText();
 
         List<String> links = driver.findElements(By.xpath(newsListPath))
                 .stream()

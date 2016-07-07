@@ -1,6 +1,4 @@
-package ifmo.escience.newscrawler.parser;
-
-import ifmo.escience.newscrawler.helpers.LocaleHolder;
+package ifmo.escience.newscrawler.parser.date.handlers;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -11,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Created by zotova on 24.06.2016.
  */
-public class DateTodayHandler extends  DateStringDateHandler {
+public class DateTodayHandler extends DateStringDateHandler {
 
     Pattern ruTodayPattern = Pattern.compile("(сегодня)");
     public DateTodayHandler(String date, DateFormat format, DateStringHandler... preHandlers) {

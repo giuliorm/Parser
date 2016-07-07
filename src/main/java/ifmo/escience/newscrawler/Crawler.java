@@ -2,18 +2,15 @@ package ifmo.escience.newscrawler;
 import ifmo.escience.newscrawler.database.NewsMongoDb;
 import ifmo.escience.newscrawler.entities.RootEntity;
 import ifmo.escience.newscrawler.entities.WebEntity;
-import java.io.File;
+
+import ifmo.escience.newscrawler.helpers.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import org.codehaus.jackson.map.ObjectMapper;
 
 public class Crawler {
     static Logger logger =  LogManager.getLogger(Crawler.class.getName());

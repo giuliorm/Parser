@@ -1,8 +1,7 @@
-package ifmo.escience.newscrawler.parser;
+package ifmo.escience.newscrawler.parser.date.handlers;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -29,7 +28,7 @@ public abstract class DateHandler<TArgument, TResult> {
                     handledDate = (TArgument) h.handle(handledDate);
                 }
                 catch(ClassCastException ex) {
-
+                    handledDate = null;
                 }
             }
         }

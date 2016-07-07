@@ -1,9 +1,12 @@
 package ifmo.escience.newscrawler.parser;
 
-import ifmo.escience.newscrawler.Utils;
+import ifmo.escience.newscrawler.helpers.Utils;
 import ifmo.escience.newscrawler.WebPage;
 import ifmo.escience.newscrawler.database.NewsMongoDb;
 import ifmo.escience.newscrawler.entities.WebEntity;
+import ifmo.escience.newscrawler.parser.date.handlers.DateHandler;
+import ifmo.escience.newscrawler.parser.date.handlers.DateStringDateHandler;
+import ifmo.escience.newscrawler.parser.date.handlers.*;
 import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +14,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -214,6 +216,8 @@ public class WebPageParser {
 
     public WebElement tryGetElement(String elementName, String path) {
         WebElement element = null;
+        //String curl = driver.getCurrentUrl();
+       // String b = driver.findElement(By.tagName("body")).getText();
   //      String b = driver.findElement(By.tagName("body")).getText();
         if (path != null && !path.isEmpty()) {
             try {
@@ -249,8 +253,8 @@ public class WebPageParser {
 
         if (!dbConnection.urlExists(entity.getEntityUrl())) {
 
-            WebPage newPage = new WebPage(entity.getEntityUrl());
-            newPage.setEntityUrl(Utils.getUrlStd(entity.getEntityUrl()));
+            WebPage newPage = new WebPage(entity.getPageUrl());
+            newPage.setEntityUrl(entity.getEntityUrl());
             // WebEntity coreEntity = existingEntities.get(key);
             newPage.setParseTime(System.nanoTime());
 
