@@ -25,28 +25,54 @@ public class ResourceTest extends TestCase {
         existingEntities = Utils.getEntitiesList("multiConfig.json")
                 .stream()
                 .collect(Collectors.toMap(item -> Utils.getUrlStd(item.getEntityUrl()), item->item));
+        parser = new WebPageParser();
     }
 
     @Parameterized.Parameters
     public static Collection<Object> data() {
         return Arrays.asList(new Object[] {
-          //   "http://rustelegraph.ru/news/2016-06-26/Vypuskniki-v-sostoyanii-slegka-pod-parusom-60576/",
-           //  "http://47news.ru/articles/105203/",
-          //  "http://piter.tv/event/Napadayuschij_Sankt_Peterburgskogo_Zenita_otmetil_s_zhenoj_sitcevuyu_svad_bu/",
-                "http://spbvoditel.ru/2016/06/27/042/",
+         /*    "http://rustelegraph.ru/news/2016-06-26/Vypuskniki-v-sostoyanii-slegka-pod-parusom-60576/",
+             "http://47news.ru/articles/105203/",
+            "http://piter.tv/event/Napadayuschij_Sankt_Peterburgskogo_Zenita_otmetil_s_zhenoj_sitcevuyu_svad_bu/",
+               "http://spbvoditel.ru/2016/06/27/042/", */
+          //      "https://saint-petersburg.ru/m/society/apaley/350108/"
+        //    "https://life.ru/t/life78/873799/pietierburzhtsy_moghut_kupit_biliety_na_kubok_konfiedieratsii_po_futbolu_za_960_rubliei"
+      //  "http://online47.ru/2016/07/05/Vo-Vsevolozhskii-i-Tosnenskii-raiony-vernulsya-svet-32562"
+               //"http://ria.ru/spb/20140320/1000398165.html"
+            //    "http://www.spb.aif.ru/society/people/bolee_25_tysyach_musulman_otprazdnovali_uraza-bayram_v_peterburge"
+          //  "http://www.fontanka.ru/2016/06/27/140/"
+             //!CANNOT PARSE AND DONT KNOW HOW
+                // -"http://konkretno.ru/2016/06/27/zamdirektora-volosovskogo-psixinternata-ukrala-u-pacientov-13-milliona-rublej.html"
+         //   "http://47channel.ru/event/Pravitel_stvo_pereraspredelilo_subsidii_chtobi_dopolnitel_no_podderzhat_malij_biznes_v_monogorodah/"
+        //"http://www.spbdnevnik.ru/news/2016-07-05/vtoraya-smena-foruma-vsmysle-perenositsya-iz-za-nepogody/"
+       // "http://vyborg.tv/obshchestvo/26442-kak-vychislit-lzhekontroljorov.html"
+           //     "http://neva.today/news/127426/"
+      //"https://baltika.fm/news/97187"
+      //  "http://ok-inform.ru/obshchestvo/proisshestviya/66098-v-tatarstane-11-letnego-malchika-na-glazakh-u-roditelej-nasmert-zasosalo-v-trubu-nasosnoj-stantsii-na-ozere.html"
+     //   "http://www.interfax-russia.ru/view.asp?id=742044"
+      //  "http://gatchina24.ru/news/2016/07/05/news_17238.html"
+     //  "http://www.ntv.ru/novosti/1640876/"
+     // "http://topspb.tv/news/news108075/"
+            //    "http://www.vesti.ru/doc.html?id=2773418"
+      //  "http://gatchina-news.ru/news/incident/gatchinskij-pedofil-osuzhden-na-17-let-strogogo-rezhima-9896.html"
+       // "https://regnum.ru/news/polit/2153010.html"
+              //  "http://mr7.ru/articles/135346/"
+     //  "http://www.rosbalt.ru/world/2016/07/06/1529771.html"
+    //  "http://lenobl.ru/news22352.html"
+       // "http://www.gazeta.spb.ru/1963215-0/"
+        "http://sledcomrf.ru/news/244944-sostoyalas-vstrecha-s-predstavitelyami.html"
         });
     };
 
     private  String url;
 
     private WebPage page;
-    private WebPageParser parser;
+    private static WebPageParser parser;
     private WebEntity resource;
 
     public ResourceTest(String url) {
         this.url = url;
         this.page = new WebPage(url);
-        this.parser = new WebPageParser();
         String key = Utils.getUrlStd(url);
         this.resource = existingEntities.containsKey(key) ? existingEntities.get(Utils.getUrlStd(url)) : null;
 

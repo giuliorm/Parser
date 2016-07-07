@@ -69,14 +69,14 @@
     "entityName": "https://saint-petersburg.ru/",
     "entityUrl": "https://saint-petersburg.ru/",
     "newsListPath": "/html/body/div[3]/div[2]/div/ul/li/a",
-    "articleNamePath": "/html/body/div[3]/div[1]/div[1]/h1/a",
-    "articleDatePath": "/html/body/div[3]/div[1]/div[1]/time",
-    "articleTextPath": "/html/body/div[3]/div[1]/div[1]/div",
+    "articleNamePath": "//*[contains(@itemprop, \"name\")]",
+    "articleDatePath": "//*[contains(@itemprop, \"datePublished\")]",
+    "articleTextPath": "//*[contains(@itemprop, \"articleBody\")]/p",
     "refreshTimeout": "30000",
     "tags":"",
     "sameNews":  "//div/table/tbody/tr/td/a",
     "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
-    "dateFormat":""
+    "dateFormat":"dd MMMM yyyy, hh:mm"
   },
   {
     "entityName": "http://lifenews78.ru/",
@@ -147,7 +147,7 @@
     "entityName": "http://konkretno.ru/",
     "entityUrl": "http://konkretno.ru/",
     "newsListPath": "//*[contains(@class, \"lenta_st\")]/a",
-    "articleNamePath": "//div[@id=\"zag\"]/h2",
+    "articleNamePath": "//id('zag')/x:h2",
     "articleTextPath": "////div[@id=\"text\"]/div/p",
     "articleDatePath": "//div[@id=\"date\"]",
     "sameNews": "",
@@ -157,17 +157,17 @@
     "dateFormat":"dd MMMM yyyy"
   },
   {
-    "entityName": "http://47channel.ru//",
+    "entityName": "http://47channel.ru/",
     "entityUrl": "http://47channel.ru/",
     "newsListPath": "//*[contains(@class, \"inner\")]/header/a",
     "articleNamePath": "//*[contains(@class, \"content\")]/article/h1",
     "articleTextPath": "//*[contains(@class, \"text-block\")]/p | //*[contains(@class, \"text-block\")]/div",
-    "articleDatePath": "//*[contains(@class, \"article-full\")]//*[contains(@class, \"date\")]",
+    "articleDatePath": "//*[contains(@class, \"article-full\")]/p[contains(@class,\"date\")]",
     "sameNews": "",
     "tags":"",
     "refreshTimeout": "30000",
-    "regExpForDate":"\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}",
-    "dateFormat":"dd MMMM yyyy"
+    "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
+    "dateFormat":"dd.mm.yyyy hh:mm"
   },
   {
     "entityName": "http://www.spbdnevnik.ru",
@@ -253,7 +253,7 @@
     "newsListPath": "//*[contains(@class, \"news\")]/p/a",
     "articleNamePath": "//*[contains(@id, \"news_info\")]/h2",
     "articleTextPath": "//*[contains(@id, \"news_info\")]/p",
-    "articleDatePath": "//*[contains(@class, \"news-autor\")]//*[contains(@class,'left textinfo')]",
+    "articleDatePath": "//*[contains(@id, \"news_info\")]/h2/div",
     "sameNews": "",
     "tags":"",
     "refreshTimeout": "30000",
@@ -277,9 +277,9 @@
     "entityName": "http://www.ntv.ru",
     "entityUrl": "http://www.ntv.ru/novosti/",
     "newsListPath": "",
-    "articleNamePath": "//*[contains(@id, \"newsLead\")]",
-    "articleTextPath": "//*[contains(@class, \"smcntr\")]",
-    "articleDatePath": "//*[contains(@class, \"ndate\")]",
+    "articleNamePath": "//*[contains(@class, \"content newsitem\")]/div/div/h1",
+    "articleTextPath": "//*[contains(@class, \"newitemntext\")] ",
+    "articleDatePath": "//*[contains(@class, \"pubdate\")]",
     "refreshTimeout": "30000",
     "sameNews": "",
     "tags":"",
@@ -304,7 +304,7 @@
     "entityUrl": "http://www.vesti.ru",
     "newsListPath": "",
     "articleNamePath": "/html/body/div[7]/div[2]/div[1]/div[1]/div/h3",
-    "articleTextPath": "//*[contains(@class, \"article__text\")]",
+    "articleTextPath": "//*[contains(@class, \"article__text\")]/p",
     "articleDatePath": "//*[contains(@class, \"article__date\")]",
     "refreshTimeout": "30000",
     "sameNews": "",
@@ -326,17 +326,17 @@
     "dateFormat":"dd MMMM yyyy hh:mm"
   },
   {
-    "entityName": "http://www.regnum.ru/",
-    "entityUrl": "http://www.regnum.ru/",
+    "entityName": "https://regnum.ru/",
+    "entityUrl": "https://regnum.ru/",
     "newsListPath": "",
     "articleNamePath": "//*[contains(@class, \"news_detail_header\")]/h1",
     "articleTextPath": "//*[contains(@class, \"news_body\")]/p",
-    "articleDatePath": "//*[contains(@class, \"news_body\")]/p/span",
+    "articleDatePath": "//*[contains(@class, \"news_detail_template_date\")]",
     "sameNews": "",
     "tags":"",
     "refreshTimeout": "30000",
-    "regExpForDate":"\\d+ [а-яА-Я]+ \\d{4}, \\d{2}:\\d{2}",
-    "dateFormat":"dd MMMM yyyy hh:mm"
+    "regExpForDate":"\\d+ [а-яА-Я]+ \\d{4}",
+    "dateFormat":"dd MMMM yyyy"
   },
   {
     "entityName": "http://www.mr7.ru",
@@ -374,8 +374,8 @@
     "sameNews": "",
     "tags":"",
     "refreshTimeout": "30000",
-    "regExpForDate":" \\d{2}-\\d{2}-\\d{4} в \\d{2}:\\d{2}",
-    "dateFormat":"dd MM yyyy в hh:mm"
+    "regExpForDate":" \\d{2}-\\d{2}-\\d{4}",
+    "dateFormat":"dd-MM-yyyy"
   },
   {
     "entityName": "gazeta.spb.ru",

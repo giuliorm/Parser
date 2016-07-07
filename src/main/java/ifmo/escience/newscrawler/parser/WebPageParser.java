@@ -214,7 +214,7 @@ public class WebPageParser {
 
     public WebElement tryGetElement(String elementName, String path) {
         WebElement element = null;
-        String b = driver.findElement(By.tagName("body")).getText();
+  //      String b = driver.findElement(By.tagName("body")).getText();
         if (path != null && !path.isEmpty()) {
             try {
                 element = driver.findElement(By.xpath(path));
