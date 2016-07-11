@@ -403,5 +403,57 @@
     "refreshTimeout": "30000",
     "regExpForDate":"\\d{2} [а-яА-Я]+ \\d{4}",
     "dateFormat":"dd MMMM yyyy"
+  },
+  {
+    "entityName": "http://www.mr7.ru/",
+    "entityUrl": "http://www.mr7.ru/",
+    "newsListPath": "//*[contains(@class, \"news-list\")]/li/a",
+    "articleNamePath": "//*[contains(@class, \"article\")]/h1",
+    "articleTextPath": "//*[contains(@class, \"content-text\")]/p",
+    "articleDatePath": "//*[contains(@class, \"date\"])",
+    "sameNews": "",
+    "tags":"",
+    "refreshTimeout": "30000",
+    "regExpForDate":"\\d{2} [а-яА-Я]+ \\d{4} \\d{2}:\\d{2}",
+    "dateFormat":"dd MMMM yyyy hh:mm"
+  },
+  {
+    "entityName": "https://78.mvd.ru/",
+    "entityUrl": "https://78.mvd.ru/",
+    "newsListPath": "//*[contains(@class, \"home-news\")]//*[contains(@class, \"sl-item\")]",
+    "articleNamePath": "//*[contains(@class, \"ln-content-holder\")]/h1",
+    "articleTextPath": "//*[contains(@class, \"article\")]/p",
+    "articleDatePath": "//*[contains(@class, \"article-date-item\")]",
+    "sameNews": "",
+    "tags":"",
+    "refreshTimeout": "30000",
+    "regExpForDate":"",
+    "dateFormat":"dd.MM.yyyy hh:mm"
+  },
+  {
+    "entityName": "http://www.spb.kp.ru/",
+    "entityUrl": "http://www.spb.kp.ru/",
+    "newsListPath": "//*[contains(@class, \"wSection\")]//*[contains(@class, \"article\")]",
+    "articleNamePath": "//article/header/h1",
+    "articleTextPath": "//*[contains(@class, \"text\")]/p",
+    "articleDatePath": "//article/div/time",
+    "sameNews": "",
+    "tags":"",
+    "refreshTimeout": "30000",
+    "regExpForDate":"",
+    "dateFormat":"dd.MM.yyyy hh:mm"
+  },
+  {
+    "entityName": "http://lenoblinform.ru/",
+    "entityUrl": "http://lenoblinform.ru/",
+    "newsListPath": "//*[contains(@class, \"news\")]",
+    "articleNamePath": "//*[contains(@class, \"news_detail\")]/h2",
+    "articleTextPath": "//*[contains(@class, \"news_detail\")]/p",
+    "articleDatePath": "//*[contains(@class, \"pub_date\")]",
+    "sameNews": "",
+    "tags":"",
+    "refreshTimeout": "30000",
+    "regExpForDate":"",
+    "dateFormat":"dd-MM-yyyy hh:mm"
   }
 ]

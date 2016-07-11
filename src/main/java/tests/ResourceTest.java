@@ -59,7 +59,11 @@ public class ResourceTest extends TestCase {
      //  "http://www.rosbalt.ru/world/2016/07/06/1529771.html"
     //  "http://lenobl.ru/news22352.html"
        // "http://www.gazeta.spb.ru/1963215-0/"
-        "http://sledcomrf.ru/news/244944-sostoyalas-vstrecha-s-predstavitelyami.html"
+     //   "http://sledcomrf.ru/news/244944-sostoyalas-vstrecha-s-predstavitelyami.html"
+           ///     "http://mr7.ru/articles/135627/",
+                "https://78.mvd.ru/news/item/8123022/",
+             //   "http://www.spb.kp.ru/daily/26553/3570028/",
+             //   "http://lenoblinform.ru/news/Rostelekom-Vigodnoe-leto-110716.html"
         });
     };
 
