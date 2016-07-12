@@ -61,9 +61,11 @@ public class ResourceTest extends TestCase {
        // "http://www.gazeta.spb.ru/1963215-0/"
      //   "http://sledcomrf.ru/news/244944-sostoyalas-vstrecha-s-predstavitelyami.html"
            ///     "http://mr7.ru/articles/135627/",
-                "https://78.mvd.ru/news/item/8123022/",
+             //   "https://78.mvd.ru/news/item/8123022/",
              //   "http://www.spb.kp.ru/daily/26553/3570028/",
              //   "http://lenoblinform.ru/news/Rostelekom-Vigodnoe-leto-110716.html"
+           //     "http://www.spb.aif.ru/incidents/chp/v_lenoblasti_devochka_sorvalas_s_osvetitelnoy_bashni_vo_vremya_selfi",
+                "http://www.spb.kp.ru/daily/26554/3570327/"
         });
     };
 
