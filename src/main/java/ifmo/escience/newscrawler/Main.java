@@ -32,7 +32,7 @@ public class Main {
             logger.error("Failed to connect to the database in Main");
             System.exit(-1);
         }
-        db.clear();
+       // db.clear();
 
         Crawler crawler = new Crawler();
         System.out.println("Crawler has started working!");
