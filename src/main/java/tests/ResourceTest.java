@@ -41,7 +41,7 @@ public class ResourceTest extends TestCase {
             //    "http://www.spb.aif.ru/society/people/bolee_25_tysyach_musulman_otprazdnovali_uraza-bayram_v_peterburge"
           //  "http://www.fontanka.ru/2016/06/27/140/"
              //!CANNOT PARSE AND DONT KNOW HOW
-                // -"http://konkretno.ru/2016/06/27/zamdirektora-volosovskogo-psixinternata-ukrala-u-pacientov-13-milliona-rublej.html"
+          //       "http://konkretno.ru/2016/06/27/zamdirektora-volosovskogo-psixinternata-ukrala-u-pacientov-13-milliona-rublej.html",
          //   "http://47channel.ru/event/Pravitel_stvo_pereraspredelilo_subsidii_chtobi_dopolnitel_no_podderzhat_malij_biznes_v_monogorodah/"
         //"http://www.spbdnevnik.ru/news/2016-07-05/vtoraya-smena-foruma-vsmysle-perenositsya-iz-za-nepogody/"
        // "http://vyborg.tv/obshchestvo/26442-kak-vychislit-lzhekontroljorov.html"
@@ -65,7 +65,9 @@ public class ResourceTest extends TestCase {
              //   "http://www.spb.kp.ru/daily/26553/3570028/",
              //   "http://lenoblinform.ru/news/Rostelekom-Vigodnoe-leto-110716.html"
            //     "http://www.spb.aif.ru/incidents/chp/v_lenoblasti_devochka_sorvalas_s_osvetitelnoy_bashni_vo_vremya_selfi",
-                "http://www.spb.kp.ru/daily/26554/3570327/"
+           //     "http://www.spb.kp.ru/daily/26554/3570327/"
+            //    "http://konkretno.ru/2016/07/14/vmesto-odnogo-avarijnogo-zhilya-drugoe-takoe-zhe.html",
+             //   "http://mr7.ru/articles/135883/"
         });
     };
 

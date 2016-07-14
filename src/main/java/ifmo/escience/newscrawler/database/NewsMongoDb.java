@@ -27,7 +27,9 @@ public class NewsMongoDb extends MongoDbConnection {
 
     public boolean urlExists(String pageUrl){
 
-        return resources.count(new Document("link", pageUrl)) > 0;
+        Document doc = new Document();
+        doc.append("link", pageUrl);
+        return resources.count(doc) > 0;
     }
 /*
     public void addMissingLink(String link){
@@ -56,22 +58,36 @@ public class NewsMongoDb extends MongoDbConnection {
         }
     }
      */
+    private Document documentFromPage(WebPage page) {
+        Document doc = new Document();
+        doc.append("number",page.getParseTime())
+                .append("title", page.getArticleName())
+                .append("mainText", page.getArticleText());
 
+        doc.append("date", page.getArticleDate())
+                .append("link", page.getPageUrl())
+                .append("mainLink",page.getEntityUrl());
+        return doc;
+    }
     public void insert(WebPage page) {
         try{
-            Document doc = new Document();
-            doc.append("number",page.getParseTime())
-                    .append("title", page.getArticleName())
-                    .append("mainText", page.getArticleText());
 
-            doc.append("date", page.getArticleDate())
-                    .append("link", page.getPageUrl())
-                    .append("mainLink",page.getEntityUrl());
             //TODO: how to insert date object?
-            resources.insertOne(doc);
+            resources.insertOne(documentFromPage(page));
         }
         catch(Exception ex){
             logger.error("Error on loading news into database!", ex);
         }
+    }
+
+    public void remove(WebPage page) {
+        try{
+
+            resources.deleteOne(documentFromPage(page));
+        }
+        catch(Exception ex){
+            logger.error("Error on loading news into database!", ex);
+        }
+
     }
 }

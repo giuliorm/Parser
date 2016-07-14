@@ -23,7 +23,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        NewsMongoDb db = new NewsMongoDb(DbConfig.dbConfigsFromProperties("config.properties"));
+        NewsMongoDb db = new NewsMongoDb(DbConfig.dbConfigsFromProperties("config.properties"))
+                ;
 
         try {
             db.connect();

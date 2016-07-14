@@ -22,6 +22,7 @@ public class MongoDbConnection {
 
     public MongoDbConnection(DbConfig config) {
         this.config = config;
+   //     initCollections();
     }
 
     public void connect () throws Exception {

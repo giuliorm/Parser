@@ -143,19 +143,7 @@
     "regExpForDate":"\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}",
     "dateFormat":"dd.MM.yyyy hh:mm"
   },
-  {
-    "entityName": "http://konkretno.ru/",
-    "entityUrl": "http://konkretno.ru/",
-    "newsListPath": "//*[contains(@class, \"lenta_st\")]/a",
-    "articleNamePath": "//id('zag')/x:h2",
-    "articleTextPath": "////div[@id=\"text\"]/div/p",
-    "articleDatePath": "//div[@id=\"date\"]",
-    "sameNews": "",
-    "tags":"",
-    "refreshTimeout": "30000",
-    "regExpForDate":"\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}",
-    "dateFormat":"dd MMMM yyyy"
-  },
+
   {
     "entityName": "http://47channel.ru/",
     "entityUrl": "http://47channel.ru/",
@@ -404,19 +392,7 @@
     "regExpForDate":"\\d{2} [а-яА-Я]+ \\d{4}",
     "dateFormat":"dd MMMM yyyy"
   },
-  {
-    "entityName": "http://www.mr7.ru/",
-    "entityUrl": "http://www.mr7.ru/",
-    "newsListPath": "//*[contains(@class, \"news-list\")]/li/a",
-    "articleNamePath": "//*[contains(@class, \"article\")]/h1",
-    "articleTextPath": "//*[contains(@class, \"content-text\")]/p",
-    "articleDatePath": "//*[contains(@class, \"date\"])",
-    "sameNews": "",
-    "tags":"",
-    "refreshTimeout": "30000",
-    "regExpForDate":"\\d{2} [а-яА-Я]+ \\d{4} \\d{2}:\\d{2}",
-    "dateFormat":"dd MMMM yyyy hh:mm"
-  },
+
   {
     "entityName": "https://78.mvd.ru/",
     "entityUrl": "https://78.mvd.ru/",
